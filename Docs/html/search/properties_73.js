@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['savedsequence',['savedSequence',['../interface_app_delegate.html#ae4e7bd0e141b2b7d9c50cf381e934923',1,'AppDelegate']]],
+  ['savedsolution',['savedSolution',['../interface_app_delegate.html#a9ea3a27920e59adc8f961d16f0b1be35',1,'AppDelegate']]],
+  ['selectednodeview',['selectedNodeView',['../interface_solution_view_controller.html#af2b630b1c3642c26e9e568ea7e26736a',1,'SolutionViewController']]],
+  ['sequence',['sequence',['../interface_puzzle.html#abef216b41f05de2c870f5bf225b2a56b',1,'Puzzle']]],
+  ['since',['since',['../interface_recent_puzzles_view_controller.html#a73b63897b70be0baddd31985f2cfaca9',1,'RecentPuzzlesViewController']]],
+  ['sixbutton',['sixButton',['../interface_hands_of_time_view_controller.html#afa9762d07f285f95f3ae0373cd58e9ad',1,'HandsOfTimeViewController']]],
+  ['solution',['solution',['../interface_hands_of_time_view_controller.html#a44faf3e022ecb3946d4bccab7b9cf0ad',1,'HandsOfTimeViewController::solution()'],['../interface_puzzle.html#a6c062c594678cff1e55503dce8f0dd11',1,'Puzzle::solution()']]],
+  ['solutions',['solutions',['../interface_solution_view_controller.html#a8130d5b8f907f3db9f0d1850ecd8ba01',1,'SolutionViewController']]],
+  ['solveanotherbutton',['solveAnotherButton',['../interface_solution_view_controller.html#a692ec1ae072124047319db4357ff9033',1,'SolutionViewController']]],
+  ['solvebutton',['solveButton',['../interface_hands_of_time_view_controller.html#a1ad0d04e68e3443dd1596e77dc44caed',1,'HandsOfTimeViewController']]],
+  ['solved',['solved',['../interface_hands_of_time_view_controller.html#aaca93fd4ae7a442bb358584d589cc14e',1,'HandsOfTimeViewController']]],
+  ['spacing',['spacing',['../interface_hands_view.html#a05124abf9d3d1752d29c3e6dc777c6e8',1,'HandsView']]],
+  ['splashview',['splashView',['../interface_app_delegate.html#aa77d1f7c235bd12650c25703d7acb556',1,'AppDelegate']]],
+  ['statuslabel',['statusLabel',['../interface_hands_of_time_view_controller.html#a0df658cd66e9da67a533d24fbdaaa3bd',1,'HandsOfTimeViewController']]],
+  ['string_5fsequence',['string_sequence',['../interface_puzzle.html#a0e53aa2dcda29ef04c09e6f832c40504',1,'Puzzle']]],
+  ['string_5ftimestamp',['string_timestamp',['../interface_puzzle.html#ad58e256961a22906258ab275aba023d7',1,'Puzzle']]]
+];

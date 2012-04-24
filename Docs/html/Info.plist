@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+     <key>CFBundleName</key>
+     <string>Hands of Time Solver for Final Fantasy XIII-2</string>
+     <key>CFBundleIdentifier</key>
+     <string>com.coreyroberts.ffxiii-2solver.docset</string>
+     <key>DocSetFeedName</key>
+     <string>Final Fantasy XIII-2 : Hands of Time Solver Documentation</string>
+     <key>DocSetPublisherIdentifier</key>
+     <string>com.coreyroberts.ffxiii-2solver</string>
+     <key>DocSetPublisherName</key>
+     <string>Corey Roberts</string>
+</dict>
+</plist>
