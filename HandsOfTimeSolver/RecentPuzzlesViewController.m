@@ -79,7 +79,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void)validateTimer {
     NSLog(@"Starting timer.");
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(connect) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:30.0f target:self selector:@selector(connect) userInfo:nil repeats:YES];
 }
 
 - (void)invalidateTimer {
@@ -132,7 +132,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     for(int i = 0; i < sequence.length; i++){
         result = [result stringByAppendingString:[NSString stringWithFormat:@"%c ", [sequence characterAtIndex:i]]];
     }
-    NSLog(@"Result: %@", result);
+    //NSLog(@"Result: %@", result);
     return result;
 }
 
@@ -183,12 +183,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [puzzles count];
+    return ([puzzles count] > 100) ? 100 : [puzzles count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 40;
+    return 60;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -201,7 +201,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     
     cell.textLabel.numberOfLines = 1;
-    cell.textLabel.font = [UIFont fontWithName:@"Georgia" size:14];
+    cell.textLabel.font = [UIFont fontWithName:@"Georgia-Bold" size:16];
     cell.textLabel.textColor = UIColorFromRGB(0xCFCFCF);
     
     cell.detailTextLabel.numberOfLines = 2;

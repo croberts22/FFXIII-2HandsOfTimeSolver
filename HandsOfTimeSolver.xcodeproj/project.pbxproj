@@ -75,6 +75,19 @@
 		AE73D50F15156ED700542A55 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE4B5A5614F97301009DCBE1 /* AboutViewController.m */; };
 		AE73D51115156ED700542A55 /* SelectedNodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = AE73D50C1515590500542A55 /* SelectedNodeView.m */; };
 		AE73D51315156EE600542A55 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE73D4FD1515009700542A55 /* QuartzCore.framework */; };
+		AEAD4F6C1565DAEF00053E17 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE0C601E1536124E00AA4360 /* libGoogleAnalytics.a */; };
+		AEAD4F6E1565DB0200053E17 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = AE0C5FDD1534C1DF00AA4360 /* CDataScanner.m */; };
+		AEAD4F6F1565DB0200053E17 /* CJSONDeserializer.m in Sources */ = {isa = PBXBuildFile; fileRef = AE0C5FDF1534C1DF00AA4360 /* CJSONDeserializer.m */; };
+		AEAD4F701565DB0200053E17 /* CJSONScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = AE0C5FE11534C1DF00AA4360 /* CJSONScanner.m */; };
+		AEAD4F711565DB0200053E17 /* CJSONSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = AE0C5FE31534C1DF00AA4360 /* CJSONSerializer.m */; };
+		AEAD4F721565DB0200053E17 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = AE0C5FF51534C1DF00AA4360 /* RegexKitLite.m */; };
+		AEAD4F731565DB0200053E17 /* RRSGlowLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = AE0C5FF71534C1DF00AA4360 /* RRSGlowLabel.m */; };
+		AEAD4F741565DB0200053E17 /* Puzzle.m in Sources */ = {isa = PBXBuildFile; fileRef = AED15290152B39AA000B534E /* Puzzle.m */; };
+		AEAD4F751565DB0200053E17 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE11147A152E246E009EF4F4 /* RegisterViewController.m */; };
+		AEAD4F761565DB0200053E17 /* RecentPuzzlesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AED15269152ABEA8000B534E /* RecentPuzzlesViewController.m */; };
+		AEAD4F771565DB1400053E17 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE0C6030153612D200AA4360 /* CFNetwork.framework */; };
+		AEAD4F781565DB1700053E17 /* libicucore.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AE111483152E302F009EF4F4 /* libicucore.A.dylib */; };
+		AEAD4F791565DB1900053E17 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AE0C60321536139700AA4360 /* libsqlite3.0.dylib */; };
 		AECAF63D14F58BA7009C5677 /* HandsOfTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE11169C14F4315B00CBB05D /* HandsOfTimeViewController.m */; };
 		AED1526B152ABEA8000B534E /* RecentPuzzlesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AED15269152ABEA8000B534E /* RecentPuzzlesViewController.m */; };
 		AED1526C152ABEA8000B534E /* RecentPuzzlesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AED1526A152ABEA8000B534E /* RecentPuzzlesViewController.xib */; };
@@ -230,7 +243,11 @@
 				AE1116CB14F5591C00CBB05D /* UIKit.framework in Frameworks */,
 				AE1116CC14F5591C00CBB05D /* Foundation.framework in Frameworks */,
 				AE1116CD14F5591C00CBB05D /* CoreGraphics.framework in Frameworks */,
+				AEAD4F771565DB1400053E17 /* CFNetwork.framework in Frameworks */,
 				AE02D672151446FA00203A56 /* GHUnitIOS.framework in Frameworks */,
+				AEAD4F781565DB1700053E17 /* libicucore.A.dylib in Frameworks */,
+				AEAD4F791565DB1900053E17 /* libsqlite3.0.dylib in Frameworks */,
+				AEAD4F6C1565DAEF00053E17 /* libGoogleAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,6 +678,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AEAD4F6E1565DB0200053E17 /* CDataScanner.m in Sources */,
+				AEAD4F6F1565DB0200053E17 /* CJSONDeserializer.m in Sources */,
+				AEAD4F701565DB0200053E17 /* CJSONScanner.m in Sources */,
+				AEAD4F711565DB0200053E17 /* CJSONSerializer.m in Sources */,
+				AEAD4F721565DB0200053E17 /* RegexKitLite.m in Sources */,
+				AEAD4F731565DB0200053E17 /* RRSGlowLabel.m in Sources */,
+				AEAD4F741565DB0200053E17 /* Puzzle.m in Sources */,
+				AEAD4F751565DB0200053E17 /* RegisterViewController.m in Sources */,
+				AEAD4F761565DB0200053E17 /* RecentPuzzlesViewController.m in Sources */,
 				AEF9CA5E151D370000C8A028 /* AppDelegate.m in Sources */,
 				AEF9CA5F151D370000C8A028 /* NodeView.m in Sources */,
 				AEF9CA60151D370000C8A028 /* HandsView.m in Sources */,
@@ -862,6 +888,10 @@
 				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
 				INFOPLIST_FILE = "UnitTests/UnitTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -884,6 +914,10 @@
 				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
 				INFOPLIST_FILE = "UnitTests/UnitTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
