@@ -24,7 +24,7 @@ colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@synthesize received_data, refreshButton, backButton, puzzlesTable, puzzles, since, num_updated_rows, timer, indicator, status, updateLabel;
+@synthesize received_data, refreshButton, backButton, puzzlesTable, puzzles, since, num_updated_rows, timer, indicator, status, updateLabel, totalPuzzles, userPuzzles;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,6 +51,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     self.num_updated_rows = 0;
     self.puzzlesTable.alpha = 0.0f;
     self.updateLabel.alpha = 0.0f;
+    self.userPuzzles.alpha = 0.0f;
+    self.totalPuzzles.alpha = 0.0f;
     
     [self.indicator startAnimating];
     
@@ -162,7 +164,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     
     [self updateTimestamp];
+    [self setUserPuzzlesText];
+    [self setTotalPuzzlesText];
     [self showUpdateLabel];
+    
     if(timer == nil){
         [self validateTimer];
     }
@@ -264,7 +269,28 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [UIView setAnimationDelay:duration];
     [UIView setAnimationDuration:duration];
     self.updateLabel.alpha = 1.0f;
+    self.userPuzzles.alpha = 1.0f;
+    self.totalPuzzles.alpha = 1.0f;
     [UIView commitAnimations];
+}
+
+- (int)findUserPuzzles {
+    int i = 0;
+    for(Puzzle *puzzle in puzzles){
+        if([puzzle.user isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]){
+            i++;
+        }
+    }
+    
+    return i;
+}
+
+- (void)setUserPuzzlesText {
+    self.userPuzzles.text = [NSString stringWithFormat:@"Your Puzzles Solved: %d", [self findUserPuzzles]];
+}
+
+- (void)setTotalPuzzlesText {
+    self.totalPuzzles.text = [NSString stringWithFormat:@"Total Puzzles Solved: %d", [puzzles count]];
 }
 
 - (void)hideIndicator {

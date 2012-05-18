@@ -16,6 +16,8 @@
     IBOutlet UIActivityIndicatorView *indicator;
     IBOutlet UILabel *status;
     IBOutlet UILabel *updateLabel;
+    IBOutlet UILabel *totalPuzzles;
+    IBOutlet UILabel *userPuzzles;
     NSMutableArray *puzzles;
     NSMutableData *received_data;
     NSTimer *timer;
@@ -29,6 +31,8 @@
 @property (nonatomic, retain) UIActivityIndicatorView *indicator;
 @property (nonatomic, retain) UILabel *status;
 @property (nonatomic, retain) UILabel *updateLabel;
+@property (nonatomic, retain) UILabel *totalPuzzles;
+@property (nonatomic, retain) UILabel *userPuzzles;
 @property (nonatomic, retain) NSMutableArray *puzzles;
 @property (nonatomic, retain) NSMutableData *received_data;
 @property (nonatomic, retain) NSTimer *timer;
