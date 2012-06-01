@@ -79,7 +79,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void)validateTimer {
     NSLog(@"Starting timer.");
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:30.0f target:self selector:@selector(connect) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:15.0f target:self selector:@selector(connect) userInfo:nil repeats:YES];
 }
 
 - (void)invalidateTimer {
@@ -320,6 +320,21 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [UIView commitAnimations];
 }
 
+- (void)addNewPuzzle {
+    Puzzle *puzzle = [[[Puzzle alloc] init] autorelease];
+    puzzle.sequence = @"1,2,3,4,5";
+    puzzle.string_sequence = [self expandString:puzzle.sequence];
+    puzzle.solution = [self convertStringToArray:@"1,2,3,4,5"];
+    puzzle.user = @"test_post";
+    puzzle.timestamp = 1386828000;
+    puzzle.string_timestamp = [self convertTimestampToDate:puzzle.timestamp];
+    
+    if(since != 0){
+        num_updated_rows++;
+    }
+    
+    [puzzles addObject:puzzle];
+}
 
 - (IBAction)refreshButtonPressed:(id)sender {
     [self invalidateTimer];
@@ -331,15 +346,20 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 
 - (void)updateTableRows {
-    NSMutableArray *insertPaths = [NSMutableArray array];
-    for(int i = 0; i < num_updated_rows; i++) {
-        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
-        [insertPaths addObject:path];
-    }
+    NSMutableArray *pathsToAdd = [NSMutableArray array];
+    NSMutableArray *pathsToRemove = [NSMutableArray array];
     
-    if(insertPaths.count > 0){
+    for(int i = 0; i < num_updated_rows; i++) {
+        NSIndexPath *addPath = [NSIndexPath indexPathForRow:i inSection:0];
+        NSIndexPath *removePath = [NSIndexPath indexPathForRow:99-i inSection:0];
+        
+        [pathsToAdd addObject:addPath];
+        [pathsToRemove addObject:removePath];
+    }
+    if(pathsToAdd.count > 0){
         [self.puzzlesTable beginUpdates];
-        [self.puzzlesTable insertRowsAtIndexPaths:insertPaths withRowAnimation:UITableViewRowAnimationTop];
+        [self.puzzlesTable insertRowsAtIndexPaths:pathsToAdd withRowAnimation:UITableViewRowAnimationTop];
+        [self.puzzlesTable deleteRowsAtIndexPaths:pathsToRemove withRowAnimation:UITableViewRowAnimationFade];
         [self.puzzlesTable endUpdates];
     }
 }
