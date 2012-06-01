@@ -10,6 +10,7 @@
 
 #import "HandsOfTimeViewController.h"
 #import "RegisterViewController.h"
+#import "RecentPuzzlesViewController.h"
 #import "GANTracker.h"
 #import "Appirater.h"
 
@@ -22,6 +23,8 @@ static const NSInteger kGANDispatchPeriodSec = 10;
 @synthesize window = _window;
 @synthesize viewController = _viewController;
 @synthesize navController = _navController;
+@synthesize splitViewController = _splitViewController;
+@synthesize masterViewController = _masterViewController;
 
 - (void)dealloc
 {
@@ -42,21 +45,37 @@ static const NSInteger kGANDispatchPeriodSec = 10;
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"HandsOfTimeViewController_iPhone" bundle:nil] autorelease];
+        self.navController = [[[UINavigationController alloc] initWithRootViewController:_viewController] autorelease];
+        self.navController.navigationBarHidden = YES;
+        
+        self.window.rootViewController = self.navController;
+
     } else {
-        self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"ViewController_iPad" bundle:nil] autorelease];
+        self.masterViewController = [[[RecentPuzzlesViewController alloc] initWithNibName:@"iPadRecentPuzzlesViewController" bundle:[NSBundle mainBundle]] autorelease];
+        self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"HandsOfTimeViewController_iPad" bundle:nil] autorelease];
+        
+        self.splitViewController = [[[UISplitViewController alloc] init] autorelease];
+        
+        _splitViewController.viewControllers = [NSArray arrayWithObjects:self.masterViewController, self.viewController, nil];
+        
+        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        [self.window addSubview:_splitViewController.view];
+        
     }
     
-    self.navController = [[[UINavigationController alloc] initWithRootViewController:_viewController] autorelease];
-    self.navController.navigationBarHidden = YES;
-    
-    self.window.rootViewController = self.navController;
     [self.window makeKeyAndVisible];
     [self fadeDefaultScreen];
     [self registerAppDefaults];
     
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"registered"]){
-        RegisterViewController *RVC = [[[RegisterViewController alloc] init] autorelease];
-        [self presentModalView:RVC withTransition:UIModalTransitionStyleCoverVertical];
+        if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+            RegisterViewController *RVC = [[[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:[NSBundle mainBundle]] autorelease];
+            [self presentModalView:RVC withTransition:UIModalTransitionStyleCoverVertical];
+        }
+        else{
+            RegisterViewController *RVC = [[[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:[NSBundle mainBundle]] autorelease];
+            [self presentModalView:RVC withTransition:UIModalTransitionStyleCrossDissolve];
+        }
     }
     
     [Appirater appLaunched:YES];

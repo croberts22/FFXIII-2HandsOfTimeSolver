@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6387AA6715773AC6001C0B9F /* iPadRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6387AA6615773AC6001C0B9F /* iPadRegisterViewController.xib */; };
+		6387AA771577B27C001C0B9F /* UILabel+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387AA761577B27C001C0B9F /* UILabel+FF.m */; };
+		6387AA7F1577B6A3001C0B9F /* UIColor+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387AA7E1577B6A3001C0B9F /* UIColor+FF.m */; };
+		63B5757C15783A5B0081BD10 /* UILabel+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B5757B15783A5B0081BD10 /* UILabel+FF.m */; };
+		63B5757F157893C90081BD10 /* iPadRecentPuzzlesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63B5757E157893C90081BD10 /* iPadRecentPuzzlesViewController.xib */; };
 		AE02D6701514466400203A56 /* SolutionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE4B5A5014F972E2009DCBE1 /* SolutionViewController.m */; };
 		AE02D672151446FA00203A56 /* GHUnitIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE02D671151446FA00203A56 /* GHUnitIOS.framework */; };
 		AE0C5FF81534C1DF00AA4360 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = AE0C5FDD1534C1DF00AA4360 /* CDataScanner.m */; };
@@ -115,6 +120,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6387AA6615773AC6001C0B9F /* iPadRegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadRegisterViewController.xib; sourceTree = "<group>"; };
+		6387AA751577B27C001C0B9F /* UILabel+FF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FF.h"; sourceTree = "<group>"; };
+		6387AA761577B27C001C0B9F /* UILabel+FF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+FF.m"; sourceTree = "<group>"; };
+		6387AA7D1577B6A3001C0B9F /* UIColor+FF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+FF.h"; sourceTree = "<group>"; };
+		6387AA7E1577B6A3001C0B9F /* UIColor+FF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+FF.m"; sourceTree = "<group>"; };
+		63B5757A15783A5B0081BD10 /* UILabel+FF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FF.h"; sourceTree = "<group>"; };
+		63B5757B15783A5B0081BD10 /* UILabel+FF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+FF.m"; sourceTree = "<group>"; };
+		63B5757E157893C90081BD10 /* iPadRecentPuzzlesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadRecentPuzzlesViewController.xib; sourceTree = "<group>"; };
 		AE02D671151446FA00203A56 /* GHUnitIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GHUnitIOS.framework; path = GHUnit/GHUnitIOS.framework; sourceTree = "<group>"; };
 		AE0C5FDC1534C1DF00AA4360 /* CDataScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDataScanner.h; path = Libraries/CDataScanner.h; sourceTree = "<group>"; };
 		AE0C5FDD1534C1DF00AA4360 /* CDataScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDataScanner.m; path = Libraries/CDataScanner.m; sourceTree = "<group>"; };
@@ -279,6 +292,59 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6387AA811577B7BD001C0B9F /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				6387AA7D1577B6A3001C0B9F /* UIColor+FF.h */,
+				6387AA7E1577B6A3001C0B9F /* UIColor+FF.m */,
+				63B5757A15783A5B0081BD10 /* UILabel+FF.h */,
+				63B5757B15783A5B0081BD10 /* UILabel+FF.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		6387AA821577B7D5001C0B9F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AED1528F152B39AA000B534E /* Puzzle.h */,
+				AED15290152B39AA000B534E /* Puzzle.m */,
+				AE73D4EB1514D7EA00542A55 /* NodeView.h */,
+				AE73D4EC1514D7EA00542A55 /* NodeView.m */,
+				AE73D50B1515590500542A55 /* SelectedNodeView.h */,
+				AE73D50C1515590500542A55 /* SelectedNodeView.m */,
+				AE73D5031515292600542A55 /* HandsView.h */,
+				AE73D5041515292600542A55 /* HandsView.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		6387AA831577B800001C0B9F /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				AE11169814F4315B00CBB05D /* AppDelegate.h */,
+				AE11169914F4315B00CBB05D /* AppDelegate.m */,
+				AE111479152E246E009EF4F4 /* RegisterViewController.h */,
+				AE11147A152E246E009EF4F4 /* RegisterViewController.m */,
+				AE11147B152E246E009EF4F4 /* RegisterViewController.xib */,
+				6387AA6615773AC6001C0B9F /* iPadRegisterViewController.xib */,
+				AED15268152ABEA8000B534E /* RecentPuzzlesViewController.h */,
+				AED15269152ABEA8000B534E /* RecentPuzzlesViewController.m */,
+				AED1526A152ABEA8000B534E /* RecentPuzzlesViewController.xib */,
+				63B5757E157893C90081BD10 /* iPadRecentPuzzlesViewController.xib */,
+				AE11169B14F4315B00CBB05D /* HandsOfTimeViewController.h */,
+				AE11169C14F4315B00CBB05D /* HandsOfTimeViewController.m */,
+				AE11169E14F4315B00CBB05D /* HandsOfTimeViewController_iPhone.xib */,
+				AE1116A114F4315B00CBB05D /* HandsOfTimeViewController_iPad.xib */,
+				AE4B5A4F14F972E2009DCBE1 /* SolutionViewController.h */,
+				AE4B5A5014F972E2009DCBE1 /* SolutionViewController.m */,
+				AE4B5A5114F972E2009DCBE1 /* SolutionViewController.xib */,
+				AE4B5A5514F97301009DCBE1 /* AboutViewController.h */,
+				AE4B5A5614F97301009DCBE1 /* AboutViewController.m */,
+				AE4B5A5714F97301009DCBE1 /* AboutViewController.xib */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
 		AE0C5FE41534C1DF00AA4360 /* Experimental */ = {
 			isa = PBXGroup;
 			children = (
@@ -356,6 +422,8 @@
 		AE11167A14F4315B00CBB05D = {
 			isa = PBXGroup;
 			children = (
+				6387AA751577B27C001C0B9F /* UILabel+FF.h */,
+				6387AA761577B27C001C0B9F /* UILabel+FF.m */,
 				AE38388B1516350C006B9272 /* Default@2x.png */,
 				AE38388915163508006B9272 /* Default.png */,
 				AE38388715163503006B9272 /* Icon@2x.png */,
@@ -399,36 +467,12 @@
 		AE11168F14F4315B00CBB05D /* HandsOfTimeSolver */ = {
 			isa = PBXGroup;
 			children = (
+				6387AA821577B7D5001C0B9F /* Models */,
+				6387AA811577B7BD001C0B9F /* Categories */,
+				6387AA831577B800001C0B9F /* Classes */,
 				AE0C60051534CBDD00AA4360 /* Images */,
-				AE73D5011515282600542A55 /* finalf.ttf */,
 				AE73D4F71514FA0200542A55 /* Libraries */,
 				AE11169014F4315B00CBB05D /* Supporting Files */,
-				AE11169814F4315B00CBB05D /* AppDelegate.h */,
-				AE11169914F4315B00CBB05D /* AppDelegate.m */,
-				AED1528F152B39AA000B534E /* Puzzle.h */,
-				AED15290152B39AA000B534E /* Puzzle.m */,
-				AE111479152E246E009EF4F4 /* RegisterViewController.h */,
-				AE11147A152E246E009EF4F4 /* RegisterViewController.m */,
-				AE11147B152E246E009EF4F4 /* RegisterViewController.xib */,
-				AED15268152ABEA8000B534E /* RecentPuzzlesViewController.h */,
-				AED15269152ABEA8000B534E /* RecentPuzzlesViewController.m */,
-				AED1526A152ABEA8000B534E /* RecentPuzzlesViewController.xib */,
-				AE11169B14F4315B00CBB05D /* HandsOfTimeViewController.h */,
-				AE11169C14F4315B00CBB05D /* HandsOfTimeViewController.m */,
-				AE11169E14F4315B00CBB05D /* HandsOfTimeViewController_iPhone.xib */,
-				AE1116A114F4315B00CBB05D /* HandsOfTimeViewController_iPad.xib */,
-				AE4B5A4F14F972E2009DCBE1 /* SolutionViewController.h */,
-				AE4B5A5014F972E2009DCBE1 /* SolutionViewController.m */,
-				AE4B5A5114F972E2009DCBE1 /* SolutionViewController.xib */,
-				AE4B5A5514F97301009DCBE1 /* AboutViewController.h */,
-				AE4B5A5614F97301009DCBE1 /* AboutViewController.m */,
-				AE4B5A5714F97301009DCBE1 /* AboutViewController.xib */,
-				AE73D4EB1514D7EA00542A55 /* NodeView.h */,
-				AE73D4EC1514D7EA00542A55 /* NodeView.m */,
-				AE73D50B1515590500542A55 /* SelectedNodeView.h */,
-				AE73D50C1515590500542A55 /* SelectedNodeView.m */,
-				AE73D5031515292600542A55 /* HandsView.h */,
-				AE73D5041515292600542A55 /* HandsView.m */,
 			);
 			path = HandsOfTimeSolver;
 			sourceTree = "<group>";
@@ -486,6 +530,7 @@
 		AE73D4F71514FA0200542A55 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				AE73D5011515282600542A55 /* finalf.ttf */,
 				AEAD4F7F1565DCE700053E17 /* Appirater */,
 				AE0C600E1536124E00AA4360 /* Google Analytics SDK */,
 				AE0C5FDC1534C1DF00AA4360 /* CDataScanner.h */,
@@ -643,6 +688,8 @@
 				AE0C603C15362DDA00AA4360 /* uitableviewselection-blue-44@2x.png in Resources */,
 				AEAD4F921565DCE700053E17 /* Localizable.strings in Resources */,
 				AEAD4F931565DCE700053E17 /* README.md in Resources */,
+				6387AA6715773AC6001C0B9F /* iPadRegisterViewController.xib in Resources */,
+				63B5757F157893C90081BD10 /* iPadRecentPuzzlesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,6 +756,9 @@
 				AE0C60021534C1E000AA4360 /* RegexKitLite.m in Sources */,
 				AE0C60031534C1E000AA4360 /* RRSGlowLabel.m in Sources */,
 				AEAD4F911565DCE700053E17 /* Appirater.m in Sources */,
+				6387AA771577B27C001C0B9F /* UILabel+FF.m in Sources */,
+				6387AA7F1577B6A3001C0B9F /* UIColor+FF.m in Sources */,
+				63B5757C15783A5B0081BD10 /* UILabel+FF.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -877,14 +927,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HandsOfTimeSolver/HandsOfTimeSolver-Prefix.pch";
 				INFOPLIST_FILE = "HandsOfTimeSolver/HandsOfTimeSolver-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -897,14 +947,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HandsOfTimeSolver/HandsOfTimeSolver-Prefix.pch";
 				INFOPLIST_FILE = "HandsOfTimeSolver/HandsOfTimeSolver-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

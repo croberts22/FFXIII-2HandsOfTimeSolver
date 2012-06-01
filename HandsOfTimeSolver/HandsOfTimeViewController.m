@@ -106,6 +106,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad){
+        
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -120,7 +123,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    }
+    else{
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    }
 }
 
 /**
@@ -131,7 +139,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     UIColor *colorOne = [UIColor colorWithRed:0.0 green:0.125 blue:0.18 alpha:1.0];
     UIColor *colorTwo = [UIColor colorWithRed:0.0 green:0.00 blue:0.05 alpha:1.0];
     CAGradientLayer *gradientLayer = [[[CAGradientLayer alloc] init] autorelease];
-    gradientLayer.frame = CGRectMake(0.0, 0.0, 320.0, 480.0);
+    NSLog(@"x: %f, y: %f", self.view.frame.size.width, 832.0f);
+    gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, 832.0f);
     [gradientLayer setColors:[NSArray arrayWithObjects:(id)colorOne.CGColor, (id)colorTwo.CGColor, nil]];
     [self.view.layer insertSublayer:gradientLayer atIndex:0];
 }

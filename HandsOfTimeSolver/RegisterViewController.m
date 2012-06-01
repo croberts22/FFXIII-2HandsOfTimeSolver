@@ -10,6 +10,15 @@
 #import "RegexKitLite.h"
 #import "AppDelegate.h"
 #import "GANTracker.h"
+#import "UILabel+FF.h"
+
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+#define IPHONE_FONTSIZE (18)
+#define IPAD_FONTSIZE (24)
 
 @interface RegisterViewController ()
 
@@ -33,7 +42,8 @@
     UIColor *colorOne = [UIColor colorWithRed:0.0 green:0.125 blue:0.18 alpha:1.0];
     UIColor *colorTwo = [UIColor colorWithRed:0.0 green:0.00 blue:0.05 alpha:1.0];
     CAGradientLayer *gradientLayer = [[[CAGradientLayer alloc] init] autorelease];
-    gradientLayer.frame = CGRectMake(0.0, 0.0, 320.0, 480.0);
+    
+    gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width+703, self.view.frame.size.height);
     [gradientLayer setColors:[NSArray arrayWithObjects:(id)colorOne.CGColor, (id)colorTwo.CGColor, nil]];
     [self.view.layer insertSublayer:gradientLayer atIndex:0];
 }
@@ -49,6 +59,33 @@
     self.indicator.alpha = 0.0f;
 }
 
+
+/* create a separate label class that performs all of these property changes.
+   also create an enum for style (left, middle, right) */
+- (void)viewDidAppear:(BOOL)animated {
+    [self.username becomeFirstResponder];
+    /*
+    UILabel *registration_message = [UILabel FFLabelWithFontSize:IPAD_FONTSIZE andFrame:CGRectMake(0, 53, self.view.frame.size.height, 99)];
+    registration_message.text = @"Please enter a username in order to register an account.";
+    
+    // iPhone = 200 height, iPad = 250 height
+    UIActivityIndicatorView *indicator1 = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.height/2, 250, 20, 20)];
+    
+    UIButton *register1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    register1.titleLabel.text = @"Register";
+    register1.frame = CGRectMake(self.view.frame.size.height/2, 300, 115, 29);
+    register1.titleLabel.textColor = [UIColor whiteColor];
+    
+    
+    indicator1.alpha = 1.0f;
+    [indicator1 startAnimating];
+    [self.view addSubview:registration_message];
+    [self.view addSubview:indicator1];
+    [self.view addSubview:register1];
+     */
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -58,7 +95,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    }
+    else{
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    }
 }
 
 - (IBAction)backgroundButtonPressed:(id)sender {

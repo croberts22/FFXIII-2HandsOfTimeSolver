@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class HandsOfTimeViewController;
+@class RecentPuzzlesViewController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate> {
     UIImageView *splashView;
@@ -21,6 +22,9 @@
 @property (nonatomic, retain) NSArray *savedSolution;
 
 @property (strong, nonatomic) UIWindow *window;
+
+@property (strong, nonatomic) UISplitViewController *splitViewController;
+@property (strong, nonatomic) RecentPuzzlesViewController *masterViewController;
 
 @property (strong, nonatomic) UINavigationController *navController;
 
