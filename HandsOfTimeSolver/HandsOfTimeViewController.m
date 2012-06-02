@@ -7,18 +7,19 @@
 //
 
 #import "HandsOfTimeViewController.h"
-#import "AppDelegate.h"
 #import "SolutionViewController.h"
 #import "AboutViewController.h"
 #import "RecentPuzzlesViewController.h"
+
+#import "AppDelegate.h"
+
+// Google Analytics
 #import "GANTracker.h"
 
-@implementation HandsOfTimeViewController
+// Categories
+#import "UIColor+FF.h"
 
-#define UIColorFromRGB(rgbValue) [UIColor \
-colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
-green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
-blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+@implementation HandsOfTimeViewController
 
 @synthesize solveButton, resetButton, viewPuzzlesButton, infoButton, backgroundButton,  oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, backButton;
 @synthesize numberField, statusLabel, numbers, solution, solved, debug, indicator;
@@ -47,12 +48,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     self.numberField.glowAmount = 20.0f;
     
     // Set button colors.
-    [self.oneButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [self.twoButton setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
-    [self.threeButton setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-    [self.fourButton setTitleColor:UIColorFromRGB(0x00FFFF) forState:UIControlStateNormal];
-    [self.fiveButton setTitleColor:UIColorFromRGB(0x8936EF) forState:UIControlStateNormal];
-    [self.sixButton setTitleColor:UIColorFromRGB(0xF984EF) forState:UIControlStateNormal];
+    [self.oneButton setTitleColor:[UIColor FFColorRed] forState:UIControlStateNormal];
+    [self.twoButton setTitleColor:[UIColor FFColorOrange] forState:UIControlStateNormal];
+    [self.threeButton setTitleColor:[UIColor FFColorGreen] forState:UIControlStateNormal];
+    [self.fourButton setTitleColor:[UIColor FFColorTurquoise] forState:UIControlStateNormal];
+    [self.fiveButton setTitleColor:[UIColor FFColorPurple] forState:UIControlStateNormal];
+    [self.sixButton setTitleColor:[UIColor FFColorPink] forState:UIControlStateNormal];
     
     // Debug; turn on to see messages in console.
     self.debug = NO;
@@ -106,9 +107,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad){
-        
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -514,10 +512,9 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else{
         [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Sending puzzle to database..." waitUntilDone:NO];
-        //NSLog(@"Solution: %@", self.solution);
+        if(debug) NSLog(@"Solution: %@", self.solution);
         
-#warning - remove comment before pushing to market
-        /*NSString *response = [self sendPuzzleToDatabase];
+        NSString *response = [self sendPuzzleToDatabase];
         
         if([response isEqualToString:@"Success!"]){
             [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Sent!" waitUntilDone:NO];
@@ -525,7 +522,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         else{
             [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Error trying to send to database." waitUntilDone:NO];
         }
-         */
+        
         // Do not push the view if we are testing in GHUnit.
         if(!GHUNIT_TESTING){
             AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
@@ -542,8 +539,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
             if(delegate.is_iPad){
                 [delegate presentDetailModalView:SVC withPresentation:UIModalPresentationFormSheet];
-                NSTimer *remove_status = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(removeStatusLabelText) userInfo:nil repeats:nil];
-                NSTimer *remove_numbers = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(resetButtonPressed:) userInfo:nil repeats:nil];
+                [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(removeStatusLabelText) userInfo:nil repeats:NO];
+                [self resetButtonPressed:nil];
             }
             else{
                 [delegate presentModalView:SVC withTransition:UIModalTransitionStyleCrossDissolve];    

@@ -54,7 +54,7 @@ static const NSInteger kGANDispatchPeriodSec = 10;
     } else {
         self.is_iPad = YES;
         self.masterViewController = [[[RecentPuzzlesViewController alloc] initWithNibName:@"iPadRecentPuzzlesViewController" bundle:[NSBundle mainBundle]] autorelease];
-        self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"HandsOfTimeViewController_iPad" bundle:nil] autorelease];
+        self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"iPadHandsOfTimeViewController" bundle:nil] autorelease];
         
         self.splitViewController = [[[UISplitViewController alloc] init] autorelease];
         
@@ -70,7 +70,7 @@ static const NSInteger kGANDispatchPeriodSec = 10;
     [self registerAppDefaults];
     
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"registered"]){
-        if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        if(!is_iPad){
             RegisterViewController *RVC = [[[RegisterViewController alloc] initWithNibName:@"RegisterViewController" bundle:[NSBundle mainBundle]] autorelease];
             [self presentModalView:RVC withTransition:UIModalTransitionStyleCoverVertical];
         }
@@ -169,6 +169,7 @@ static const NSInteger kGANDispatchPeriodSec = 10;
 - (void)popModalView {
     [self.viewController dismissModalViewControllerAnimated:YES];
     
+    // If user is using iPad, deselect the cell in RecentPuzzlesViewController.
     if(is_iPad){
         RecentPuzzlesViewController *rpvc = [self.splitViewController.viewControllers objectAtIndex:0];
         NSIndexPath *selection = [rpvc.puzzlesTable indexPathForSelectedRow];

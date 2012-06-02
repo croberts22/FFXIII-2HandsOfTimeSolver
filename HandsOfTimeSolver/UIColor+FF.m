@@ -8,30 +8,36 @@
 
 #import "UIColor+FF.h"
 
-@implementation UIColor (FF)
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-+ (UIColor *)FFColorBlue {
-    return [UIColor blueColor];
-}
+@implementation UIColor (FF)
 
 + (UIColor *)FFColorRed {
     return [UIColor redColor];
+}
+
++ (UIColor *)FFColorOrange {
+    return [UIColor orangeColor];
 }
 
 + (UIColor *)FFColorGreen {
     return [UIColor greenColor];
 }
 
-+ (UIColor *)FFColorPink {
-    return [UIColor purpleColor];
++ (UIColor *)FFColorTurquoise {
+    return UIColorFromRGB(0x00FFFF);
 }
 
 + (UIColor *)FFColorPurple {
-    return [UIColor purpleColor];
+    return UIColorFromRGB(0x8936EF);
 }
 
-+ (UIColor *)FFColorOrange {
-    return [UIColor orangeColor];
++ (UIColor *)FFColorPink {
+    return UIColorFromRGB(0xF984EF);
 }
+
 
 @end

@@ -10,4 +10,11 @@
 
 @interface UIColor (FF)
 
++ (UIColor *)FFColorRed;
++ (UIColor *)FFColorOrange;
++ (UIColor *)FFColorGreen;
++ (UIColor *)FFColorTurquoise;
++ (UIColor *)FFColorPurple;
++ (UIColor *)FFColorPink;
+
 @end

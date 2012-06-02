@@ -12,6 +12,8 @@
 #import "GANTracker.h"
 #import <math.h>
 
+#import "UIColor+FF.h"
+
 @implementation SolutionViewController
 
 #define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -29,11 +31,6 @@
 #define FRAME_RADIUS (FRAME_DIMENSION/2.0f)
 
 #define NUMBER_FONT_SIZE ( IS_IPAD ? 56.0f : 32.0f )
-
-#define UIColorFromRGB(rgbValue) [UIColor \
-colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
-green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
-blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @synthesize solutions, nodes, coordinates, directions, writtenSolution, finishedSteps, solveAnotherButton, backButton, nextButton, currentStep, nodeView, handsView, selectedNodeView;
 
@@ -265,25 +262,25 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         
         switch([[nodes objectAtIndex:i] intValue]){
             case 1:
-                node.textColor = node.glowColor = [UIColor redColor];
+                node.textColor = node.glowColor = [UIColor FFColorRed];
                 break;
             case 2:
-                node.textColor = node.glowColor = [UIColor orangeColor];
+                node.textColor = node.glowColor = [UIColor FFColorOrange];
                 break;
             case 3:
-                node.textColor = node.glowColor = [UIColor greenColor];
+                node.textColor = node.glowColor = [UIColor FFColorGreen];
                 break;
             case 4:
-                node.textColor = node.glowColor = UIColorFromRGB(0x00FFFF);
+                node.textColor = node.glowColor = [UIColor FFColorTurquoise];
                 break;
             case 5:
-                node.textColor = node.glowColor = UIColorFromRGB(0x8936EF);
+                node.textColor = node.glowColor = [UIColor FFColorPurple];
                 break;
             case 6:
-                node.textColor = node.glowColor = UIColorFromRGB(0xF984EF);
+                node.textColor = node.glowColor = [UIColor FFColorPink];
                 break;
             default:
-                node.textColor = node.glowColor = [UIColor lightGrayColor];
+                node.textColor = node.glowColor = [UIColor FFColorTurquoise];
         }
 
         node.glowOffset = CGSizeMake(0.0, 0.0);
