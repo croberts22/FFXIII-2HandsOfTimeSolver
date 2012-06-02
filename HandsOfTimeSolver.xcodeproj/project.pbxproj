@@ -11,6 +11,7 @@
 		637F27CE1579B8DC00C5DBF6 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 637F27CD1579B8DC00C5DBF6 /* Default-Landscape~ipad.png */; };
 		637F27D01579B8E200C5DBF6 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 637F27CF1579B8E200C5DBF6 /* Default-Landscape@2x~ipad.png */; };
 		637F27D21579BAE600C5DBF6 /* iPadSolutionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */; };
+		637F27D51579C80900C5DBF6 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 637F27D41579C80900C5DBF6 /* Common.m */; };
 		6387AA6715773AC6001C0B9F /* iPadRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6387AA6615773AC6001C0B9F /* iPadRegisterViewController.xib */; };
 		6387AA771577B27C001C0B9F /* UILabel+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387AA761577B27C001C0B9F /* UILabel+FF.m */; };
 		6387AA7F1577B6A3001C0B9F /* UIColor+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387AA7E1577B6A3001C0B9F /* UIColor+FF.m */; };
@@ -126,6 +127,8 @@
 		637F27CD1579B8DC00C5DBF6 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		637F27CF1579B8E200C5DBF6 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadSolutionViewController.xib; sourceTree = "<group>"; };
+		637F27D31579C80900C5DBF6 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		637F27D41579C80900C5DBF6 /* Common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Common.m; sourceTree = "<group>"; };
 		6387AA6615773AC6001C0B9F /* iPadRegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadRegisterViewController.xib; sourceTree = "<group>"; };
 		6387AA751577B27C001C0B9F /* UILabel+FF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FF.h"; sourceTree = "<group>"; };
 		6387AA761577B27C001C0B9F /* UILabel+FF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+FF.m"; sourceTree = "<group>"; };
@@ -349,6 +352,8 @@
 				AE4B5A5614F97301009DCBE1 /* AboutViewController.m */,
 				AE4B5A5714F97301009DCBE1 /* AboutViewController.xib */,
 				637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */,
+				637F27D31579C80900C5DBF6 /* Common.h */,
+				637F27D41579C80900C5DBF6 /* Common.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -771,6 +776,7 @@
 				6387AA771577B27C001C0B9F /* UILabel+FF.m in Sources */,
 				6387AA7F1577B6A3001C0B9F /* UIColor+FF.m in Sources */,
 				63B5757C15783A5B0081BD10 /* UILabel+FF.m in Sources */,
+				637F27D51579C80900C5DBF6 /* Common.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

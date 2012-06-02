@@ -14,11 +14,20 @@
 
 @implementation SolutionViewController
 
-#define CENTER_X (160)
-#define CENTER_Y (200)
-#define RADIUS   (115)
-#define FRAME_DIMENSION (50.0f)
+#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+#define CENTER_X (self.nodeView.center.x)
+#define CENTER_Y (self.nodeView.center.y)
+
+#define IPAD_PADDING (70)
+#define IPHONE_PADDING (40) 
+
+#define RADIUS (self.view.frame.size.width/2 - ( IS_IPAD ? IPAD_PADDING : IPHONE_PADDING ) )
+
+#define FRAME_DIMENSION ( IS_IPAD ? 80.0f : 50.0f )
 #define INNER_FRAME_DIMENSION (sqrt(pow((FRAME_DIMENSION/2.0),2)+pow((FRAME_DIMENSION/2.0),2)))
+
+#define NUMBER_FONT_SIZE ( IS_IPAD ? 56.0f : 32.0f )
 
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -91,8 +100,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    if(delegate.is_iPad){
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    }
+    else{
+        return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    }
 }
 
 /****************
@@ -219,7 +233,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     UIColor *colorOne = [UIColor colorWithRed:0.0 green:0.125 blue:0.18 alpha:1.0];
     UIColor *colorTwo = [UIColor colorWithRed:0.0 green:0.00 blue:0.05 alpha:1.0];
     CAGradientLayer *gradientLayer = [[[CAGradientLayer alloc] init] autorelease];
-    gradientLayer.frame = CGRectMake(0.0, 0.0, 320.0, 480.0);
+    gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
     [gradientLayer setColors:[NSArray arrayWithObjects:(id)colorOne.CGColor, (id)colorTwo.CGColor, nil]];
     [self.view.layer insertSublayer:gradientLayer atIndex:0];
 }
@@ -245,7 +259,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         
         node.text = value;
         node.textAlignment = UITextAlignmentCenter;
-        node.font = [UIFont fontWithName:@"Cochin" size:32];
+        node.font = [UIFont fontWithName:@"Cochin" size:NUMBER_FONT_SIZE];
         node.frame = frame;
         
         switch([[nodes objectAtIndex:i] intValue]){

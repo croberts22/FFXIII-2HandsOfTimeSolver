@@ -13,8 +13,8 @@
 
 @synthesize left_hand, right_hand, coordinates, nodes, chosenNode, spacing, current_position, chosenNodeValue, move_foward;
 
-#define CENTER_X (160)
-#define CENTER_Y (200)
+#define CENTER_X (self.center.x)
+#define CENTER_Y (self.center.y)
 
 - (id)initWithFrame:(CGRect)frame
 {

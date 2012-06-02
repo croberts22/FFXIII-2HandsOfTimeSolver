@@ -139,7 +139,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     UIColor *colorOne = [UIColor colorWithRed:0.0 green:0.125 blue:0.18 alpha:1.0];
     UIColor *colorTwo = [UIColor colorWithRed:0.0 green:0.00 blue:0.05 alpha:1.0];
     CAGradientLayer *gradientLayer = [[[CAGradientLayer alloc] init] autorelease];
-    NSLog(@"x: %f, y: %f", self.view.frame.size.width, 832.0f);
     gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, 832.0f);
     [gradientLayer setColors:[NSArray arrayWithObjects:(id)colorOne.CGColor, (id)colorTwo.CGColor, nil]];
     [self.view.layer insertSublayer:gradientLayer atIndex:0];
@@ -515,7 +514,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     else{
         [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Sending puzzle to database..." waitUntilDone:NO];
-        NSLog(@"Solution: %@", self.solution);
+        //NSLog(@"Solution: %@", self.solution);
         
 #warning - remove comment before pushing to market
         /*NSString *response = [self sendPuzzleToDatabase];
@@ -529,11 +528,25 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
          */
         // Do not push the view if we are testing in GHUnit.
         if(!GHUNIT_TESTING){
-            SolutionViewController *SVC = [[SolutionViewController alloc] init];
+            AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+            SolutionViewController *SVC;
+            if(delegate.is_iPad){
+                SVC = [[SolutionViewController alloc] initWithNibName:@"iPadSolutionViewController" bundle:[NSBundle mainBundle]];
+            }
+            else{
+                SVC = [[SolutionViewController alloc] initWithNibName:@"SolutionViewController" bundle:[NSBundle mainBundle]];                
+            }
+            
             SVC.solutions = self.solution;
             SVC.nodes = self.numbers;
-            AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-            [delegate presentModalView:SVC withTransition:UIModalTransitionStyleCrossDissolve];
+
+            if(delegate.is_iPad){
+                [delegate presentDetailModalView:SVC withPresentation:UIModalPresentationFormSheet];
+            }
+            else{
+                [delegate presentModalView:SVC withTransition:UIModalTransitionStyleCrossDissolve];    
+            }
+            
             delegate.savedSequence = @"";
             [SVC release];
             

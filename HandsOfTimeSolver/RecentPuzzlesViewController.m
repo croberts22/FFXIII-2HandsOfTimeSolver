@@ -103,7 +103,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     UIColor *colorOne = [UIColor colorWithRed:0.0 green:0.125 blue:0.18 alpha:1.0];
     UIColor *colorTwo = [UIColor colorWithRed:0.0 green:0.00 blue:0.05 alpha:1.0];
     CAGradientLayer *gradientLayer = [[[CAGradientLayer alloc] init] autorelease];
-    NSLog(@"x: %f, y: %f", self.view.frame.size.width, self.view.frame.size.height);
     gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
     [gradientLayer setColors:[NSArray arrayWithObjects:(id)colorOne.CGColor, (id)colorTwo.CGColor, nil]];
     [self.view.layer insertSublayer:gradientLayer atIndex:0];
@@ -427,7 +426,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     NSError *error = nil;
     
     NSString *data = [[[NSString alloc] initWithData:received_data encoding:NSUTF8StringEncoding] autorelease];
-    NSLog(@"%@", data);
+    //NSLog(@"%@", data);
     //Make condition for data containing string 'Can't connect to local MySQL'
     if([data isEqualToString:@"No new puzzles."]){
         NSLog(@"No new data.");

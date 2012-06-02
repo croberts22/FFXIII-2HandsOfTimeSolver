@@ -10,10 +10,19 @@
 
 @implementation NodeView
 
-#define CENTER_X (160)
-#define CENTER_Y (200)
-#define RADIUS   (150.0f)
-#define FRAME_DIMENSION (50.0f)
+#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+#define CENTER_X (self.center.x)
+#define CENTER_Y (self.center.y)
+
+#define IPAD_PADDING (10)
+#define IPHONE_PADDING (5)
+
+#define RADIUS (self.frame.size.width/2 - ( IS_IPAD ? IPAD_PADDING : IPHONE_PADDING ) )
+
+#define FRAME_DIMENSION ( IS_IPAD ? 80.0f : 50.0f )
+#define INNER_FRAME_DIMENSION (sqrt(pow((FRAME_DIMENSION/2.0),2)+pow((FRAME_DIMENSION/2.0),2)))
+
 #define FRAME_RADIUS (FRAME_DIMENSION/2.0f)
 
 #define UIColorFromRGB(rgbValue) [UIColor \

@@ -161,6 +161,11 @@ static const NSInteger kGANDispatchPeriodSec = 10;
     [self.viewController presentModalViewController:vc animated:YES];
 }
 
+- (void)presentDetailModalView:(UIViewController *)vc withPresentation:(UIModalPresentationStyle)presentation {
+    [vc setModalPresentationStyle:presentation];
+    [self.splitViewController presentModalViewController:vc animated:YES];
+}
+
 - (void)popModalView {
     [self.viewController dismissModalViewControllerAnimated:YES];
 }

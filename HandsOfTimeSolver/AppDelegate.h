@@ -34,6 +34,7 @@
 
 
 - (void)presentModalView:(UIViewController *)vc withTransition:(UIModalTransitionStyle)transition;
+- (void)presentDetailModalView:(UIViewController *)vc withPresentation:(UIModalPresentationStyle)presentation;
 - (void)popModalView;
 
 
