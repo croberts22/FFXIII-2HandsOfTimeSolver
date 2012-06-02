@@ -312,9 +312,17 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
  @param sender The object that called this method.
  */
 - (IBAction)infoButtonPressed:(id)sender {
-    AboutViewController *AVC = [[AboutViewController alloc] init];
+    AboutViewController *AVC;
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    [delegate presentModalView:AVC withTransition:UIModalTransitionStyleCrossDissolve];
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        AVC = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:[NSBundle mainBundle]];
+        [delegate presentModalView:AVC withTransition:UIModalTransitionStyleCrossDissolve];
+    }
+    else{
+        AVC = [[AboutViewController alloc] initWithNibName:@"iPadAboutViewController" bundle:[NSBundle mainBundle]];
+        [delegate presentModalView:AVC withTransition:UIModalTransitionStylePartialCurl];
+    }
+    
     [AVC release];
 }
 
@@ -509,7 +517,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Sending puzzle to database..." waitUntilDone:NO];
         NSLog(@"Solution: %@", self.solution);
         
-        NSString *response = [self sendPuzzleToDatabase];
+#warning - remove comment before pushing to market
+        /*NSString *response = [self sendPuzzleToDatabase];
         
         if([response isEqualToString:@"Success!"]){
             [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Sent!" waitUntilDone:NO];
@@ -517,6 +526,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         else{
             [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Error trying to send to database." waitUntilDone:NO];
         }
+         */
         // Do not push the view if we are testing in GHUnit.
         if(!GHUNIT_TESTING){
             SolutionViewController *SVC = [[SolutionViewController alloc] init];

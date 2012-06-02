@@ -39,7 +39,7 @@
     UIColor *colorOne = [UIColor colorWithRed:0.0 green:0.125 blue:0.18 alpha:1.0];
     UIColor *colorTwo = [UIColor colorWithRed:0.0 green:0.00 blue:0.05 alpha:1.0];
     CAGradientLayer *gradientLayer = [[[CAGradientLayer alloc] init] autorelease];
-    gradientLayer.frame = CGRectMake(0.0, 0.0, 320.0, 480.0);
+    gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width+703, self.view.frame.size.height);
     [gradientLayer setColors:[NSArray arrayWithObjects:(id)colorOne.CGColor, (id)colorTwo.CGColor, nil]];
     [self.view.layer insertSublayer:gradientLayer atIndex:0];
 }
@@ -65,7 +65,13 @@
     self.about.alpha = 0.0f;
     self.about.scrollView.bounces = NO;
     
-    NSString *header = @"<body link=#00FFFF vlink=#00FFFF alink=#00FFFF><div style='text-align: center; font-family: \"Cochin\", \"Georgia\"; font-size: 12px; color: white; background-color: clear'>";
+    NSString *header;
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        header = @"<body link=#00FFFF vlink=#00FFFF alink=#00FFFF><div style='text-align: center; font-family: \"Cochin\", \"Georgia\"; font-size: 12px; color: white; background-color: clear'>";
+    }
+    else{
+        header = @"<body link=#00FFFF vlink=#00FFFF alink=#00FFFF><div style='text-align: center; font-family: \"Cochin\", \"Georgia\"; font-size: 24px; color: white; background-color: clear'>";
+    }
     NSString *author = @"The Hands of Time Solver for Final Fantasy XIII-2 is designed by me, Corey Roberts!<br /><br />";
     NSString *why = @"I wrote this app because I know that many people consider the Hands of Time puzzle to be a very frustrating and time-consuming puzzle.  Many people guess and end up taking a lot of time on them. This app helps reduce that time so they can continue on with the story.<br /><br />";
     NSString *why2 = @"If you found a bug or some error in a solution, you can either submit it at this <a href='http://ffxiii-2handsoftimesolver.blogspot.com'>link</a> or send me an email directly. I also don't mind comments of appreciation of constructive criticism. Your contribution helps! :)<br /><br />";
@@ -86,8 +92,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
+        return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    }
+    else{
+        return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    }
 }
 
 - (IBAction)homeButtonPressed:(id)sender {

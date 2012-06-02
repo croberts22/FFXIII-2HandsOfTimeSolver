@@ -15,11 +15,13 @@
     UIImageView *splashView;
     NSString *savedSequence;
     NSArray *savedSolution;
+    BOOL is_iPad;
 }
 
 @property (nonatomic, retain) UIImageView *splashView;
 @property (nonatomic, retain) NSString *savedSequence;
 @property (nonatomic, retain) NSArray *savedSolution;
+@property (nonatomic, assign) BOOL is_iPad;
 
 @property (strong, nonatomic) UIWindow *window;
 

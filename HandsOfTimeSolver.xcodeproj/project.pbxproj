@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		637F27CC1579ADCE00C5DBF6 /* iPadAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */; };
+		637F27CE1579B8DC00C5DBF6 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 637F27CD1579B8DC00C5DBF6 /* Default-Landscape~ipad.png */; };
+		637F27D01579B8E200C5DBF6 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 637F27CF1579B8E200C5DBF6 /* Default-Landscape@2x~ipad.png */; };
+		637F27D21579BAE600C5DBF6 /* iPadSolutionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */; };
 		6387AA6715773AC6001C0B9F /* iPadRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6387AA6615773AC6001C0B9F /* iPadRegisterViewController.xib */; };
 		6387AA771577B27C001C0B9F /* UILabel+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387AA761577B27C001C0B9F /* UILabel+FF.m */; };
 		6387AA7F1577B6A3001C0B9F /* UIColor+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387AA7E1577B6A3001C0B9F /* UIColor+FF.m */; };
@@ -48,8 +52,8 @@
 		AE11169614F4315B00CBB05D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AE11169514F4315B00CBB05D /* main.m */; };
 		AE11169A14F4315B00CBB05D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AE11169914F4315B00CBB05D /* AppDelegate.m */; };
 		AE11169D14F4315B00CBB05D /* HandsOfTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE11169C14F4315B00CBB05D /* HandsOfTimeViewController.m */; };
-		AE1116A014F4315B00CBB05D /* HandsOfTimeViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE11169E14F4315B00CBB05D /* HandsOfTimeViewController_iPhone.xib */; };
-		AE1116A314F4315B00CBB05D /* HandsOfTimeViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE1116A114F4315B00CBB05D /* HandsOfTimeViewController_iPad.xib */; };
+		AE1116A014F4315B00CBB05D /* HandsOfTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE11169E14F4315B00CBB05D /* HandsOfTimeViewController.xib */; };
+		AE1116A314F4315B00CBB05D /* iPadHandsOfTimeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE1116A114F4315B00CBB05D /* iPadHandsOfTimeViewController.xib */; };
 		AE1116AB14F4315B00CBB05D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE1116AA14F4315B00CBB05D /* SenTestingKit.framework */; };
 		AE1116AC14F4315B00CBB05D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE11168914F4315B00CBB05D /* UIKit.framework */; };
 		AE1116AD14F4315B00CBB05D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE11168B14F4315B00CBB05D /* Foundation.framework */; };
@@ -64,8 +68,6 @@
 		AE332F4D151A8539006A5F08 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE332F4C151A8539006A5F08 /* MessageUI.framework */; };
 		AE383886151634FE006B9272 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = AE383885151634FE006B9272 /* Icon.png */; };
 		AE38388815163503006B9272 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE38388715163503006B9272 /* Icon@2x.png */; };
-		AE38388A15163508006B9272 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = AE38388915163508006B9272 /* Default.png */; };
-		AE38388C1516350C006B9272 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE38388B1516350C006B9272 /* Default@2x.png */; };
 		AE4B5A5214F972E2009DCBE1 /* SolutionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE4B5A5014F972E2009DCBE1 /* SolutionViewController.m */; };
 		AE4B5A5314F972E2009DCBE1 /* SolutionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE4B5A5114F972E2009DCBE1 /* SolutionViewController.xib */; };
 		AE4B5A5814F97301009DCBE1 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE4B5A5614F97301009DCBE1 /* AboutViewController.m */; };
@@ -120,6 +122,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadAboutViewController.xib; sourceTree = "<group>"; };
+		637F27CD1579B8DC00C5DBF6 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		637F27CF1579B8E200C5DBF6 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
+		637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadSolutionViewController.xib; sourceTree = "<group>"; };
 		6387AA6615773AC6001C0B9F /* iPadRegisterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadRegisterViewController.xib; sourceTree = "<group>"; };
 		6387AA751577B27C001C0B9F /* UILabel+FF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FF.h"; sourceTree = "<group>"; };
 		6387AA761577B27C001C0B9F /* UILabel+FF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+FF.m"; sourceTree = "<group>"; };
@@ -183,8 +189,8 @@
 		AE11169914F4315B00CBB05D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		AE11169B14F4315B00CBB05D /* HandsOfTimeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandsOfTimeViewController.h; sourceTree = "<group>"; };
 		AE11169C14F4315B00CBB05D /* HandsOfTimeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HandsOfTimeViewController.m; sourceTree = "<group>"; };
-		AE11169F14F4315B00CBB05D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/HandsOfTimeViewController_iPhone.xib; sourceTree = "<group>"; };
-		AE1116A214F4315B00CBB05D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/HandsOfTimeViewController_iPad.xib; sourceTree = "<group>"; };
+		AE11169F14F4315B00CBB05D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/HandsOfTimeViewController.xib; sourceTree = "<group>"; };
+		AE1116A214F4315B00CBB05D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/iPadHandsOfTimeViewController.xib; sourceTree = "<group>"; };
 		AE1116A914F4315B00CBB05D /* HandsOfTimeSolverTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandsOfTimeSolverTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE1116AA14F4315B00CBB05D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		AE1116B214F4315B00CBB05D /* HandsOfTimeSolverTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HandsOfTimeSolverTests-Info.plist"; sourceTree = "<group>"; };
@@ -333,14 +339,16 @@
 				63B5757E157893C90081BD10 /* iPadRecentPuzzlesViewController.xib */,
 				AE11169B14F4315B00CBB05D /* HandsOfTimeViewController.h */,
 				AE11169C14F4315B00CBB05D /* HandsOfTimeViewController.m */,
-				AE11169E14F4315B00CBB05D /* HandsOfTimeViewController_iPhone.xib */,
-				AE1116A114F4315B00CBB05D /* HandsOfTimeViewController_iPad.xib */,
+				AE11169E14F4315B00CBB05D /* HandsOfTimeViewController.xib */,
+				AE1116A114F4315B00CBB05D /* iPadHandsOfTimeViewController.xib */,
 				AE4B5A4F14F972E2009DCBE1 /* SolutionViewController.h */,
 				AE4B5A5014F972E2009DCBE1 /* SolutionViewController.m */,
 				AE4B5A5114F972E2009DCBE1 /* SolutionViewController.xib */,
+				637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */,
 				AE4B5A5514F97301009DCBE1 /* AboutViewController.h */,
 				AE4B5A5614F97301009DCBE1 /* AboutViewController.m */,
 				AE4B5A5714F97301009DCBE1 /* AboutViewController.xib */,
+				637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -422,6 +430,8 @@
 		AE11167A14F4315B00CBB05D = {
 			isa = PBXGroup;
 			children = (
+				637F27CF1579B8E200C5DBF6 /* Default-Landscape@2x~ipad.png */,
+				637F27CD1579B8DC00C5DBF6 /* Default-Landscape~ipad.png */,
 				6387AA751577B27C001C0B9F /* UILabel+FF.h */,
 				6387AA761577B27C001C0B9F /* UILabel+FF.m */,
 				AE38388B1516350C006B9272 /* Default@2x.png */,
@@ -665,8 +675,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE11169414F4315B00CBB05D /* InfoPlist.strings in Resources */,
-				AE1116A014F4315B00CBB05D /* HandsOfTimeViewController_iPhone.xib in Resources */,
-				AE1116A314F4315B00CBB05D /* HandsOfTimeViewController_iPad.xib in Resources */,
+				AE1116A014F4315B00CBB05D /* HandsOfTimeViewController.xib in Resources */,
+				AE1116A314F4315B00CBB05D /* iPadHandsOfTimeViewController.xib in Resources */,
 				AE4B5A5314F972E2009DCBE1 /* SolutionViewController.xib in Resources */,
 				AE4B5A5914F97301009DCBE1 /* AboutViewController.xib in Resources */,
 				AE73D5021515282600542A55 /* finalf.ttf in Resources */,
@@ -674,8 +684,6 @@
 				AE73D50A15152F3300542A55 /* Hand@2x.png in Resources */,
 				AE383886151634FE006B9272 /* Icon.png in Resources */,
 				AE38388815163503006B9272 /* Icon@2x.png in Resources */,
-				AE38388A15163508006B9272 /* Default.png in Resources */,
-				AE38388C1516350C006B9272 /* Default@2x.png in Resources */,
 				AED1526C152ABEA8000B534E /* RecentPuzzlesViewController.xib in Resources */,
 				AE11147D152E246E009EF4F4 /* RegisterViewController.xib in Resources */,
 				AE0C60081534CBDD00AA4360 /* table_cell.png in Resources */,
@@ -690,6 +698,10 @@
 				AEAD4F931565DCE700053E17 /* README.md in Resources */,
 				6387AA6715773AC6001C0B9F /* iPadRegisterViewController.xib in Resources */,
 				63B5757F157893C90081BD10 /* iPadRecentPuzzlesViewController.xib in Resources */,
+				637F27CC1579ADCE00C5DBF6 /* iPadAboutViewController.xib in Resources */,
+				637F27CE1579B8DC00C5DBF6 /* Default-Landscape~ipad.png in Resources */,
+				637F27D01579B8E200C5DBF6 /* Default-Landscape@2x~ipad.png in Resources */,
+				637F27D21579BAE600C5DBF6 /* iPadSolutionViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -815,20 +827,20 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		AE11169E14F4315B00CBB05D /* HandsOfTimeViewController_iPhone.xib */ = {
+		AE11169E14F4315B00CBB05D /* HandsOfTimeViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				AE11169F14F4315B00CBB05D /* en */,
 			);
-			name = HandsOfTimeViewController_iPhone.xib;
+			name = HandsOfTimeViewController.xib;
 			sourceTree = "<group>";
 		};
-		AE1116A114F4315B00CBB05D /* HandsOfTimeViewController_iPad.xib */ = {
+		AE1116A114F4315B00CBB05D /* iPadHandsOfTimeViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				AE1116A214F4315B00CBB05D /* en */,
 			);
-			name = HandsOfTimeViewController_iPad.xib;
+			name = iPadHandsOfTimeViewController.xib;
 			sourceTree = "<group>";
 		};
 		AE1116B314F4315B00CBB05D /* InfoPlist.strings */ = {

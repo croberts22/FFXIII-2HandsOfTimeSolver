@@ -18,7 +18,7 @@ static const NSInteger kGANDispatchPeriodSec = 10;
 
 @implementation AppDelegate
 
-@synthesize splashView, savedSequence, savedSolution;
+@synthesize splashView, savedSequence, savedSolution, is_iPad;
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
@@ -44,6 +44,7 @@ static const NSInteger kGANDispatchPeriodSec = 10;
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        self.is_iPad = NO;
         self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"HandsOfTimeViewController_iPhone" bundle:nil] autorelease];
         self.navController = [[[UINavigationController alloc] initWithRootViewController:_viewController] autorelease];
         self.navController.navigationBarHidden = YES;
@@ -51,6 +52,7 @@ static const NSInteger kGANDispatchPeriodSec = 10;
         self.window.rootViewController = self.navController;
 
     } else {
+        self.is_iPad = YES;
         self.masterViewController = [[[RecentPuzzlesViewController alloc] initWithNibName:@"iPadRecentPuzzlesViewController" bundle:[NSBundle mainBundle]] autorelease];
         self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"HandsOfTimeViewController_iPad" bundle:nil] autorelease];
         
@@ -92,8 +94,16 @@ static const NSInteger kGANDispatchPeriodSec = 10;
 }
 
 - (void)fadeDefaultScreen {
-    splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 320, 480)];
-	splashView.image = [UIImage imageNamed:@"Default.png"]; 
+    if(is_iPad){
+        UIImage *image = [UIImage imageNamed:@"Default-Landscape.png"];
+        splashView.image = [[[UIImage alloc] initWithCGImage:image.CGImage scale:1.0 orientation:UIImageOrientationRight] autorelease];
+        splashView.frame = CGRectMake(0, 0, 748, 1024);
+    }
+    else{
+        splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 320, 480)];
+        splashView.image = [UIImage imageNamed:@"Default.png"];     
+    }
+    
 	[_window addSubview:splashView]; 
 	[_window bringSubviewToFront:splashView];
 	[UIView beginAnimations:nil context:nil]; 
