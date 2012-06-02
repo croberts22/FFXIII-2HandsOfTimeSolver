@@ -7,6 +7,7 @@
 //
 
 #import "SelectedNodeView.h"
+#import "SolutionViewController.h"
 
 @implementation SelectedNodeView
 
@@ -78,6 +79,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     CGContextStrokePath(context);
     CGContextSetFillColorWithColor(context, [UIColor blackColor].CGColor);
     CGContextFillEllipseInRect(context, rectangle);
+    
 }
 
 - (void)drawHighlightedNotChosenNode:(NSArray *)coordinate {

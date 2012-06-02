@@ -26,6 +26,7 @@
 
 #define FRAME_DIMENSION ( IS_IPAD ? 80.0f : 50.0f )
 #define INNER_FRAME_DIMENSION (sqrt(pow((FRAME_DIMENSION/2.0),2)+pow((FRAME_DIMENSION/2.0),2)))
+#define FRAME_RADIUS (FRAME_DIMENSION/2.0f)
 
 #define NUMBER_FONT_SIZE ( IS_IPAD ? 56.0f : 32.0f )
 
@@ -289,6 +290,20 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         node.glowAmount = 10.0f;
         node.backgroundColor = [UIColor clearColor];
         [self.view addSubview:node];
+        
+        
+        if(i == self.selectedNodeView.highlightedNodeToChoose) {
+            // create button
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake([[current_coordinates objectAtIndex:0] floatValue] - FRAME_DIMENSION/2, 
+                                      [[current_coordinates objectAtIndex:1] floatValue] - FRAME_DIMENSION/2, 
+                                      FRAME_DIMENSION, 
+                                      FRAME_DIMENSION);
+            button.tag = i;
+            [button addTarget:self action:@selector(nextButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            
+            [self.view addSubview:button];
+        }
 
     }
     self.coordinates = [NSArray arrayWithArray:results];

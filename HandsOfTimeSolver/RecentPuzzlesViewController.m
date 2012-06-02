@@ -21,6 +21,12 @@
 
 @implementation RecentPuzzlesViewController
 
+#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+#define TEXT_FONT_SIZE ( IS_IPAD ? 20.0f : 16.0f )
+#define DETAIL_TEXT_FONT_SIZE ( IS_IPAD ? 14.0f : 12.0f )
+#define CELL_SIZE ( IS_IPAD ? 80.0f : 60.0f )
+
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
@@ -195,7 +201,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return CELL_SIZE;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -208,22 +214,18 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     
     cell.textLabel.numberOfLines = 1;
-    cell.textLabel.font = [UIFont fontWithName:@"Georgia-Bold" size:16];
+    cell.textLabel.font = [UIFont fontWithName:@"Georgia-Bold" size:TEXT_FONT_SIZE];
     cell.textLabel.textColor = UIColorFromRGB(0xCFCFCF);
     
     cell.detailTextLabel.numberOfLines = 2;
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Georgia" size:12];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Georgia" size:DETAIL_TEXT_FONT_SIZE];
     cell.detailTextLabel.textColor = [UIColor grayColor];
     
     cell.selectedBackgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"uitableviewselection-blue-44.png"]] autorelease];
     Puzzle *puzzle = [puzzles objectAtIndex:puzzles.count - 1 - indexPath.row];
     NSString *submission = [NSString stringWithFormat:@"Submitted by %@ on %@", puzzle.user, puzzle.string_timestamp];
-    //NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:submission];
-    //[attributedString beginEditing];
-    //[attributedString addAttribute:kCTFontAttributeName value:[UIFont fontWithName:@"Georgia-Bold" size:12] range:NSMakeRange(13, puzzle.user.length)];
-    //[attributedString endEditing];
+    
     cell.textLabel.text = puzzle.string_sequence;
-    //cell.detailTextLabel.text = attributedString;
     cell.detailTextLabel.text = submission;
     
     return cell;
@@ -424,17 +426,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
           [error localizedDescription],
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!" 
-                                                    message:[error localizedDescription] 
-                                                   delegate:self 
-                                          cancelButtonTitle:@":( Okay" 
-                                          otherButtonTitles:nil, nil];
-    [alert show];
-    [alert release];
-    
     [self showErrorStatus];
-    [self invalidateTimer];
     [self hideIndicator];
+    if(timer == nil){
+        [self validateTimer];
+    }
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection

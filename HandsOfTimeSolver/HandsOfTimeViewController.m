@@ -542,6 +542,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
             if(delegate.is_iPad){
                 [delegate presentDetailModalView:SVC withPresentation:UIModalPresentationFormSheet];
+                NSTimer *remove_status = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(removeStatusLabelText) userInfo:nil repeats:nil];
+                NSTimer *remove_numbers = [NSTimer scheduledTimerWithTimeInterval:2.0f target:self selector:@selector(resetButtonPressed:) userInfo:nil repeats:nil];
             }
             else{
                 [delegate presentModalView:SVC withTransition:UIModalTransitionStyleCrossDissolve];    
