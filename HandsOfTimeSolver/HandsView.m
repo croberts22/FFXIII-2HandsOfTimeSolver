@@ -16,6 +16,11 @@
 #define CENTER_X (self.center.x)
 #define CENTER_Y (self.center.y)
 
+#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+
+#define SIZE_X ( IS_IPAD ? 30.0f : 15.0f )
+#define SIZE_Y ( IS_IPAD ? 282.0f : 141.0f )
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -33,7 +38,9 @@
         right_hand = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Hand.png"]];
     }
     
-    CGRect frame = CGRectMake(CENTER_X-7.5f, CENTER_Y-70.5f, 15, 141);
+    CGRect frame = CGRectMake(CENTER_X - ( SIZE_X / 2), 
+                              CENTER_Y - ( SIZE_Y / 2 ), 
+                              SIZE_X, SIZE_Y);
     
     left_hand.frame = frame;
     right_hand.frame = frame;
