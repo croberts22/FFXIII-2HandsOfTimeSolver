@@ -11,6 +11,8 @@
 #import "Puzzle.h"
 #import "AppDelegate.h"
 #import "GANTracker.h"
+#import "SolutionViewController.h"
+#import "HandsOfTimeViewController.h"
 
 
 @interface RecentPuzzlesViewController ()
@@ -367,12 +369,26 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.puzzlesTable deselectRowAtIndexPath:indexPath animated:YES];
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    delegate.savedSequence = [[puzzles objectAtIndex:puzzles.count - 1 - indexPath.row] sequence];
-    delegate.savedSolution = [[puzzles objectAtIndex:puzzles.count - 1 - indexPath.row] solution];
-
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    NSArray *saved_solution = [[puzzles objectAtIndex:puzzles.count - 1 - indexPath.row] solution];
+    NSString *saved_sequence = [[puzzles objectAtIndex:puzzles.count - 1 - indexPath.row] sequence];
+    
+    if(delegate.is_iPad){
+        SolutionViewController *SVC = [[[SolutionViewController alloc] initWithNibName:@"iPadSolutionViewController" bundle:[NSBundle mainBundle]] autorelease];
+        
+        SVC.solutions = saved_solution;
+        SVC.nodes = [HandsOfTimeViewController createNumbersArray:saved_sequence];
+        
+        [delegate presentDetailModalView:SVC withPresentation:UIModalPresentationFormSheet];
+    }
+    else{
+        delegate.savedSequence = saved_sequence;
+        delegate.savedSolution = saved_solution;
+        
+        [self.puzzlesTable deselectRowAtIndexPath:indexPath animated:YES];       
+        [self.navigationController popViewControllerAnimated:YES];
+    } 
 }
 
 

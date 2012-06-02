@@ -253,7 +253,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
  @param sender The object that called this method.
  */
 - (IBAction)solveButtonPressed:(id)sender {
-    self.numbers = [self createNumbersArray:numberField.text];
+    self.numbers = [HandsOfTimeViewController createNumbersArray:numberField.text];
     if(self.numbers.count == 0){
         [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Please input some numbers." waitUntilDone:NO];
         return;
@@ -443,11 +443,11 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
  Creates an array of user-input numbers from a string.
  @param string A string to be parsed into an array-based container.
  */
-- (NSMutableArray *)createNumbersArray:(NSString *)string {
++ (NSMutableArray *)createNumbersArray:(NSString *)string {
     NSString *values = [string stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSMutableArray *result = [[NSMutableArray alloc] init];
     for(int i = 0; i < [values length]; i++){
-        NSNumber *value = [self parseStringToInt:values atIndex:i];
+        NSNumber *value = [HandsOfTimeViewController parseStringToInt:values atIndex:i];
         [result addObject:value];
     }
     return [result autorelease];
@@ -458,7 +458,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
  @param values The string that contains the user-input numbers.
  @param i An index for the character to be parsed.
  */
-- (NSNumber *)parseStringToInt:(NSString *)values atIndex:(int)i { 
++ (NSNumber *)parseStringToInt:(NSString *)values atIndex:(int)i { 
     int result = [[NSString stringWithFormat:@"%@", [values substringWithRange:NSMakeRange(i, 1)]] intValue];
     return [NSNumber numberWithInt:result];
 }
@@ -563,7 +563,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     SolutionViewController *SVC = [[SolutionViewController alloc] init];
     self.solution = delegate.savedSolution;
     self.numberField.text = delegate.savedSequence;
-    self.numbers = [self createNumbersArray:numberField.text];
+    self.numbers = [HandsOfTimeViewController createNumbersArray:numberField.text];
 
     SVC.solutions = delegate.savedSolution;
     SVC.nodes = self.numbers;

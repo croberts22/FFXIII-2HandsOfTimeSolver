@@ -168,6 +168,14 @@ static const NSInteger kGANDispatchPeriodSec = 10;
 
 - (void)popModalView {
     [self.viewController dismissModalViewControllerAnimated:YES];
+    
+    if(is_iPad){
+        RecentPuzzlesViewController *rpvc = [self.splitViewController.viewControllers objectAtIndex:0];
+        NSIndexPath *selection = [rpvc.puzzlesTable indexPathForSelectedRow];
+        if (selection) {
+            [rpvc.puzzlesTable deselectRowAtIndexPath:selection animated:YES];
+        }
+    }
 }
 
 @end

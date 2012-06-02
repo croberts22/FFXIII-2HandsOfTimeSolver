@@ -285,7 +285,7 @@
  @param string A string to be parsed into an array-based container.
  @return NSMutableArray of user-input numbers.
  */
-- (NSMutableArray *)createNumbersArray:(NSString *)string;
++ (NSMutableArray *)createNumbersArray:(NSString *)string;
 
 /**
  Takes a character from a string at a given index and returns the the value in a primitive int form.
@@ -293,7 +293,7 @@
  @param i An index for the character to be parsed.
  @return NSNumber of the integer parsed from the string.
  */
-- (NSNumber *)parseStringToInt:(NSString *)values atIndex:(int)i;
++ (NSNumber *)parseStringToInt:(NSString *)values atIndex:(int)i;
 
 /**
  Takes the solution array and converts the result as a string by separating
