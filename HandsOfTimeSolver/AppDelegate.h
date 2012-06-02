@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Crittercism.h"
 
 @class HandsOfTimeViewController;
 @class RecentPuzzlesViewController;

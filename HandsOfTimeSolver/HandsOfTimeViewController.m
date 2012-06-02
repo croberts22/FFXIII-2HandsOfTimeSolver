@@ -501,6 +501,9 @@
     return get;
 }
 
+
+- (IBAction) crashPressed:(id) sender { [NSException raise:NSInvalidArgumentException format:@"Foo must not be nil"]; }
+
 /**
  Determines the results of the puzzle solving, once the puzzle has been attempted
  to solve.

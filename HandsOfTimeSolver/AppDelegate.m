@@ -11,6 +11,7 @@
 #import "HandsOfTimeViewController.h"
 #import "RegisterViewController.h"
 #import "RecentPuzzlesViewController.h"
+#import "UIImage-Extensions.h"
 #import "GANTracker.h"
 #import "Appirater.h"
 
@@ -45,11 +46,13 @@ static const NSInteger kGANDispatchPeriodSec = 10;
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         self.is_iPad = NO;
-        self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"HandsOfTimeViewController_iPhone" bundle:nil] autorelease];
+        self.viewController = [[[HandsOfTimeViewController alloc] initWithNibName:@"HandsOfTimeViewController" bundle:nil] autorelease];
         self.navController = [[[UINavigationController alloc] initWithRootViewController:_viewController] autorelease];
         self.navController.navigationBarHidden = YES;
         
         self.window.rootViewController = self.navController;
+        
+        [Crittercism initWithAppID: @"4fca42c32cd952044200000b" andKey:@"fqnugix7tsa1mpahtlw3h9ckxeob" andSecret:@"m4doxelxwlfhnj1b5qskrpajc8iq76tv" andMainViewController:self.navController];
 
     } else {
         self.is_iPad = YES;
@@ -62,6 +65,8 @@ static const NSInteger kGANDispatchPeriodSec = 10;
         
         self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         [self.window addSubview:_splitViewController.view];
+        
+        [Crittercism initWithAppID: @"4fca42c32cd952044200000b" andKey:@"fqnugix7tsa1mpahtlw3h9ckxeob" andSecret:@"m4doxelxwlfhnj1b5qskrpajc8iq76tv" andMainViewController:self.splitViewController];
         
     }
     
@@ -93,11 +98,28 @@ static const NSInteger kGANDispatchPeriodSec = 10;
     [defaults registerDefaults:appDefaults];
 }
 
+static inline double radians (double degrees) { return degrees * M_PI / 180; }
+
 - (void)fadeDefaultScreen {
     if(is_iPad){
-        UIImage *image = [UIImage imageNamed:@"Default-Landscape.png"];
-        splashView.image = [[[UIImage alloc] initWithCGImage:image.CGImage scale:1.0 orientation:UIImageOrientationRight] autorelease];
-        splashView.frame = CGRectMake(0, 0, 748, 1024);
+        
+        UIImage *image = [UIImage imageNamed:@"Default-Landscape.png"];        
+        
+        UIImage *rotated_image = [image imageRotatedByDegrees:90.0];
+        
+        /*
+        UIGraphicsBeginImageContext(image.size);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        if([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) {
+            CGContextRotateCTM(context, radians(180));
+        }
+        
+        [image drawAtPoint:CGPointMake(0, 0)];
+         */
+        
+        splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.window.frame.size.width-20, self.window.frame.size.height)];
+        splashView.image = rotated_image;
     }
     else{
         splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 320, 480)];
