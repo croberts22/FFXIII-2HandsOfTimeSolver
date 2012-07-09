@@ -14,12 +14,13 @@
 #import "UIImage-Extensions.h"
 #import "GANTracker.h"
 #import "Appirater.h"
+#import "ASIHTTPRequest.h"
 
 static const NSInteger kGANDispatchPeriodSec = 10;
 
 @implementation AppDelegate
 
-@synthesize splashView, savedSequence, savedSolution, is_iPad;
+@synthesize splashView, savedSequence, savedSolution, is_iPad, request;
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
@@ -67,12 +68,12 @@ static const NSInteger kGANDispatchPeriodSec = 10;
         [self.window addSubview:_splitViewController.view];
         
         [Crittercism initWithAppID: @"4fca42c32cd952044200000b" andKey:@"fqnugix7tsa1mpahtlw3h9ckxeob" andSecret:@"m4doxelxwlfhnj1b5qskrpajc8iq76tv" andMainViewController:self.splitViewController];
-        
     }
     
     [self.window makeKeyAndVisible];
     [self fadeDefaultScreen];
     [self registerAppDefaults];
+    [self checkForUpdates];
     
     if(![[NSUserDefaults standardUserDefaults] boolForKey:@"registered"]){
         if(!is_iPad){
@@ -88,6 +89,14 @@ static const NSInteger kGANDispatchPeriodSec = 10;
     [Appirater appLaunched:YES];
     
     return YES;
+}
+
+- (void)checkForUpdates {
+    NSString *current_version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *API_Call = [NSString stringWithFormat:@"http://ffxiii-2.texasdrums.com/api/app_update.php?current=%@", current_version];
+    self.request = [[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:API_Call]];
+    self.request.delegate = self;
+    [self.request startAsynchronous];
 }
 
 - (void)registerAppDefaults {
@@ -106,18 +115,6 @@ static inline double radians (double degrees) { return degrees * M_PI / 180; }
         UIImage *image = [UIImage imageNamed:@"Default-Landscape.png"];        
         
         UIImage *rotated_image = [image imageRotatedByDegrees:90.0];
-        
-        /*
-        UIGraphicsBeginImageContext(image.size);
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        
-        if([[UIDevice currentDevice] orientation] == UIDeviceOrientationLandscapeRight) {
-            CGContextRotateCTM(context, radians(180));
-        }
-        
-        [image drawAtPoint:CGPointMake(0, 0)];
-         */
-        
         splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.window.frame.size.width-20, self.window.frame.size.height)];
         splashView.image = rotated_image;
     }
@@ -199,6 +196,26 @@ static inline double radians (double degrees) { return degrees * M_PI / 180; }
             [rpvc.puzzlesTable deselectRowAtIndexPath:selection animated:YES];
         }
     }
+}
+
+#pragma mark - ASIHTTPRequest delegate methods
+
+- (void)requestFinished:(ASIHTTPRequest *)request_ {
+    if(![[request_ responseString] isEqualToString:@"OK"]){
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
+                                                        message:[request_ responseString] 
+                                                       delegate:self 
+                                              cancelButtonTitle:nil 
+                                              otherButtonTitles:@"Okay", nil];
+        [alert show];
+        [alert release];
+    }
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request {
+    NSLog(@"Request failed! Reason: %@", [[request error] description]);
+    // Try again.
+    [self.request startAsynchronous];
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "GANTracker.h"
 #import "SolutionViewController.h"
 #import "HandsOfTimeViewController.h"
+#import "ASIHTTPRequest.h"
 
 
 @interface RecentPuzzlesViewController ()
@@ -32,7 +33,7 @@ colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@synthesize received_data, refreshButton, backButton, puzzlesTable, puzzles, since, num_updated_rows, timer, indicator, status, updateLabel, totalPuzzles, userPuzzles;
+@synthesize refreshButton, backButton, puzzlesTable, puzzles, since, num_updated_rows, timer, indicator, status, updateLabel, totalPuzzles, userPuzzles, total_count, request_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,6 +43,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     }
     return self;
 }
+
+#pragma mark - Memory Management
+
+- (void)dealloc {
+    [self.request_ clearDelegatesAndCancel];
+    [self.request_ release];
+    [super dealloc];
+}
+
+#pragma mark - View lifecycle
 
 - (void)viewWillAppear:(BOOL)animated {
     [[GANTracker sharedTracker] trackPageview:@"Recent Puzzles (RecentPuzzlesViewController)" withError:nil];
@@ -57,6 +68,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     self.since = 0;
     self.num_updated_rows = 0;
+    self.total_count = 0;
     self.puzzlesTable.alpha = 0.0f;
     self.updateLabel.alpha = 0.0f;
     self.userPuzzles.alpha = 0.0f;
@@ -84,6 +96,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [timer invalidate];
     timer = nil;
 }
+
+
 
 - (void)validateTimer {
     NSLog(@"Starting timer.");
@@ -120,14 +134,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)connect {
     [self showLoadingStatus];
     [self performSelectorOnMainThread:@selector(displayIndicator) withObject:nil waitUntilDone:YES];
-    NSString *API_Call = [NSString stringWithFormat:@"http://ffxiii-2.texasdrums.com/api/v1/update.php?timestamp=%d", since];
+    NSString *API_Call = [NSString stringWithFormat:@"http://ffxiii-2.texasdrums.com/api/v1.1/update.php?timestamp=%d", since];
     //NSLog(@"%@", API_Call);
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:API_Call] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
-    NSURLConnection *urlconnection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-    if(urlconnection) {
-        NSLog(@"Initiating connection...");
-        received_data = [[NSMutableData data] retain];
-    }
+    
+    self.request_ = [[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:API_Call]];
+    self.request_.delegate = self;
+    [self.request_ startAsynchronous];
 }
 
 - (NSArray *)convertStringToArray:(NSString *)solution {
@@ -153,7 +165,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     num_updated_rows = 0;
     
+    BOOL total_count_captured = FALSE;
+    
     for(NSDictionary *item in results) {
+        if(!total_count_captured) {
+            total_count = [[item objectForKey:@"total_count"] intValue];
+            total_count_captured = TRUE;
+            continue;
+        }
+        
         Puzzle *puzzle = [[[Puzzle alloc] init] autorelease];
         puzzle.sequence = [item objectForKey:@"sequence"];
         puzzle.string_sequence = [self expandString:puzzle.sequence];
@@ -196,7 +216,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ([puzzles count] > 100) ? 100 : [puzzles count];
+    return [puzzles count] > 50 ? 50 : [puzzles count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -222,7 +242,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     cell.detailTextLabel.textColor = [UIColor grayColor];
     
     cell.selectedBackgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"uitableviewselection-blue-44.png"]] autorelease];
-    Puzzle *puzzle = [puzzles objectAtIndex:puzzles.count - 1 - indexPath.row];
+    Puzzle *puzzle = [puzzles objectAtIndex:indexPath.row];
     NSString *submission = [NSString stringWithFormat:@"Submitted by %@ on %@", puzzle.user, puzzle.string_timestamp];
     
     cell.textLabel.text = puzzle.string_sequence;
@@ -299,7 +319,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 
 - (void)setTotalPuzzlesText {
-    self.totalPuzzles.text = [NSString stringWithFormat:@"Total Puzzles Solved: %d", [puzzles count]];
+    self.totalPuzzles.text = [NSString stringWithFormat:@"Total Puzzles Solved: %d", total_count];
 }
 
 - (void)hideIndicator {
@@ -354,7 +374,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     
     for(int i = 0; i < num_updated_rows; i++) {
         NSIndexPath *addPath = [NSIndexPath indexPathForRow:i inSection:0];
-        NSIndexPath *removePath = [NSIndexPath indexPathForRow:99-i inSection:0];
+        NSIndexPath *removePath = [NSIndexPath indexPathForRow:49-i inSection:0];
         
         [pathsToAdd addObject:addPath];
         [pathsToRemove addObject:removePath];
@@ -373,8 +393,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 {
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     
-    NSArray *saved_solution = [[puzzles objectAtIndex:puzzles.count - 1 - indexPath.row] solution];
-    NSString *saved_sequence = [[puzzles objectAtIndex:puzzles.count - 1 - indexPath.row] sequence];
+    NSArray *saved_solution = [[puzzles objectAtIndex:indexPath.row] solution];
+    NSString *saved_sequence = [[puzzles objectAtIndex:indexPath.row] sequence];
     
     if(delegate.is_iPad){
         SolutionViewController *SVC = [[[SolutionViewController alloc] initWithNibName:@"iPadSolutionViewController" bundle:[NSBundle mainBundle]] autorelease];
@@ -393,52 +413,16 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     } 
 }
 
+#pragma mark - ASIHTTPRequest delegate methods
 
-
-#pragma mark - NSURLConnection delegate methods
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    [received_data setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    [received_data appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection
-  didFailWithError:(NSError *)error
-{
-    // release the connection, and the data object
-    [connection release];
-    [received_data release];
-    
-    // inform the user
-    NSLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-    
-    [self showErrorStatus];
-    [self hideIndicator];
-    if(timer == nil){
-        [self validateTimer];
-    }
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    NSError *error = nil;
-    
-    NSString *data = [[[NSString alloc] initWithData:received_data encoding:NSUTF8StringEncoding] autorelease];
-    //NSLog(@"%@", data);
-    //Make condition for data containing string 'Can't connect to local MySQL'
-    if([data isEqualToString:@"No new puzzles."]){
+- (void)requestFinished:(ASIHTTPRequest *)request {
+    if([[request responseString] isEqualToString:@"No new puzzles."]){
         NSLog(@"No new data.");
     }
     else{
         NSLog(@"Parsing new puzzles...");
-        NSDictionary *results = [[CJSONDeserializer deserializer] deserialize:received_data error:&error];
+        NSError *error;
+        NSDictionary *results = [[CJSONDeserializer deserializer] deserialize:[request responseData] error:&error];
         [self parseResults:results];
     }
     
@@ -453,11 +437,15 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     if(timer == nil){
         [self validateTimer];
     }
-    NSLog(@"Succeeded! Received %d bytes of data.", [received_data length]);
-    
-    // release the connection, and the data object
-    [connection release];
-    [received_data release];
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request {
+    NSLog(@"Request failed! Reason: %@", [[request error] description]);
+    [self showErrorStatus];
+    [self hideIndicator];
+    if(timer == nil){
+        [self validateTimer];
+    }
 }
 
 @end

@@ -23,6 +23,12 @@
 
 #define FRAME_RADIUS (FRAME_DIMENSION/2.0f)
 
+
+// API Calls
+#warning - to do later
+#define API_VERSION_NUMBER @"1.1"
+#define API_APP_UPDATE @"http://www.ffxiii-2handsoftimesolver.com/api/v%@/app_update.php", API_VERSION_NUMBER
+
 @implementation Common
 
 @end
