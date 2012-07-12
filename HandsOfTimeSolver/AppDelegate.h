@@ -7,25 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Crittercism.h"
+
 
 @class HandsOfTimeViewController;
 @class RecentPuzzlesViewController;
-@class ASIHTTPRequest;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate> {
     UIImageView *splashView;
     NSString *savedSequence;
     NSArray *savedSolution;
     BOOL is_iPad;
-    ASIHTTPRequest *request;
 }
 
 @property (nonatomic, retain) UIImageView *splashView;
 @property (nonatomic, retain) NSString *savedSequence;
 @property (nonatomic, retain) NSArray *savedSolution;
 @property (nonatomic, assign) BOOL is_iPad;
-@property (nonatomic, retain) ASIHTTPRequest *request;
 
 @property (strong, nonatomic) UIWindow *window;
 

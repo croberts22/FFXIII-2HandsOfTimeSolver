@@ -10,6 +10,8 @@
 #import "SolutionViewController.h"
 #import "AboutViewController.h"
 #import "RecentPuzzlesViewController.h"
+#import "Common.h"
+#import "ASIHTTPRequest.h"
 
 #import "AppDelegate.h"
 
@@ -257,7 +259,7 @@
         return;
     }
     
-    [self performSelectorOnMainThread:@selector(commitUIForSolving) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(commitUIForSolving) withObject:nil waitUntilDone:YES];
     [self performSelectorInBackground:@selector(solvePuzzle) withObject:nil];
 }
 
@@ -485,46 +487,37 @@
 
 /**
  Takes the puzzle and solution sequence and sends data to the server.
- @return NSString that contains the response from the server.
  */
-- (NSString *)sendPuzzleToDatabase {
-    NSError *anerror = nil;
+- (void)sendPuzzleToDatabase {
+    NSString *API_Call = [NSString stringWithFormat:@"%@pattern=%@&solution=%@&user=%@", API_SUBMIT_PUZZLE, numberField.text, [self convertSolutionArrayToString], [[NSUserDefaults standardUserDefaults] objectForKey:@"username"]];
+    NSLog(@"API Request: %@", API_Call);
     
-    // TODO: Change database and API whenever a new one is acquired.
-    NSString *API_Call = [NSString stringWithFormat:@"http://ffxiii-2.texasdrums.com/api/v1/submit_puzzle.php?pattern=%@&solution=%@&user=%@", numberField.text, [self convertSolutionArrayToString], [[NSUserDefaults standardUserDefaults] objectForKey:@"username"]];
-    NSLog(@"%@", API_Call);
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:API_Call]];
-    NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&anerror];
+    __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:API_Call]];
     
-    NSString *get = [[[NSString alloc] initWithData:response encoding:NSASCIIStringEncoding] autorelease];
+    [request setCompletionBlock:^{ 
+        NSLog(@"Puzzle request completed. Status: %@", [request responseString]);    
+    }];
+    [request setFailedBlock:^{ 
+        NSLog(@"Puzzle request failed. Status: %@", [[request error] localizedDescription]);
+    }];
     
-    return get;
+    [request startAsynchronous];
 }
 
-
-- (IBAction) crashPressed:(id) sender { [NSException raise:NSInvalidArgumentException format:@"Foo must not be nil"]; }
 
 /**
  Determines the results of the puzzle solving, once the puzzle has been attempted
  to solve.
  */
 - (void)determineResults {
-    [self performSelectorOnMainThread:@selector(revokeUIForSolving) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(revokeUIForSolving) withObject:nil waitUntilDone:YES];
     if(self.solution == nil){
         [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"No solution exists!" waitUntilDone:NO];
     }
     else{
-        [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Sending puzzle to database..." waitUntilDone:NO];
         if(debug) NSLog(@"Solution: %@", self.solution);
         
-        NSString *response = [self sendPuzzleToDatabase];
-        
-        if([response isEqualToString:@"Success!"]){
-            [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Sent!" waitUntilDone:NO];
-        }
-        else{
-            [self performSelectorOnMainThread:@selector(setStatusLabelText:) withObject:@"Error trying to send to database." waitUntilDone:NO];
-        }
+        [self sendPuzzleToDatabase];
         
         // Do not push the view if we are testing in GHUnit.
         if(!GHUNIT_TESTING){

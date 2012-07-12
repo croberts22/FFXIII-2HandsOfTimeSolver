@@ -14,7 +14,7 @@
 #import "SolutionViewController.h"
 #import "HandsOfTimeViewController.h"
 #import "ASIHTTPRequest.h"
-
+#import "Common.h"
 
 @interface RecentPuzzlesViewController ()
 
@@ -33,7 +33,7 @@ colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@synthesize refreshButton, backButton, puzzlesTable, puzzles, since, num_updated_rows, timer, indicator, status, updateLabel, totalPuzzles, userPuzzles, total_count, request_;
+@synthesize refreshButton, backButton, puzzlesTable, puzzles, since, num_updated_rows, timer, indicator, status, updateLabel, totalPuzzles, userPuzzles, total_count, user_count;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -47,8 +47,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #pragma mark - Memory Management
 
 - (void)dealloc {
-    [self.request_ clearDelegatesAndCancel];
-    [self.request_ release];
     [super dealloc];
 }
 
@@ -69,6 +67,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     self.since = 0;
     self.num_updated_rows = 0;
     self.total_count = 0;
+    self.user_count = 0;
     self.puzzlesTable.alpha = 0.0f;
     self.updateLabel.alpha = 0.0f;
     self.userPuzzles.alpha = 0.0f;
@@ -134,12 +133,45 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (void)connect {
     [self showLoadingStatus];
     [self performSelectorOnMainThread:@selector(displayIndicator) withObject:nil waitUntilDone:YES];
-    NSString *API_Call = [NSString stringWithFormat:@"http://ffxiii-2.texasdrums.com/api/v1.1/update.php?timestamp=%d", since];
-    //NSLog(@"%@", API_Call);
+    NSString *API_Call = [NSString stringWithFormat:@"%@timestamp=%d&username=%@", API_UPDATE_LIST, since, [[NSUserDefaults standardUserDefaults] objectForKey:@"username"]];
+    NSLog(@"API Request: %@", API_Call);
     
-    self.request_ = [[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:API_Call]];
-    self.request_.delegate = self;
-    [self.request_ startAsynchronous];
+    __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:API_Call]];
+    
+    [request setCompletionBlock:^{
+        if([[request responseString] isEqualToString:@"No new puzzles."]){
+            NSLog(@"No new data.");
+        }
+        else{
+            NSLog(@"Parsing new puzzles...");
+            NSError *error;
+            NSDictionary *results = [[CJSONDeserializer deserializer] deserialize:[request responseData] error:&error];
+            [self parseResults:results];
+        }
+        
+        if([puzzles count] == 0){
+            [self showErrorStatus];
+        }
+        else {
+            [self hideStatus];
+        }
+        
+        [self hideIndicator];
+        if(timer == nil){
+            [self validateTimer];
+        }
+    }];
+    
+    [request setFailedBlock:^{
+        NSLog(@"Request failed! Reason: %@", [[request error] localizedDescription]);
+        [self showErrorStatus];
+        [self hideIndicator];
+        if(timer == nil){
+            [self validateTimer];
+        }
+    }];
+    
+    [request startAsynchronous];
 }
 
 - (NSArray *)convertStringToArray:(NSString *)solution {
@@ -170,6 +202,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     for(NSDictionary *item in results) {
         if(!total_count_captured) {
             total_count = [[item objectForKey:@"total_count"] intValue];
+            user_count = [[item objectForKey:@"user_count"] intValue];
             total_count_captured = TRUE;
             continue;
         }
@@ -186,7 +219,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
             num_updated_rows++;
         }
         
-        [puzzles addObject:puzzle];
+        if(since == 0) {
+            [puzzles addObject:puzzle];
+        }
+        else {
+            [puzzles insertObject:puzzle atIndex:0];
+        }
     }
     
     if(since == 0){
@@ -315,7 +353,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 
 - (void)setUserPuzzlesText {
-    self.userPuzzles.text = [NSString stringWithFormat:@"Your Puzzles Solved: %d", [self findUserPuzzles]];
+    self.userPuzzles.text = [NSString stringWithFormat:@"Your Puzzles Solved: %d", user_count];
 }
 
 - (void)setTotalPuzzlesText {
@@ -356,7 +394,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         num_updated_rows++;
     }
     
-    [puzzles addObject:puzzle];
+    [puzzles insertObject:puzzle atIndex:0];
 }
 
 - (IBAction)refreshButtonPressed:(id)sender {

@@ -304,9 +304,8 @@
 
 /**
  Takes the puzzle and solution sequence and sends data to the server.
- @return NSString that contains the response from the server.
  */
-- (NSString *)sendPuzzleToDatabase;
+- (void)sendPuzzleToDatabase;
 
 //Solve Puzzle Methods
 

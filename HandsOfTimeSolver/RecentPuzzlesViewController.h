@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-@class ASIHTTPRequest;
-
 @interface RecentPuzzlesViewController : UIViewController<NSURLConnectionDelegate> {
     IBOutlet UITableView *puzzlesTable;
     IBOutlet UIButton *refreshButton;
@@ -25,7 +23,7 @@
     int since;
     int num_updated_rows;
     int total_count;
-    ASIHTTPRequest *request_;
+    int user_count;
 }
 
 @property (nonatomic, retain) UITableView *puzzlesTable;
@@ -41,6 +39,6 @@
 @property (nonatomic, assign) int since;
 @property (nonatomic, assign) int num_updated_rows;
 @property (nonatomic, assign) int total_count;
-@property (nonatomic, retain) ASIHTTPRequest *request_;
+@property (nonatomic, assign) int user_count;
 
 @end

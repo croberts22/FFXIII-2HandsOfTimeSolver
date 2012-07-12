@@ -15,12 +15,14 @@
 #import "GANTracker.h"
 #import "Appirater.h"
 #import "ASIHTTPRequest.h"
+#import "Crittercism.h"
+#import "Common.h"
 
 static const NSInteger kGANDispatchPeriodSec = 10;
 
 @implementation AppDelegate
 
-@synthesize splashView, savedSequence, savedSolution, is_iPad, request;
+@synthesize splashView, savedSequence, savedSolution, is_iPad;
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
@@ -93,10 +95,25 @@ static const NSInteger kGANDispatchPeriodSec = 10;
 
 - (void)checkForUpdates {
     NSString *current_version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *API_Call = [NSString stringWithFormat:@"http://ffxiii-2.texasdrums.com/api/app_update.php?current=%@", current_version];
-    self.request = [[ASIHTTPRequest alloc] initWithURL:[NSURL URLWithString:API_Call]];
-    self.request.delegate = self;
-    [self.request startAsynchronous];
+    NSString *API_Call = [NSString stringWithFormat:@"%@current=%@", API_APP_UPDATE, current_version];
+    NSLog(@"API Request: %@", API_Call);
+    __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:API_Call]];
+    
+    [request setCompletionBlock:^{ 
+        if(![[request responseString] isEqualToString:@"OK"]){
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
+                                                            message:[request responseString] 
+                                                           delegate:self 
+                                                  cancelButtonTitle:nil 
+                                                  otherButtonTitles:@"Okay", nil];
+            [alert show];
+            [alert release];
+        }
+    }];
+    [request setFailedBlock:^{ }];
+    
+    [request startAsynchronous];
+    
 }
 
 - (void)registerAppDefaults {
@@ -196,26 +213,6 @@ static inline double radians (double degrees) { return degrees * M_PI / 180; }
             [rpvc.puzzlesTable deselectRowAtIndexPath:selection animated:YES];
         }
     }
-}
-
-#pragma mark - ASIHTTPRequest delegate methods
-
-- (void)requestFinished:(ASIHTTPRequest *)request_ {
-    if(![[request_ responseString] isEqualToString:@"OK"]){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update Available" 
-                                                        message:[request_ responseString] 
-                                                       delegate:self 
-                                              cancelButtonTitle:nil 
-                                              otherButtonTitles:@"Okay", nil];
-        [alert show];
-        [alert release];
-    }
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)request {
-    NSLog(@"Request failed! Reason: %@", [[request error] description]);
-    // Try again.
-    [self.request startAsynchronous];
 }
 
 @end
