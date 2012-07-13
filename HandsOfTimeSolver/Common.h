@@ -8,9 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-//#define API_VERSION_NUMBER @"1.1"
-//#define API_BASE_URL  @"http://www.ffxiii-2handsoftimesolver.coreyjustinroberts.com/api"
-
 #define API_VERSION_NUMBER @"v1.1"
 #define API_BASE_URL @"http://ffxiii-2.coreyjustinroberts.com/api"
 #define API_APP_UPDATE [NSString stringWithFormat:@"%@/app_update.php?", API_BASE_URL]
