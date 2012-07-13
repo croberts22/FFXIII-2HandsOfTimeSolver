@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-@interface RecentPuzzlesViewController : UIViewController<NSURLConnectionDelegate> {
+@interface RecentPuzzlesViewController : UIViewController {
     IBOutlet UITableView *puzzlesTable;
     IBOutlet UIButton *refreshButton;
     IBOutlet UIButton *backButton;

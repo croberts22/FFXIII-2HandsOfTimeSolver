@@ -96,8 +96,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     timer = nil;
 }
 
-
-
 - (void)validateTimer {
     NSLog(@"Starting timer.");
     self.timer = [NSTimer scheduledTimerWithTimeInterval:15.0f target:self selector:@selector(connect) userInfo:nil repeats:YES];
@@ -449,41 +447,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
         [self.puzzlesTable deselectRowAtIndexPath:indexPath animated:YES];       
         [self.navigationController popViewControllerAnimated:YES];
     } 
-}
-
-#pragma mark - ASIHTTPRequest delegate methods
-
-- (void)requestFinished:(ASIHTTPRequest *)request {
-    if([[request responseString] isEqualToString:@"No new puzzles."]){
-        NSLog(@"No new data.");
-    }
-    else{
-        NSLog(@"Parsing new puzzles...");
-        NSError *error;
-        NSDictionary *results = [[CJSONDeserializer deserializer] deserialize:[request responseData] error:&error];
-        [self parseResults:results];
-    }
-    
-    if([puzzles count] == 0){
-        [self showErrorStatus];
-    }
-    else {
-        [self hideStatus];
-    }
-    
-    [self hideIndicator];
-    if(timer == nil){
-        [self validateTimer];
-    }
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)request {
-    NSLog(@"Request failed! Reason: %@", [[request error] description]);
-    [self showErrorStatus];
-    [self hideIndicator];
-    if(timer == nil){
-        [self validateTimer];
-    }
 }
 
 @end
