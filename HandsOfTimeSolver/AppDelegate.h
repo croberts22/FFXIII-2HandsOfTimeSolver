@@ -12,7 +12,7 @@
 @class HandsOfTimeViewController;
 @class RecentPuzzlesViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate> {
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate> {
     UIImageView *splashView;
     NSString *savedSequence;
     NSArray *savedSolution;

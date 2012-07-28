@@ -173,6 +173,16 @@
 		63D04EFB15AA878F00C9D46F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D04EF815AA878F00C9D46F /* Reachability.m */; };
 		63D04EFD15AA87F000C9D46F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D04EFC15AA87F000C9D46F /* libz.dylib */; };
 		63D04EFF15AA882E00C9D46F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D04EFE15AA882E00C9D46F /* MobileCoreServices.framework */; };
+		63E4D73515C48BCB003EC59E /* libCrittercism_v3_1_5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63C94C8F157A7B1A00E893F6 /* libCrittercism_v3_1_5.a */; };
+		63E4D73715C48BEB003EC59E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D04EFC15AA87F000C9D46F /* libz.dylib */; };
+		63E4D73815C48C00003EC59E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D04EFE15AA882E00C9D46F /* MobileCoreServices.framework */; };
+		63E4D73915C48D5B003EC59E /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 637F27D41579C80900C5DBF6 /* Common.m */; };
+		63E4D73A15C48D62003EC59E /* UIColor+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387AA7E1577B6A3001C0B9F /* UIColor+FF.m */; };
+		63E4D73B15C48D62003EC59E /* UILabel+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B5757B15783A5B0081BD10 /* UILabel+FF.m */; };
+		63E4D73C15C48E1F003EC59E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C94D43157A835500E893F6 /* Icon.png */; };
+		63E4D73D15C48E21003EC59E /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C94D45157A835A00E893F6 /* Icon@2x.png */; };
+		63E4D73E15C48E28003EC59E /* Icon~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C94D4B157A837700E893F6 /* Icon~ipad.png */; };
+		63E4D73F15C48E2B003EC59E /* Icon@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C94D4D157A837D00E893F6 /* Icon@2x~ipad.png */; };
 		AE02D6701514466400203A56 /* SolutionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE4B5A5014F972E2009DCBE1 /* SolutionViewController.m */; };
 		AE02D672151446FA00203A56 /* GHUnitIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE02D671151446FA00203A56 /* GHUnitIOS.framework */; };
 		AE0C5FF81534C1DF00AA4360 /* CDataScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = AE0C5FDD1534C1DF00AA4360 /* CDataScanner.m */; };
@@ -601,6 +611,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63E4D73815C48C00003EC59E /* MobileCoreServices.framework in Frameworks */,
+				63E4D73715C48BEB003EC59E /* libz.dylib in Frameworks */,
 				AEAD4F981565E1BD00053E17 /* SystemConfiguration.framework in Frameworks */,
 				AEF9CA61151D370C00C8A028 /* MessageUI.framework in Frameworks */,
 				AE73D51315156EE600542A55 /* QuartzCore.framework in Frameworks */,
@@ -610,6 +622,7 @@
 				AEAD4F771565DB1400053E17 /* CFNetwork.framework in Frameworks */,
 				AE02D672151446FA00203A56 /* GHUnitIOS.framework in Frameworks */,
 				AEAD4F781565DB1700053E17 /* libicucore.A.dylib in Frameworks */,
+				63E4D73515C48BCB003EC59E /* libCrittercism_v3_1_5.a in Frameworks */,
 				AEAD4F791565DB1900053E17 /* libsqlite3.0.dylib in Frameworks */,
 				AEAD4F6C1565DAEF00053E17 /* libGoogleAnalytics.a in Frameworks */,
 			);
@@ -1358,6 +1371,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE1116D314F5591C00CBB05D /* InfoPlist.strings in Resources */,
+				63E4D73C15C48E1F003EC59E /* Icon.png in Resources */,
+				63E4D73D15C48E21003EC59E /* Icon@2x.png in Resources */,
+				63E4D73E15C48E28003EC59E /* Icon~ipad.png in Resources */,
+				63E4D73F15C48E2B003EC59E /* Icon@2x~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1471,6 +1488,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63E4D73A15C48D62003EC59E /* UIColor+FF.m in Sources */,
+				63E4D73B15C48D62003EC59E /* UILabel+FF.m in Sources */,
+				63E4D73915C48D5B003EC59E /* Common.m in Sources */,
 				AEAD4F971565E1B300053E17 /* Appirater.m in Sources */,
 				AEAD4F6E1565DB0200053E17 /* CDataScanner.m in Sources */,
 				AEAD4F6F1565DB0200053E17 /* CJSONDeserializer.m in Sources */,
@@ -1733,6 +1753,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
+					"\"$(SRCROOT)/HandsOfTimeSolver/CrittercismSDK\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1759,6 +1780,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
+					"\"$(SRCROOT)/HandsOfTimeSolver/CrittercismSDK\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

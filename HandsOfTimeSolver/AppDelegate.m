@@ -215,4 +215,10 @@ static inline double radians (double degrees) { return degrees * M_PI / 180; }
     }
 }
 
+#pragma mark - UIAlertView Delegate Methods
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/us/app/hands-time-solver-for-ffxiii/id514202078?mt=8&uo=4"]];
+}
+
 @end

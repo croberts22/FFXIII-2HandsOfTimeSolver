@@ -495,19 +495,21 @@
  Takes the puzzle and solution sequence and sends data to the server.
  */
 - (void)sendPuzzleToDatabase {
-    NSString *API_Call = [NSString stringWithFormat:@"%@pattern=%@&solution=%@&user=%@", API_SUBMIT_PUZZLE, numberField.text, [self convertSolutionArrayToString], [[NSUserDefaults standardUserDefaults] objectForKey:@"username"]];
-    NSLog(@"API Request: %@", API_Call);
-    
-    __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:API_Call]];
-    
-    [request setCompletionBlock:^{ 
-        NSLog(@"Puzzle request completed. Status: %@", [request responseString]);    
-    }];
-    [request setFailedBlock:^{ 
-        NSLog(@"Puzzle request failed. Status: %@", [[request error] localizedDescription]);
-    }];
-    
-    [request startAsynchronous];
+    if(!GHUNIT_TESTING){
+        NSString *API_Call = [NSString stringWithFormat:@"%@pattern=%@&solution=%@&user=%@", API_SUBMIT_PUZZLE, numberField.text, [self convertSolutionArrayToString], [[NSUserDefaults standardUserDefaults] objectForKey:@"username"]];
+        NSLog(@"API Request: %@", API_Call);
+        
+        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:API_Call]];
+        
+        [request setCompletionBlock:^{
+            NSLog(@"Puzzle request completed. Status: %@", [request responseString]);
+        }];
+        [request setFailedBlock:^{
+            NSLog(@"Puzzle request failed. Status: %@", [[request error] localizedDescription]);
+        }];
+        
+        [request startAsynchronous];
+    }
 }
 
 

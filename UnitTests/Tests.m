@@ -197,7 +197,7 @@
     NSNumber *expected_result = [NSNumber numberWithInt:1];
     NSString *string = @"1";
     int index = 0;
-    result = [self.vc parseStringToInt:string atIndex:index];
+    result = [HandsOfTimeViewController parseStringToInt:string atIndex:index];
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     GHAssertTrue(result == expected_result, nil);
 }
@@ -207,7 +207,7 @@
     NSNumber *expected_result = [NSNumber numberWithInt:2];
     NSString *string = @"2";
     int index = 0;
-    result = [self.vc parseStringToInt:string atIndex:index];
+    result = [HandsOfTimeViewController parseStringToInt:string atIndex:index];
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     GHAssertTrue(result == expected_result, nil);
 }
@@ -217,7 +217,7 @@
     NSNumber *expected_result = [NSNumber numberWithInt:5];
     NSString *string = @"123456789";
     int index = 4;
-    result = [self.vc parseStringToInt:string atIndex:index];
+    result = [HandsOfTimeViewController parseStringToInt:string atIndex:index];
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     GHAssertTrue(result == expected_result, nil);
 }
@@ -227,7 +227,7 @@
     NSNumber *expected_result = [NSNumber numberWithInt:9];
     NSString *string = @"123456789";
     int index = 8;
-    result = [self.vc parseStringToInt:string atIndex:index];
+    result = [HandsOfTimeViewController parseStringToInt:string atIndex:index];
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     GHAssertTrue(result == expected_result, nil);
 }
@@ -237,7 +237,7 @@
     NSNumber *expected_result;
     NSString *string = @"123456789";
     for(int index = 0; index < [string length]; index++){
-        result = [self.vc parseStringToInt:string atIndex:index]; 
+        result = [HandsOfTimeViewController parseStringToInt:string atIndex:index]; 
         expected_result = [NSNumber numberWithInt:index+1];
         GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
         GHAssertTrue(result == expected_result, nil);
@@ -254,7 +254,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    result = [self.vc createNumbersArray:string];
+    result = [HandsOfTimeViewController createNumbersArray:string];
 
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     
@@ -279,7 +279,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    result = [self.vc createNumbersArray:string];
+    result = [HandsOfTimeViewController createNumbersArray:string];
     
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     
@@ -294,7 +294,7 @@
     NSArray *expected_result = NULL;
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    result = [self.vc createNumbersArray:string];
+    result = [HandsOfTimeViewController createNumbersArray:string];
     
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     
@@ -315,7 +315,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    result = [self.vc createNumbersArray:string];
+    result = [HandsOfTimeViewController createNumbersArray:string];
     
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     
@@ -330,7 +330,7 @@
     NSArray *expected_result = [NSArray arrayWithObjects:[NSNumber numberWithInt:1], nil];
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    result = [self.vc createNumbersArray:string];
+    result = [HandsOfTimeViewController createNumbersArray:string];
     
     GHTestLog(@"result: %@\nexpected_result: %@", result, expected_result);
     
@@ -350,7 +350,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    self.vc.numbers = [self.vc createNumbersArray:numbers];
+    self.vc.numbers = [HandsOfTimeViewController createNumbersArray:numbers];
     [self.vc solvePuzzle];
     NSArray *result = self.vc.solution;
     
@@ -368,7 +368,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    self.vc.numbers = [self.vc createNumbersArray:numbers];
+    self.vc.numbers = [HandsOfTimeViewController createNumbersArray:numbers];
     [self.vc solvePuzzle];
     NSArray *result = self.vc.solution;
     
@@ -394,7 +394,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    self.vc.numbers = [self.vc createNumbersArray:numbers];
+    self.vc.numbers = [HandsOfTimeViewController createNumbersArray:numbers];
     [self.vc solvePuzzle];
     NSArray *result = self.vc.solution;
     
@@ -422,7 +422,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    self.vc.numbers = [self.vc createNumbersArray:numbers];
+    self.vc.numbers = [HandsOfTimeViewController createNumbersArray:numbers];
     [self.vc solvePuzzle];
     NSArray *result = self.vc.solution;
     
@@ -450,7 +450,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    self.vc.numbers = [self.vc createNumbersArray:numbers];
+    self.vc.numbers = [HandsOfTimeViewController createNumbersArray:numbers];
     [self.vc solvePuzzle];
     NSArray *result = self.vc.solution;
     
@@ -478,7 +478,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    self.vc.numbers = [self.vc createNumbersArray:numbers];
+    self.vc.numbers = [HandsOfTimeViewController createNumbersArray:numbers];
     [self.vc solvePuzzle];
     NSArray *result = self.vc.solution;
     
@@ -509,7 +509,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    self.vc.numbers = [self.vc createNumbersArray:numbers];
+    self.vc.numbers = [HandsOfTimeViewController createNumbersArray:numbers];
     [self.vc solvePuzzle];
     NSArray *result = self.vc.solution;
     
@@ -540,7 +540,7 @@
     
     NSMutableArray *intermediate = [NSMutableArray arrayWithArray:expected_result];
     
-    self.vc.numbers = [self.vc createNumbersArray:numbers];
+    self.vc.numbers = [HandsOfTimeViewController createNumbersArray:numbers];
     [self.vc solvePuzzle];
     NSArray *result = self.vc.solution;
     
