@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6373CFE616084D2400782A25 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6373CFE516084D2400782A25 /* Default-568h@2x.png */; };
 		637F27CC1579ADCE00C5DBF6 /* iPadAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */; };
 		637F27D21579BAE600C5DBF6 /* iPadSolutionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */; };
 		637F27D51579C80900C5DBF6 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 637F27D41579C80900C5DBF6 /* Common.m */; };
@@ -285,6 +286,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6373CFE516084D2400782A25 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadAboutViewController.xib; sourceTree = "<group>"; };
 		637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadSolutionViewController.xib; sourceTree = "<group>"; };
 		637F27D31579C80900C5DBF6 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
@@ -1004,6 +1006,7 @@
 		AE11167A14F4315B00CBB05D = {
 			isa = PBXGroup;
 			children = (
+				6373CFE516084D2400782A25 /* Default-568h@2x.png */,
 				63D04EFE15AA882E00C9D46F /* MobileCoreServices.framework */,
 				63D04EFC15AA87F000C9D46F /* libz.dylib */,
 				63C94D57157A88DC00E893F6 /* Default-Portrait@2x~ipad.png */,
@@ -1355,6 +1358,7 @@
 				63C94D54157A84F200E893F6 /* Default@2x.png in Resources */,
 				63C94D59157A899800E893F6 /* Default-Portrait@2x~ipad.png in Resources */,
 				63C94D5A157A89AC00E893F6 /* Default-Portrait~ipad.png in Resources */,
+				6373CFE616084D2400782A25 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1668,7 +1672,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HandsOfTimeSolver/HandsOfTimeSolver-Prefix.pch";
 				INFOPLIST_FILE = "HandsOfTimeSolver/HandsOfTimeSolver-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
@@ -1690,7 +1694,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HandsOfTimeSolver/HandsOfTimeSolver-Prefix.pch";
 				INFOPLIST_FILE = "HandsOfTimeSolver/HandsOfTimeSolver-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
@@ -1749,7 +1753,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
 				INFOPLIST_FILE = "UnitTests/UnitTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
@@ -1776,7 +1780,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
 				INFOPLIST_FILE = "UnitTests/UnitTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
