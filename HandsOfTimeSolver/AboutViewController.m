@@ -7,25 +7,27 @@
 //
 
 #import "AboutViewController.h"
-#import "AppDelegate.h"
 #import "RegexKitLite.h"
-#import "GANTracker.h"
+#import "ASIHTTPRequest.h"
+
+@interface AboutViewController()
+@property (nonatomic, retain) AppDelegate *delegate;
+@end
 
 @implementation AboutViewController
 
-@synthesize homeButton, about, emailButton, yesButton, noButton, backgroundButton, username, received_data, indicator, version;
+@synthesize homeButton, about, emailButton, yesButton, noButton, backgroundButton, username, indicator, version;
+@synthesize delegate;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
@@ -48,8 +50,7 @@
     [[GANTracker sharedTracker] trackPageview:@"About/Settings (AboutViewController)" withError:nil];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self createBackground];
     
@@ -74,7 +75,7 @@
     }
     NSString *author = @"The Hands of Time Solver for Final Fantasy XIII-2 is designed by me, Corey Roberts!<br /><br />";
     NSString *why = @"I wrote this app because I know that many people consider the Hands of Time puzzle to be a very frustrating and time-consuming puzzle.  Many people guess and end up taking a lot of time on them. This app helps reduce that time so they can continue on with the story.<br /><br />";
-    NSString *why2 = @"If you found a bug or some error in a solution, you can either submit it at this <a href='http://ffxiii-2handsoftimesolver.blogspot.com'>link</a> or send me an email directly. I also don't mind comments of appreciation of constructive criticism. Your contribution helps! :)<br /><br />";
+    NSString *why2 = @"If you found a bug or some error in a solution, you can either submit it at this <a href='http://ffxiii-2handsoftimesolver.blogspot.com'>link</a> or send me an email directly. I also don't mind comments of appreciation or constructive criticism. Your contribution helps! :)<br /><br />";
     NSString *copyright = @"<br />The Final Fantasy XIII-2 logo and Mog are properties of Square Enix.<br />";
     NSString *footer = @"</div></body>";
     [self.about loadHTMLString:[NSString stringWithFormat:@"%@%@%@%@%@%@", header, author, why, why2, copyright, footer] baseURL:nil];
@@ -83,15 +84,13 @@
     self.version.text = versionString;
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         return (interfaceOrientation == UIInterfaceOrientationPortrait);
     }
@@ -101,7 +100,6 @@
 }
 
 - (IBAction)homeButtonPressed:(id)sender {
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     [delegate popModalView];
 }
 
@@ -189,12 +187,11 @@
 
 - (void)sendUsername {
     [self performSelectorOnMainThread:@selector(displayIndicator) withObject:nil waitUntilDone:YES];
+
     NSString *API_Call = [NSString stringWithFormat:@"http://ffxiii-2.texasdrums.com/api/v1/update_user.php?old_username=%@&new_username=%@", [[NSUserDefaults standardUserDefaults] objectForKey:@"username"], username.text];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:API_Call] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
-    NSURLConnection *urlconnection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:YES];
-    if(urlconnection) {
-        received_data = [[NSMutableData data] retain];
-    }
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:API_Call]];
+    request.delegate = self;
+    [request startAsynchronous];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
@@ -210,64 +207,23 @@
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-    [UIView beginAnimations:@"fadein" context:nil];
-    [UIView setAnimationDuration:0.50f];
-    webView.alpha = 1.0f;
-    [UIView commitAnimations];  
+    [UIView animateWithDuration:.5f animations:^{
+        self.about.alpha = 1.0f;
+    }];
 }
 
-#pragma mark - NSURLConnection delegate methods
+#pragma mark - ASIHTTPRequest Delegate Methods
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    // This method is called when the server has determined that it
-    // has enough information to create the NSURLResponse.
-    
-    // It can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-    [received_data setLength:0];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    // Append the new data to received_data.
-    [received_data appendData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection
-  didFailWithError:(NSError *)error
-{
-    // release the connection, and the data object
-    [connection release];
-    [received_data release];
-    
-    // inform the user
-    NSLog(@"Connection failed! Error - %@ %@",
-          [error localizedDescription],
-          [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!" 
-                                                    message:[error localizedDescription] 
-                                                   delegate:self 
-                                          cancelButtonTitle:@":( Okay" 
-                                          otherButtonTitles:nil, nil];
-    [alert show];
-    [alert release];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    NSString *data = [[[NSString alloc] initWithData:received_data encoding:NSUTF8StringEncoding] autorelease];
-    
-    if([data isEqualToString:@"200 OK"]){
+- (void)requestFinished:(ASIHTTPRequest *)request {
+    if([request.responseString isEqualToString:@"200 OK"]){
         NSLog(@"Username accepted.");
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setBool:YES forKey:@"registered"];
         [defaults setObject:self.username.text forKey:@"username"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!" 
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!"
                                                         message:@"Your username has been changed."
-                                                       delegate:self 
-                                              cancelButtonTitle:@"Okay." 
+                                                       delegate:self
+                                              cancelButtonTitle:@"Okay."
                                               otherButtonTitles:nil, nil];
         
         [alert show];
@@ -275,12 +231,12 @@
         
         [[NSUserDefaults standardUserDefaults] setObject:self.username.text forKey:@"username"];
     }
-    else if([data isEqualToString:@"302 Username Taken"]){
+    else {
         NSString *message = [NSString stringWithFormat:@"The username '%@' is already taken. Please choose another username.", self.username.text];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!" 
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error!"
                                                         message:message
-                                                       delegate:nil 
-                                              cancelButtonTitle:@"Okay." 
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Okay."
                                               otherButtonTitles:nil, nil];
         
         [alert show];
@@ -288,12 +244,10 @@
     }
     
     [self hideIndicator];
-    
-    NSLog(@"Succeeded! Received %d bytes of data", [received_data length]);
-    
-    // release the connection, and the data object
-    [connection release];
-    [received_data release];
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request {
+    // Do nothing.
 }
 
 - (void)hideIndicator {

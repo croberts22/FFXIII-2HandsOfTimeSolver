@@ -12,11 +12,9 @@
 #import "RegisterViewController.h"
 #import "RecentPuzzlesViewController.h"
 #import "UIImage-Extensions.h"
-#import "GANTracker.h"
 #import "Appirater.h"
 #import "ASIHTTPRequest.h"
 #import "Crittercism.h"
-#import "Common.h"
 
 static const NSInteger kGANDispatchPeriodSec = 10;
 

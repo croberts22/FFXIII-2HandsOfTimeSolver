@@ -10,8 +10,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import "ASIHTTPRequest.h"
 
-@interface AboutViewController : UIViewController<MFMailComposeViewControllerDelegate, UIWebViewDelegate, UITextFieldDelegate, NSURLConnectionDelegate> {
+@interface AboutViewController : UIViewController<MFMailComposeViewControllerDelegate, UIWebViewDelegate, UITextFieldDelegate, ASIHTTPRequestDelegate> {
     IBOutlet UIButton *homeButton;
     IBOutlet UIWebView *about;
     IBOutlet UIButton *emailButton;
@@ -21,7 +22,6 @@
     IBOutlet UITextField *username;
     IBOutlet UIActivityIndicatorView *indicator;
     IBOutlet UILabel *version;
-    NSMutableData *received_data;
 }
 
 @property (nonatomic, retain) UIButton *homeButton;
@@ -33,7 +33,6 @@
 @property (nonatomic, retain) UITextField *username;
 @property (nonatomic, retain) UIActivityIndicatorView *indicator;
 @property (nonatomic, retain) UILabel *version;
-@property (nonatomic, retain) NSMutableData *received_data;
 
 - (void)createBackground;
 - (IBAction)homeButtonPressed:(id)sender;

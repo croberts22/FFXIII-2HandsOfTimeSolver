@@ -9,15 +9,12 @@
 #import "RecentPuzzlesViewController.h"
 #import "CJSONDeserializer.h"
 #import "Puzzle.h"
-#import "AppDelegate.h"
-#import "GANTracker.h"
 #import "SolutionViewController.h"
 #import "HandsOfTimeViewController.h"
 #import "ASIHTTPRequest.h"
-#import "Common.h"
 
 @interface RecentPuzzlesViewController ()
-
+@property (nonatomic, retain) AppDelegate *delegate;
 @end
 
 @implementation RecentPuzzlesViewController
@@ -34,12 +31,12 @@ green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @synthesize refreshButton, backButton, puzzlesTable, puzzles, since, num_updated_rows, timer, indicator, status, updateLabel, totalPuzzles, userPuzzles, total_count, user_count;
+@synthesize delegate;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     return self;
 }
@@ -56,12 +53,10 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [[GANTracker sharedTracker] trackPageview:@"Recent Puzzles (RecentPuzzlesViewController)" withError:nil];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self createBackground];
     
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     delegate.savedSequence = @"";
     
     self.since = 0;
@@ -84,8 +79,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self connect];
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -107,8 +101,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     timer = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         return (interfaceOrientation == UIInterfaceOrientationPortrait);
     }
@@ -244,24 +237,19 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [puzzles count] > 50 ? 50 : [puzzles count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return CELL_SIZE;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -425,9 +413,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSArray *saved_solution = [[puzzles objectAtIndex:indexPath.row] solution];
     NSString *saved_sequence = [[puzzles objectAtIndex:indexPath.row] sequence];

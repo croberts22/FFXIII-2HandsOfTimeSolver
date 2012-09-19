@@ -8,11 +8,8 @@
 
 #import "RegisterViewController.h"
 #import "RegexKitLite.h"
-#import "AppDelegate.h"
-#import "GANTracker.h"
 #import "UILabel+FF.h"
 #import "ASIHTTPRequest.h"
-#import "Common.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor \
 colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
@@ -23,18 +20,18 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #define IPAD_FONTSIZE (24)
 
 @interface RegisterViewController ()
-
+@property (nonatomic, retain) AppDelegate *delegate;
 @end
 
 @implementation RegisterViewController
 
+@synthesize delegate;
 @synthesize username, backgroundButton, registerButton, received_data, indicator;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     return self;
 }
@@ -54,8 +51,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [[GANTracker sharedTracker] trackPageview:@"Registration (RegisterViewController)" withError:nil];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self createBackground];
     self.indicator.alpha = 0.0f;
@@ -65,15 +61,13 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
     [self.username becomeFirstResponder];
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         return (interfaceOrientation == UIInterfaceOrientationPortrait);
     }
@@ -190,7 +184,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     [delegate popModalView];
 }
 

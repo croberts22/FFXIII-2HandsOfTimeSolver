@@ -7,14 +7,10 @@
 //
 
 #import "SolutionViewController.h"
-#import "AppDelegate.h"
 #import "RRSGlowLabel.h"
-#import "GANTracker.h"
 #import <math.h>
 
 #import "UIColor+FF.h"
-
-@implementation SolutionViewController
 
 #define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
@@ -22,7 +18,7 @@
 #define CENTER_Y (self.nodeView.center.y)
 
 #define IPAD_PADDING (70)
-#define IPHONE_PADDING (40) 
+#define IPHONE_PADDING (40)
 
 #define RADIUS (self.view.frame.size.width/2 - ( IS_IPAD ? IPAD_PADDING : IPHONE_PADDING ) )
 
@@ -32,19 +28,24 @@
 
 #define NUMBER_FONT_SIZE ( IS_IPAD ? 56.0f : 32.0f )
 
+@interface SolutionViewController()
+@property (nonatomic, retain) AppDelegate *delegate;
+@end
+
+@implementation SolutionViewController
+
+@synthesize delegate;
 @synthesize solutions, nodes, coordinates, directions, writtenSolution, finishedSteps, solveAnotherButton, backButton, nextButton, currentStep, nodeView, handsView, selectedNodeView;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     }
     return self;
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
@@ -57,9 +58,9 @@
     [[GANTracker sharedTracker] trackPageview:@"Solution (SolutionViewController)" withError:nil];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.nodeView.tag = 100;
     self.nodeView.nodes = self.nodes;
     
@@ -89,16 +90,13 @@
     [self beginDisplayingSolution];
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     if(delegate.is_iPad){
         return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
     }
@@ -112,7 +110,6 @@
  ****************/
 
 - (IBAction)solveAnotherButtonPressed:(id)sender {
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     [delegate popModalView];
 }
 
@@ -210,7 +207,7 @@
 
 - (void)createWrittenSolution {
     for (int i = 0; i < solutions.count-1; i++){
-        NSString *step = [NSString stringWithFormat:@"Step %d: Choose the node with value %d and move %@ to the node with value %d.", i+1, [nodes objectAtIndex:[[solutions objectAtIndex:i] intValue]], [directions objectAtIndex:i], [nodes objectAtIndex:[[solutions objectAtIndex:i] intValue]]];
+        NSString *step = [NSString stringWithFormat:@"Step %d: Choose the node with value %@ and move %@ to the node with value %@.", i+1, [nodes objectAtIndex:[[solutions objectAtIndex:i] intValue]], [directions objectAtIndex:i], [nodes objectAtIndex:[[solutions objectAtIndex:i] intValue]]];
         self.writtenSolution.text = [NSString stringWithFormat:@"%@\n%@", self.writtenSolution.text, step];
     }
     

@@ -10,33 +10,38 @@
 #import "SolutionViewController.h"
 #import "AboutViewController.h"
 #import "RecentPuzzlesViewController.h"
-#import "Common.h"
 #import "ASIHTTPRequest.h"
-
-#import "AppDelegate.h"
-
-// Google Analytics
-#import "GANTracker.h"
 
 // Categories
 #import "UIColor+FF.h"
 
+@interface HandsOfTimeViewController()
+@property (nonatomic, retain) AppDelegate *delegate;
+@end
+
 @implementation HandsOfTimeViewController
 
+@synthesize delegate;
 @synthesize solveButton, resetButton, viewPuzzlesButton, infoButton, backgroundButton,  oneButton, twoButton, threeButton, fourButton, fiveButton, sixButton, backButton;
 @synthesize numberField, statusLabel, numbers, solution, solved, debug, indicator;
 @synthesize GHUNIT_TESTING;
 
-- (void)didReceiveMemoryWarning
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    }
+    return self;
+}
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
 }
 
 #pragma mark - View lifecycle
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     [self createBackground];
     
@@ -64,23 +69,19 @@
     self.GHUNIT_TESTING = NO;
 }
 
-- (void)viewDidUnload
-{
+- (void)viewDidUnload {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     // Google Analytics Tracker
     [[GANTracker sharedTracker] trackPageview:@"Input Screen (HandsOfTimeViewController)" withError:nil];
     
-    // If we are coming back from RecentPuzzlesVieController, items are saved
+    // If we are coming back from RecentPuzzlesViewController, items are saved
     // within the delegate. Call them here.
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    
     if([delegate.savedSequence length] > 0){
         self.numbers = nil;   
         self.numberField.text = delegate.savedSequence;
@@ -106,23 +107,19 @@
     self.GHUNIT_TESTING = NO;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         return (interfaceOrientation == UIInterfaceOrientationPortrait);
     }
@@ -318,7 +315,7 @@
  */
 - (IBAction)infoButtonPressed:(id)sender {
     AboutViewController *AVC;
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
         AVC = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:[NSBundle mainBundle]];
         [delegate presentModalView:AVC withTransition:UIModalTransitionStyleCrossDissolve];
@@ -499,15 +496,8 @@
         NSString *API_Call = [NSString stringWithFormat:@"%@pattern=%@&solution=%@&user=%@", API_SUBMIT_PUZZLE, numberField.text, [self convertSolutionArrayToString], [[NSUserDefaults standardUserDefaults] objectForKey:@"username"]];
         NSLog(@"API Request: %@", API_Call);
         
-        __block ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:API_Call]];
-        
-        [request setCompletionBlock:^{
-            NSLog(@"Puzzle request completed. Status: %@", [request responseString]);
-        }];
-        [request setFailedBlock:^{
-            NSLog(@"Puzzle request failed. Status: %@", [[request error] localizedDescription]);
-        }];
-        
+        ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:API_Call]];
+        request.delegate = nil;
         [request startAsynchronous];
     }
 }
@@ -529,7 +519,6 @@
         
         // Do not push the view if we are testing in GHUnit.
         if(!GHUNIT_TESTING){
-            AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
             SolutionViewController *SVC;
             if(delegate.is_iPad){
                 SVC = [[SolutionViewController alloc] initWithNibName:@"iPadSolutionViewController" bundle:[NSBundle mainBundle]];
@@ -562,7 +551,6 @@
  and displays the SolutionViewController with the selected data.
  */
 - (void)solveImmediately {
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     SolutionViewController *SVC = [[SolutionViewController alloc] init];
     self.solution = delegate.savedSolution;
     self.numberField.text = delegate.savedSequence;
