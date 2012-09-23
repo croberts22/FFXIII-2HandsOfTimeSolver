@@ -559,11 +559,16 @@
 
 @implementation SolutionDisplayTests
 
-#define CENTER_X (160)
-#define CENTER_Y (200)
-#define RADIUS   (115)
-#define FRAME_DIMENSION (50.0f)
+#define CENTER_X (self.vc.view.center.x)
+#define CENTER_Y (self.vc.view.center.y)
+#define IPAD_PADDING (70)
+#define IPHONE_PADDING (40)
+#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define RADIUS (self.vc.view.frame.size.width/2 - ( IS_IPAD ? IPAD_PADDING : IPHONE_PADDING ) )
+#define FRAME_DIMENSION ( IS_IPAD ? 80.0f : 50.0f )
 #define INNER_FRAME_DIMENSION (sqrt(pow((FRAME_DIMENSION/2.0),2)+pow((FRAME_DIMENSION/2.0),2)))
+#define FRAME_RADIUS (FRAME_DIMENSION/2.0f)
+#define NUMBER_FONT_SIZE ( IS_IPAD ? 56.0f : 32.0f )
 
 @synthesize vc;
 
