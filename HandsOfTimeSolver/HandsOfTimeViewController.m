@@ -137,10 +137,10 @@
     UIColor *colorTwo = [UIColor colorWithRed:0.0 green:0.00 blue:0.05 alpha:1.0];
     CAGradientLayer *gradientLayer = [[[CAGradientLayer alloc] init] autorelease];
     if([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone){
-        gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
+        gradientLayer.frame = CGRectMake(0.0, 0.0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
     else{
-        gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, 832.0f);
+        gradientLayer.frame = CGRectMake(0.0, 0.0, SCREEN_WIDTH, 832.0f);
     }
     
     [gradientLayer setColors:[NSArray arrayWithObjects:(id)colorOne.CGColor, (id)colorTwo.CGColor, nil]];

@@ -228,7 +228,7 @@
     UIColor *colorOne = [UIColor colorWithRed:0.0 green:0.125 blue:0.18 alpha:1.0];
     UIColor *colorTwo = [UIColor colorWithRed:0.0 green:0.00 blue:0.05 alpha:1.0];
     CAGradientLayer *gradientLayer = [[[CAGradientLayer alloc] init] autorelease];
-    gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
+    gradientLayer.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, SCREEN_HEIGHT);
     [gradientLayer setColors:[NSArray arrayWithObjects:(id)colorOne.CGColor, (id)colorTwo.CGColor, nil]];
     [self.view.layer insertSublayer:gradientLayer atIndex:0];
 }
@@ -312,7 +312,7 @@
     
     //show success message
     if(step == solutions.count){
-        text = @"Solved! :) Click 'Solve Another' to do another one!";
+        text = @"Solved! :) Tap 'Solve Another' to do another one!";
         self.selectedNodeView.highlightedNodeToChoose = -1;
         self.selectedNodeView.highlightedNodeNotToChoose = -1;
     }
@@ -322,7 +322,7 @@
             text = @"Last step: Choose the final node.";
         }
         else{
-            text = [NSString stringWithFormat:@"Step %d: Choose the node with value %d and move %@to the node with the value %d.", step+1, [[nodes objectAtIndex:[[solutions objectAtIndex:step] intValue]] intValue], [directions objectAtIndex:step], [[nodes objectAtIndex:[[solutions objectAtIndex:step+1] intValue]] intValue]];   
+            text = [NSString stringWithFormat:@"Step %d: Choose %d and move %@to the node with value %d.", step+1, [[nodes objectAtIndex:[[solutions objectAtIndex:step] intValue]] intValue], [directions objectAtIndex:step], [[nodes objectAtIndex:[[solutions objectAtIndex:step+1] intValue]] intValue]];   
         }
         
         self.selectedNodeView.highlightedNodeToChoose = [[solutions objectAtIndex:step] intValue];

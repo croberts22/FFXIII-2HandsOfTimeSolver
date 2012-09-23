@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+
 #define API_VERSION_NUMBER @"v1.1"
 #define API_BASE_URL @"http://ffxiii-2.coreyjustinroberts.com/api"
 #define API_APP_UPDATE [NSString stringWithFormat:@"%@/app_update.php?", API_BASE_URL]

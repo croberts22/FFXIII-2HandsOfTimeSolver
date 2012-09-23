@@ -66,6 +66,7 @@ static const NSInteger kGANDispatchPeriodSec = 10;
         
         self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         [self.window addSubview:_splitViewController.view];
+        self.window.rootViewController = _splitViewController;
         
         [Crittercism initWithAppID: @"4fca42c32cd952044200000b" andKey:@"fqnugix7tsa1mpahtlw3h9ckxeob" andSecret:@"m4doxelxwlfhnj1b5qskrpajc8iq76tv" andMainViewController:self.splitViewController];
     }
@@ -134,8 +135,13 @@ static inline double radians (double degrees) { return degrees * M_PI / 180; }
         splashView.image = rotated_image;
     }
     else{
-        splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, 320, 480)];
-        splashView.image = [UIImage imageNamed:@"Default.png"];     
+        splashView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        if(SCREEN_HEIGHT > 480) {
+            splashView.image = [UIImage imageNamed:@"Default-568h@2x.png"];
+        }
+        else {
+            splashView.image = [UIImage imageNamed:@"Default.png"];
+        }
     }
     
 	[_window addSubview:splashView]; 
