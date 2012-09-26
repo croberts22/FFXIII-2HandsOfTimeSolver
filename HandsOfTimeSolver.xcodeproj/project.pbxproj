@@ -1349,8 +1349,8 @@
 		AE1116BC14F4315B00CBB05D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Corey Roberts (8E236WJF76)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Corey Roberts (8E236WJF76)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HandsOfTimeSolver/HandsOfTimeSolver-Prefix.pch";
 				INFOPLIST_FILE = "HandsOfTimeSolver/HandsOfTimeSolver-Info.plist";
@@ -1361,8 +1361,8 @@
 					"\"$(SRCROOT)/HandsOfTimeSolver/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "07897038-2B18-41A5-A4C2-223832E0E46E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "07897038-2B18-41A5-A4C2-223832E0E46E";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1371,8 +1371,8 @@
 		AE1116BD14F4315B00CBB05D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Corey Roberts";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Corey Roberts";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HandsOfTimeSolver/HandsOfTimeSolver-Prefix.pch";
 				INFOPLIST_FILE = "HandsOfTimeSolver/HandsOfTimeSolver-Info.plist";
@@ -1383,8 +1383,8 @@
 					"\"$(SRCROOT)/HandsOfTimeSolver/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1755D436-7077-41FD-8555-CB64A70A676E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1755D436-7077-41FD-8555-CB64A70A676E";
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
