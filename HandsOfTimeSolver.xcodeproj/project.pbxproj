@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		6373CFE616084D2400782A25 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6373CFE516084D2400782A25 /* Default-568h@2x.png */; };
+		63742A7C1666FFA600CEFF6D /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63742A7B1666FFA600CEFF6D /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		63742A7D1666FFA600CEFF6D /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63742A7B1666FFA600CEFF6D /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		63742A7E1666FFA600CEFF6D /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63742A7B1666FFA600CEFF6D /* TTTAttributedLabel.m */; settings = {COMPILER_FLAGS = "-fobj-arc"; }; };
+		63742A821667241000CEFF6D /* RecentPuzzleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63742A811667241000CEFF6D /* RecentPuzzleCell.m */; };
+		63742A831667241000CEFF6D /* RecentPuzzleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63742A811667241000CEFF6D /* RecentPuzzleCell.m */; };
+		63742A841667241000CEFF6D /* RecentPuzzleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63742A811667241000CEFF6D /* RecentPuzzleCell.m */; };
+		63742AA316673BB900CEFF6D /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63742AA216673BB900CEFF6D /* CoreText.framework */; };
 		637F27CC1579ADCE00C5DBF6 /* iPadAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */; };
 		637F27D21579BAE600C5DBF6 /* iPadSolutionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */; };
 		637F27D51579C80900C5DBF6 /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 637F27D41579C80900C5DBF6 /* Common.m */; };
@@ -213,6 +220,11 @@
 
 /* Begin PBXFileReference section */
 		6373CFE516084D2400782A25 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		63742A7A1666FFA600CEFF6D /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
+		63742A7B1666FFA600CEFF6D /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
+		63742A801667241000CEFF6D /* RecentPuzzleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentPuzzleCell.h; sourceTree = "<group>"; };
+		63742A811667241000CEFF6D /* RecentPuzzleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentPuzzleCell.m; sourceTree = "<group>"; };
+		63742AA216673BB900CEFF6D /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadAboutViewController.xib; sourceTree = "<group>"; };
 		637F27D11579BAE500C5DBF6 /* iPadSolutionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iPadSolutionViewController.xib; sourceTree = "<group>"; };
 		637F27D31579C80900C5DBF6 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
@@ -435,6 +447,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63742AA316673BB900CEFF6D /* CoreText.framework in Frameworks */,
 				63D04EFF15AA882E00C9D46F /* MobileCoreServices.framework in Frameworks */,
 				63D04EFD15AA87F000C9D46F /* libz.dylib in Frameworks */,
 				AEAD4F961565DD0100053E17 /* SystemConfiguration.framework in Frameworks */,
@@ -485,6 +498,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63742A791666FFA600CEFF6D /* TTTAttributedLabel */ = {
+			isa = PBXGroup;
+			children = (
+				63742A7A1666FFA600CEFF6D /* TTTAttributedLabel.h */,
+				63742A7B1666FFA600CEFF6D /* TTTAttributedLabel.m */,
+			);
+			name = TTTAttributedLabel;
+			path = Libraries/TTTAttributedLabel;
+			sourceTree = "<group>";
+		};
 		6387AA811577B7BD001C0B9F /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -540,6 +563,8 @@
 				637F27CB1579ADCE00C5DBF6 /* iPadAboutViewController.xib */,
 				637F27D31579C80900C5DBF6 /* Common.h */,
 				637F27D41579C80900C5DBF6 /* Common.m */,
+				63742A801667241000CEFF6D /* RecentPuzzleCell.h */,
+				63742A811667241000CEFF6D /* RecentPuzzleCell.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -760,6 +785,7 @@
 		AE11167A14F4315B00CBB05D = {
 			isa = PBXGroup;
 			children = (
+				63742AA216673BB900CEFF6D /* CoreText.framework */,
 				63D4E7F9160FBEDB00119B0A /* Icon-72.png */,
 				6373CFE516084D2400782A25 /* Default-568h@2x.png */,
 				63D04EFE15AA882E00C9D46F /* MobileCoreServices.framework */,
@@ -876,6 +902,7 @@
 		AE73D4F71514FA0200542A55 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				63742A791666FFA600CEFF6D /* TTTAttributedLabel */,
 				63D04E8515AA80AB00C9D46F /* ASIHTTP */,
 				63D04E8315AA7FDF00C9D46F /* JSON */,
 				63C94C8A157A7B1A00E893F6 /* CrittercismSDK */,
@@ -1137,6 +1164,8 @@
 				63D04EF015AA80AB00C9D46F /* ASIS3Request.m in Sources */,
 				63D04EF315AA80AB00C9D46F /* ASIS3ServiceRequest.m in Sources */,
 				63D04EF915AA878F00C9D46F /* Reachability.m in Sources */,
+				63742A7C1666FFA600CEFF6D /* TTTAttributedLabel.m in Sources */,
+				63742A821667241000CEFF6D /* RecentPuzzleCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1167,6 +1196,8 @@
 				63D04EF115AA80AB00C9D46F /* ASIS3Request.m in Sources */,
 				63D04EF415AA80AB00C9D46F /* ASIS3ServiceRequest.m in Sources */,
 				63D04EFA15AA878F00C9D46F /* Reachability.m in Sources */,
+				63742A7D1666FFA600CEFF6D /* TTTAttributedLabel.m in Sources */,
+				63742A831667241000CEFF6D /* RecentPuzzleCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1218,6 +1249,8 @@
 				63D04EF215AA80AB00C9D46F /* ASIS3Request.m in Sources */,
 				63D04EF515AA80AB00C9D46F /* ASIS3ServiceRequest.m in Sources */,
 				63D04EFB15AA878F00C9D46F /* Reachability.m in Sources */,
+				63742A7E1666FFA600CEFF6D /* TTTAttributedLabel.m in Sources */,
+				63742A841667241000CEFF6D /* RecentPuzzleCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

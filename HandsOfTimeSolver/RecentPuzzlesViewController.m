@@ -12,6 +12,8 @@
 #import "SolutionViewController.h"
 #import "HandsOfTimeViewController.h"
 #import "ASIHTTPRequest.h"
+#import "RecentPuzzleCell.h"
+#import "TTTAttributedLabel.h"
 
 @interface RecentPuzzlesViewController ()
 @property (nonatomic, retain) AppDelegate *delegate;
@@ -255,27 +257,22 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"Cell Identifier";
+    
+    RecentPuzzleCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[RecentPuzzleCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     }
-    
-    cell.textLabel.numberOfLines = 1;
-    cell.textLabel.font = [UIFont fontWithName:@"Georgia-Bold" size:TEXT_FONT_SIZE];
-    cell.textLabel.textColor = UIColorFromRGB(0xCFCFCF);
-    
-    cell.detailTextLabel.numberOfLines = 2;
-    cell.detailTextLabel.font = [UIFont fontWithName:@"Georgia" size:DETAIL_TEXT_FONT_SIZE];
-    cell.detailTextLabel.textColor = [UIColor grayColor];
     
     cell.selectedBackgroundView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"uitableviewselection-blue-44.png"]] autorelease];
     Puzzle *puzzle = [puzzles objectAtIndex:indexPath.row];
-    NSString *submission = [NSString stringWithFormat:@"Submitted by %@ on %@", puzzle.user, puzzle.string_timestamp];
+    NSString *submission = [NSString stringWithFormat:@"Solved by %@ on %@", puzzle.user, puzzle.string_timestamp];
     
-    cell.textLabel.text = puzzle.string_sequence;
-    cell.detailTextLabel.text = submission;
+    cell.details.text = submission;
+    
+    [cell setPuzzleText:puzzle.string_sequence];
+    [cell setDetailsText:submission withUsername:puzzle.user];
     
     return cell;
 }
@@ -283,8 +280,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 - (NSString *)convertTimestampToDate:(int)time {
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
     NSDateFormatter *format = [[[NSDateFormatter alloc] init] autorelease];
-    [format setDateStyle:NSDateFormatterMediumStyle];
-    [format setTimeStyle:NSDateFormatterShortStyle];
+    [format setDateFormat:@"M/d/yy, h:mm a"];
     NSString *dateString = [format stringFromDate:date];
     return dateString;
 }
