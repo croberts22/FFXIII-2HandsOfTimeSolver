@@ -1,0 +1,4 @@
+app_identifier(ENV.fetch('APP_IDENTIFIER', 'com.coreyroberts.ffxiii2solver'))
+apple_id(ENV.fetch('FASTLANE_USER', 'corey@spacepyro.com'))
+itc_team_id(ENV.fetch('FASTLANE_ITC_TEAM_ID', '1005384'))
+team_id(ENV.fetch('FASTLANE_TEAM_ID', 'QYFSMCG7FR'))

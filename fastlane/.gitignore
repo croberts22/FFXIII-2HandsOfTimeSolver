@@ -1,0 +1,10 @@
+.env
+*.p8
+report.xml
+test_output/
+screenshots/
+*.ipa
+*.pkg
+*.dSYM.zip
+*.xcarchive
+swift_report.xml

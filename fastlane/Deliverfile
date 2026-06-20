@@ -1,0 +1,19 @@
+app_identifier(ENV.fetch('APP_IDENTIFIER', 'com.coreyroberts.ffxiii2solver'))
+username(ENV.fetch('FASTLANE_USER', 'corey@spacepyro.com'))
+
+force(true)
+
+skip_metadata(false)
+skip_screenshots(true)
+precheck_include_in_app_purchases(false)
+
+submit_for_review(true)
+
+automatic_release(false)
+phased_release(true)
+
+submission_information({
+  add_id_info_uses_idfa: false,
+  add_id_info_tracks_install: false,
+  add_id_info_limits_tracking: false
+})

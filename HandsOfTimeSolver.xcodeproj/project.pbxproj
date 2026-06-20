@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 100;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -97,12 +97,10 @@
 		63D04EF915AA878F00C9D46F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D04EF815AA878F00C9D46F /* Reachability.m */; };
 		63D04EFA15AA878F00C9D46F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D04EF815AA878F00C9D46F /* Reachability.m */; };
 		63D04EFB15AA878F00C9D46F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D04EF815AA878F00C9D46F /* Reachability.m */; };
-		63D04EFD15AA87F000C9D46F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D04EFC15AA87F000C9D46F /* libz.dylib */; };
 		63D04EFF15AA882E00C9D46F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D04EFE15AA882E00C9D46F /* MobileCoreServices.framework */; };
 		63D4E7A8160FAA9700119B0A /* libCrittercismCrashOnly_v3_3_4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D4E7A7160FAA9700119B0A /* libCrittercismCrashOnly_v3_3_4.a */; };
 		63D4E7A9160FAA9700119B0A /* libCrittercismCrashOnly_v3_3_4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D4E7A7160FAA9700119B0A /* libCrittercismCrashOnly_v3_3_4.a */; };
 		63D4E7FA160FBEDC00119B0A /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 63D4E7F9160FBEDB00119B0A /* Icon-72.png */; };
-		63E4D73715C48BEB003EC59E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D04EFC15AA87F000C9D46F /* libz.dylib */; };
 		63E4D73815C48C00003EC59E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D04EFE15AA882E00C9D46F /* MobileCoreServices.framework */; };
 		63E4D73915C48D5B003EC59E /* Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 637F27D41579C80900C5DBF6 /* Common.m */; };
 		63E4D73A15C48D62003EC59E /* UIColor+FF.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387AA7E1577B6A3001C0B9F /* UIColor+FF.m */; };
@@ -319,7 +317,6 @@
 		63D04EB615AA80AB00C9D46F /* ASIS3ServiceRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIS3ServiceRequest.m; sourceTree = "<group>"; };
 		63D04EF715AA878F00C9D46F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		63D04EF815AA878F00C9D46F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		63D04EFC15AA87F000C9D46F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		63D04EFE15AA882E00C9D46F /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		63D4E7A7160FAA9700119B0A /* libCrittercismCrashOnly_v3_3_4.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercismCrashOnly_v3_3_4.a; sourceTree = "<group>"; };
 		63D4E7F9160FBEDB00119B0A /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
@@ -433,10 +430,8 @@
 /* Begin PBXFrameworksBuildPhase section */
 		AE11168214F4315B00CBB05D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				63D04EFF15AA882E00C9D46F /* MobileCoreServices.framework in Frameworks */,
-				63D04EFD15AA87F000C9D46F /* libz.dylib in Frameworks */,
 				AEAD4F961565DD0100053E17 /* SystemConfiguration.framework in Frameworks */,
 				AE0C60331536139700AA4360 /* libsqlite3.0.dylib in Frameworks */,
 				AE0C6031153612D200AA4360 /* CFNetwork.framework in Frameworks */,
@@ -449,24 +444,19 @@
 				AE0C602A1536124E00AA4360 /* libGoogleAnalytics.a in Frameworks */,
 				63D4E7A8160FAA9700119B0A /* libCrittercismCrashOnly_v3_3_4.a in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AE1116A514F4315B00CBB05D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				AE1116AB14F4315B00CBB05D /* SenTestingKit.framework in Frameworks */,
 				AE1116AC14F4315B00CBB05D /* UIKit.framework in Frameworks */,
 				AE1116AD14F4315B00CBB05D /* Foundation.framework in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AE1116C614F5591C00CBB05D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				63E4D73815C48C00003EC59E /* MobileCoreServices.framework in Frameworks */,
-				63E4D73715C48BEB003EC59E /* libz.dylib in Frameworks */,
 				AEAD4F981565E1BD00053E17 /* SystemConfiguration.framework in Frameworks */,
 				AEF9CA61151D370C00C8A028 /* MessageUI.framework in Frameworks */,
 				AE73D51315156EE600542A55 /* QuartzCore.framework in Frameworks */,
@@ -480,7 +470,6 @@
 				AEAD4F6C1565DAEF00053E17 /* libGoogleAnalytics.a in Frameworks */,
 				63D4E7A9160FAA9700119B0A /* libCrittercismCrashOnly_v3_3_4.a in Frameworks */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
@@ -763,7 +752,6 @@
 				63D4E7F9160FBEDB00119B0A /* Icon-72.png */,
 				6373CFE516084D2400782A25 /* Default-568h@2x.png */,
 				63D04EFE15AA882E00C9D46F /* MobileCoreServices.framework */,
-				63D04EFC15AA87F000C9D46F /* libz.dylib */,
 				63C94D57157A88DC00E893F6 /* Default-Portrait@2x~ipad.png */,
 				63C94D55157A88D600E893F6 /* Default-Portrait~ipad.png */,
 				63C94D51157A839700E893F6 /* Default-Landscape@2x~ipad.png */,
@@ -914,8 +902,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = HandsOfTimeSolver;
 			productName = HandsOfTimeSolver;
 			productReference = AE11168514F4315B00CBB05D /* HandsOfTimeSolver.app */;
@@ -950,8 +936,6 @@
 			);
 			buildRules = (
 			);
-			dependencies = (
-			);
 			name = UnitTests;
 			productName = UnitTests;
 			productReference = AE1116C914F5591C00CBB05D /* UnitTests.app */;
@@ -964,13 +948,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0460;
-				ORGANIZATIONNAME = "University of Texas at Austin";
+				ORGANIZATIONNAME = "";
 			};
 			buildConfigurationList = AE11167F14F4315B00CBB05D /* Build configuration list for PBXProject "HandsOfTimeSolver" */;
-			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				da,
 				de,
@@ -986,6 +970,7 @@
 				sv,
 			);
 			mainGroup = AE11167A14F4315B00CBB05D;
+			preferredProjectObjectVersion = 100;
 			productRefGroup = AE11168614F4315B00CBB05D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1000,7 +985,6 @@
 /* Begin PBXResourcesBuildPhase section */
 		AE11168314F4315B00CBB05D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				AE11169414F4315B00CBB05D /* InfoPlist.strings in Resources */,
 				AE1116A014F4315B00CBB05D /* HandsOfTimeViewController.xib in Resources */,
@@ -1042,19 +1026,15 @@
 				6373CFE616084D2400782A25 /* Default-568h@2x.png in Resources */,
 				63D4E7FA160FBEDC00119B0A /* Icon-72.png in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AE1116A614F4315B00CBB05D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				AE1116B514F4315B00CBB05D /* InfoPlist.strings in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AE1116C714F5591C00CBB05D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				AE1116D314F5591C00CBB05D /* InfoPlist.strings in Resources */,
 				63E4D73C15C48E1F003EC59E /* Icon.png in Resources */,
@@ -1062,30 +1042,24 @@
 				63E4D73E15C48E28003EC59E /* Icon~ipad.png in Resources */,
 				63E4D73F15C48E2B003EC59E /* Icon@2x~ipad.png in Resources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		AE1116A714F4315B00CBB05D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+			shellScript = (
+				"# Run the unit tests in this test bundle.",
+				"\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"",
+				"",
+			);
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AE11168114F4315B00CBB05D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				AE11169614F4315B00CBB05D /* main.m in Sources */,
 				AE11169A14F4315B00CBB05D /* AppDelegate.m in Sources */,
@@ -1138,11 +1112,9 @@
 				63D04EF315AA80AB00C9D46F /* ASIS3ServiceRequest.m in Sources */,
 				63D04EF915AA878F00C9D46F /* Reachability.m in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AE1116A414F4315B00CBB05D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				AE1116B814F4315B00CBB05D /* HandsOfTimeSolverTests.m in Sources */,
 				63D04EB815AA80AB00C9D46F /* ASIAuthenticationDialog.m in Sources */,
@@ -1168,11 +1140,9 @@
 				63D04EF415AA80AB00C9D46F /* ASIS3ServiceRequest.m in Sources */,
 				63D04EFA15AA878F00C9D46F /* Reachability.m in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AE1116C514F5591C00CBB05D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
 			files = (
 				63E4D73A15C48D62003EC59E /* UIColor+FF.m in Sources */,
 				63E4D73B15C48D62003EC59E /* UILabel+FF.m in Sources */,
@@ -1219,7 +1189,6 @@
 				63D04EF515AA80AB00C9D46F /* ASIS3ServiceRequest.m in Sources */,
 				63D04EFB15AA878F00C9D46F /* Reachability.m in Sources */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
@@ -1295,7 +1264,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		AE1116B914F4315B00CBB05D /* Debug */ = {
+		AE1116B914F4315B00CBB05D /* Debug configuration for PBXProject "HandsOfTimeSolver" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1328,7 +1297,7 @@
 			};
 			name = Debug;
 		};
-		AE1116BA14F4315B00CBB05D /* Release */ = {
+		AE1116BA14F4315B00CBB05D /* Release configuration for PBXProject "HandsOfTimeSolver" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1356,20 +1325,24 @@
 			};
 			name = Release;
 		};
-		AE1116BC14F4315B00CBB05D /* Debug */ = {
+		AE1116BC14F4315B00CBB05D /* Debug configuration for PBXNativeTarget "HandsOfTimeSolver" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HandsOfTimeSolver/HandsOfTimeSolver-Prefix.pch";
 				INFOPLIST_FILE = "HandsOfTimeSolver/HandsOfTimeSolver-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Hands of Time Solver";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
 					"\"$(SRCROOT)/HandsOfTimeSolver/CrittercismSDK\"",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -1378,20 +1351,24 @@
 			};
 			name = Debug;
 		};
-		AE1116BD14F4315B00CBB05D /* Release */ = {
+		AE1116BD14F4315B00CBB05D /* Release configuration for PBXNativeTarget "HandsOfTimeSolver" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Corey Roberts";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Corey Roberts";
+				CURRENT_PROJECT_VERSION = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HandsOfTimeSolver/HandsOfTimeSolver-Prefix.pch";
 				INFOPLIST_FILE = "HandsOfTimeSolver/HandsOfTimeSolver-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Hands of Time Solver";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/HandsOfTimeSolver/Libraries/Google Analytics SDK/Library\"",
 					"\"$(SRCROOT)/HandsOfTimeSolver/CrittercismSDK\"",
 				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1755D436-7077-41FD-8555-CB64A70A676E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1755D436-7077-41FD-8555-CB64A70A676E";
@@ -1400,7 +1377,7 @@
 			};
 			name = Release;
 		};
-		AE1116BF14F4315B00CBB05D /* Debug */ = {
+		AE1116BF14F4315B00CBB05D /* Debug configuration for PBXNativeTarget "HandsOfTimeSolverTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HandsOfTimeSolver.app/HandsOfTimeSolver";
@@ -1421,7 +1398,7 @@
 			};
 			name = Debug;
 		};
-		AE1116C014F4315B00CBB05D /* Release */ = {
+		AE1116C014F4315B00CBB05D /* Release configuration for PBXNativeTarget "HandsOfTimeSolverTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/HandsOfTimeSolver.app/HandsOfTimeSolver";
@@ -1442,7 +1419,7 @@
 			};
 			name = Release;
 		};
-		AE1116E314F5591D00CBB05D /* Debug */ = {
+		AE1116E314F5591D00CBB05D /* Debug configuration for PBXNativeTarget "UnitTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1469,7 +1446,7 @@
 			};
 			name = Debug;
 		};
-		AE1116E414F5591D00CBB05D /* Release */ = {
+		AE1116E414F5591D00CBB05D /* Release configuration for PBXNativeTarget "UnitTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1502,37 +1479,33 @@
 		AE11167F14F4315B00CBB05D /* Build configuration list for PBXProject "HandsOfTimeSolver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AE1116B914F4315B00CBB05D /* Debug */,
-				AE1116BA14F4315B00CBB05D /* Release */,
+				AE1116B914F4315B00CBB05D /* Debug configuration for PBXProject "HandsOfTimeSolver" */,
+				AE1116BA14F4315B00CBB05D /* Release configuration for PBXProject "HandsOfTimeSolver" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		AE1116BB14F4315B00CBB05D /* Build configuration list for PBXNativeTarget "HandsOfTimeSolver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AE1116BC14F4315B00CBB05D /* Debug */,
-				AE1116BD14F4315B00CBB05D /* Release */,
+				AE1116BC14F4315B00CBB05D /* Debug configuration for PBXNativeTarget "HandsOfTimeSolver" */,
+				AE1116BD14F4315B00CBB05D /* Release configuration for PBXNativeTarget "HandsOfTimeSolver" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		AE1116BE14F4315B00CBB05D /* Build configuration list for PBXNativeTarget "HandsOfTimeSolverTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AE1116BF14F4315B00CBB05D /* Debug */,
-				AE1116C014F4315B00CBB05D /* Release */,
+				AE1116BF14F4315B00CBB05D /* Debug configuration for PBXNativeTarget "HandsOfTimeSolverTests" */,
+				AE1116C014F4315B00CBB05D /* Release configuration for PBXNativeTarget "HandsOfTimeSolverTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 		AE1116E514F5591D00CBB05D /* Build configuration list for PBXNativeTarget "UnitTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AE1116E314F5591D00CBB05D /* Debug */,
-				AE1116E414F5591D00CBB05D /* Release */,
+				AE1116E314F5591D00CBB05D /* Debug configuration for PBXNativeTarget "UnitTests" */,
+				AE1116E414F5591D00CBB05D /* Release configuration for PBXNativeTarget "UnitTests" */,
 			);
-			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */

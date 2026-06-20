@@ -1,0 +1,15 @@
+# For more information about this configuration visit
+# https://github.com/fastlane/scan#scanfile
+
+project_path = ENV.fetch('XCODE_PROJECT', 'HandsOfTimeSwiftUI.xcodeproj')
+project(File.exist?(project_path) ? project_path : File.join('..', project_path))
+scheme(ENV.fetch('SCHEME', 'HandsOfTime'))
+code_coverage(true)
+clean(true)
+skip_slack(true)
+include_simulator_logs(false)
+buildlog_path('fastlane/test_output')
+number_of_retries(3)
+use_system_scm(true)
+disable_package_automatic_updates(true)
+result_bundle(true)

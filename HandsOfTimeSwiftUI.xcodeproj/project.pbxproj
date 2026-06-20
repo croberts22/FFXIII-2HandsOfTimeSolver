@@ -3,45 +3,26 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0192BC6C10E5C262858D937E /* HandsOfTimeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9D6060482F9C31804117DD0E /* HandsOfTimeCore */; };
-		088CA6D7B2D9FC29933927FE /* PuzzleHistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DAA01AB30CFDBBA87557A5 /* PuzzleHistoryEntry.swift */; };
-		21D0DC9FE58426BDDE356150 /* TipJarStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84067B744E471747B3BE041E /* TipJarStore.swift */; };
-		5065097CD6D0D89D9DAF5BFD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5AD3FEBEA1A89F94CEF7CE3 /* Foundation.framework */; };
-		5FE07BA9CD400FB5C580EF79 /* SolutionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FA07D0ABDDB42DA8EC671C /* SolutionView.swift */; };
-		67543F63042738BD96A87C20 /* HandsOfTimeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C600868445C43EAD8B3E4DE9 /* HandsOfTimeApp.swift */; };
-		73B8C4BA48A4226069DB1B4B /* SolverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1F01C1591112A8E0A6F48D /* SolverView.swift */; };
-		7C98EAF355181C154ABE606B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA532CD020470EC2D5F0B13E /* HistoryView.swift */; };
-		9B2D3F8F9FDCC5A168CDE66C /* TipJarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AD4968AD2AF4900831BAAE /* TipJarView.swift */; };
-		9B9046F2A1F9BD1D4147D3F3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FC33F7A3FE71907C3240F /* ContentView.swift */; };
-		9FA06EBE6E0DEACED638B234 /* PuzzleInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1472A824158010692E2C62 /* PuzzleInputViewModel.swift */; };
-		A474DB1A392C4B9B7869C3B1 /* PuzzleRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37207C93AD6548EE4B28CF86 /* PuzzleRingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		37207C93AD6548EE4B28CF86 /* PuzzleRingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PuzzleRingView.swift; path = App/Views/PuzzleRingView.swift; sourceTree = "<group>"; };
-		451C465836AA20AC427BB89C /* HandsOfTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = HandsOfTime.app; path = HandsOfTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		77FA07D0ABDDB42DA8EC671C /* SolutionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SolutionView.swift; path = App/Views/SolutionView.swift; sourceTree = "<group>"; };
-		7D1472A824158010692E2C62 /* PuzzleInputViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PuzzleInputViewModel.swift; path = App/ViewModels/PuzzleInputViewModel.swift; sourceTree = "<group>"; };
-		84067B744E471747B3BE041E /* TipJarStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TipJarStore.swift; path = App/Store/TipJarStore.swift; sourceTree = "<group>"; };
-		94DAA01AB30CFDBBA87557A5 /* PuzzleHistoryEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PuzzleHistoryEntry.swift; path = App/Models/PuzzleHistoryEntry.swift; sourceTree = "<group>"; };
-		9B1F01C1591112A8E0A6F48D /* SolverView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SolverView.swift; path = App/Views/SolverView.swift; sourceTree = "<group>"; };
-		9E0FC33F7A3FE71907C3240F /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = App/Views/ContentView.swift; sourceTree = "<group>"; };
-		A5AD3FEBEA1A89F94CEF7CE3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		B8AD4968AD2AF4900831BAAE /* TipJarView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TipJarView.swift; path = App/Views/TipJarView.swift; sourceTree = "<group>"; };
-		C600868445C43EAD8B3E4DE9 /* HandsOfTimeApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HandsOfTimeApp.swift; path = App/HandsOfTimeApp.swift; sourceTree = "<group>"; };
-		FA532CD020470EC2D5F0B13E /* HistoryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HistoryView.swift; path = App/Views/HistoryView.swift; sourceTree = "<group>"; };
+		451C465836AA20AC427BB89C /* HandsOfTime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandsOfTime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		2C51D6D42FE510E0003CEF7F /* HandsOfTime */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = HandsOfTime; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		908600CA8BEDFBF284009B9E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5065097CD6D0D89D9DAF5BFD /* Foundation.framework in Frameworks */,
 				0192BC6C10E5C262858D937E /* HandsOfTimeCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,14 +30,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8920BA18B8C2C6C5753E340B /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				A5AD3FEBEA1A89F94CEF7CE3 /* Foundation.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
 		A01544B41F702689F2F5C3A9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -65,38 +38,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A39C37601DF528C80A6A0920 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				8920BA18B8C2C6C5753E340B /* iOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		B49C19AD480DC73504FC7D08 /* HandsOfTime */ = {
-			isa = PBXGroup;
-			children = (
-				C600868445C43EAD8B3E4DE9 /* HandsOfTimeApp.swift */,
-				94DAA01AB30CFDBBA87557A5 /* PuzzleHistoryEntry.swift */,
-				84067B744E471747B3BE041E /* TipJarStore.swift */,
-				7D1472A824158010692E2C62 /* PuzzleInputViewModel.swift */,
-				9E0FC33F7A3FE71907C3240F /* ContentView.swift */,
-				FA532CD020470EC2D5F0B13E /* HistoryView.swift */,
-				37207C93AD6548EE4B28CF86 /* PuzzleRingView.swift */,
-				77FA07D0ABDDB42DA8EC671C /* SolutionView.swift */,
-				9B1F01C1591112A8E0A6F48D /* SolverView.swift */,
-				B8AD4968AD2AF4900831BAAE /* TipJarView.swift */,
-			);
-			name = HandsOfTime;
-			path = HandsOfTime;
-			sourceTree = "<group>";
-		};
 		C8BF774D0607B8F44796541C = {
 			isa = PBXGroup;
 			children = (
+				2C51D6D42FE510E0003CEF7F /* HandsOfTime */,
 				A01544B41F702689F2F5C3A9 /* Products */,
-				A39C37601DF528C80A6A0920 /* Frameworks */,
-				B49C19AD480DC73504FC7D08 /* HandsOfTime */,
 			);
 			sourceTree = "<group>";
 		};
@@ -114,6 +60,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				2C51D6D42FE510E0003CEF7F /* HandsOfTime */,
 			);
 			name = HandsOfTime;
 			packageProductDependencies = (
@@ -141,11 +90,9 @@
 				Base,
 			);
 			mainGroup = C8BF774D0607B8F44796541C;
-			minimizedProjectReferenceProxies = 0;
 			packageReferences = (
 				AF13186CF68C4E63B02B3D0B /* XCLocalSwiftPackageReference "HandsOfTimeCore" */,
 			);
-			preferredProjectObjectVersion = 77;
 			productRefGroup = A01544B41F702689F2F5C3A9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -170,16 +117,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67543F63042738BD96A87C20 /* HandsOfTimeApp.swift in Sources */,
-				088CA6D7B2D9FC29933927FE /* PuzzleHistoryEntry.swift in Sources */,
-				21D0DC9FE58426BDDE356150 /* TipJarStore.swift in Sources */,
-				9FA06EBE6E0DEACED638B234 /* PuzzleInputViewModel.swift in Sources */,
-				9B9046F2A1F9BD1D4147D3F3 /* ContentView.swift in Sources */,
-				7C98EAF355181C154ABE606B /* HistoryView.swift in Sources */,
-				A474DB1A392C4B9B7869C3B1 /* PuzzleRingView.swift in Sources */,
-				5FE07BA9CD400FB5C580EF79 /* SolutionView.swift in Sources */,
-				73B8C4BA48A4226069DB1B4B /* SolverView.swift in Sources */,
-				9B2D3F8F9FDCC5A168CDE66C /* TipJarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,10 +198,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Hands of Time";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.coreyroberts.ffxiii2solver;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -343,10 +284,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Hands of Time";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.coreyroberts.ffxiii2solver;
 				PRODUCT_NAME = "$(TARGET_NAME)";

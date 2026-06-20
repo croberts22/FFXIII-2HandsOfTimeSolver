@@ -1,0 +1,511 @@
+default_platform :ios
+
+APP_NAME = ENV.fetch('APP_NAME', 'Hands of Time')
+APP_IDENTIFIER = ENV.fetch('APP_IDENTIFIER', 'com.coreyroberts.ffxiii2solver')
+XCODE_PROJECT = ENV.fetch('XCODE_PROJECT', 'HandsOfTimeSwiftUI.xcodeproj')
+SCHEME = ENV.fetch('SCHEME', 'HandsOfTime')
+TARGET = ENV.fetch('TARGET', 'HandsOfTime')
+APPLE_ID = ENV.fetch('FASTLANE_USER', 'corey@spacepyro.com')
+TEAM_ID = ENV.fetch('FASTLANE_TEAM_ID', 'QYFSMCG7FR')
+MATCH_APP_IDENTIFIERS = ENV.fetch('MATCH_APP_IDENTIFIERS', APP_IDENTIFIER)
+                           .split(',')
+                           .map(&:strip)
+                           .reject(&:empty?)
+
+def boolean_option(value, default:)
+  return default if value.nil?
+  return value if value == true || value == false
+
+  %w[1 true yes].include?(value.to_s.downcase)
+end
+
+def configure_app_store_connect_api_key
+  key_id = ENV['APP_STORE_CONNECT_API_KEY_ID'] || ENV['ASC_KEY_ID'] || '63WP63PW2Z'
+  issuer_id = ENV['APP_STORE_CONNECT_ISSUER_ID'] || ENV['ASC_ISSUER_ID'] || '69a6de76-4abd-47e3-e053-5b8c7c11a4d1'
+  key_filepath = ENV['APP_STORE_CONNECT_API_KEY_PATH'] || "fastlane/#{key_id}.p8"
+  key_content = ENV['APP_STORE_CONNECT_API_KEY_CONTENT']
+
+  if key_content.to_s.empty? && !File.exist?(key_filepath)
+    UI.message("No App Store Connect API key found at #{key_filepath}; App Store lanes may prompt for Apple ID auth.")
+    return
+  end
+
+  options = {
+    key_id: key_id,
+    issuer_id: issuer_id,
+    duration: 1200,
+    in_house: false
+  }
+
+  if key_content.to_s.empty?
+    options[:key_filepath] = key_filepath
+  else
+    options[:key_content] = key_content
+    options[:is_key_content_base64] = boolean_option(
+      ENV['APP_STORE_CONNECT_API_KEY_CONTENT_BASE64'],
+      default: false
+    )
+  end
+
+  app_store_connect_api_key(options)
+end
+
+def notify(message:, success: true)
+  ENV['SLACK_URL'] = ENV['HANDS_OF_TIME_SLACK_URL'] if ENV['SLACK_URL'].to_s.empty? && !ENV['HANDS_OF_TIME_SLACK_URL'].to_s.empty?
+  return if ENV['SLACK_URL'].to_s.empty?
+
+  slack(message: message, success: success)
+end
+
+def sentry_auth_token
+  ENV['HANDS_OF_TIME_SENTRY_AUTH_TOKEN'] || ENV['SENTRY_AUTH_TOKEN']
+end
+
+def repo_file(path)
+  return path if File.exist?(path)
+
+  parent_path = File.join('..', path)
+  return parent_path if File.exist?(parent_path)
+
+  path
+end
+
+def first_existing_file(paths)
+  paths.find { |path| File.exist?(path) }
+end
+
+def xcode_project_path
+  repo_file(XCODE_PROJECT)
+end
+
+platform :ios do
+  before_all do
+    ENV['FASTLANE_EXPLICIT_OPEN_SIMULATOR'] ||= '1'
+    ENV['FASTLANE_XCODE_LIST_TIMEOUT'] ||= '60'
+    ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] ||= '120'
+    ENV['XCODE_PATH'] ||= XCODE_PROJECT
+    ENV['SENTRY_ORG_SLUG'] ||= 'spacepyro-labs-llc'
+    ENV['SENTRY_PROJECT_SLUG'] ||= 'hands-of-time-ios'
+
+    configure_app_store_connect_api_key
+  end
+
+  desc 'Cleans up TestFlight users who are not participating in the beta.'
+  lane :clean_testflight_users do
+    clean_testflight_testers(
+      days_of_inactivity: 120,
+      app_identifier: APP_IDENTIFIER
+    )
+  end
+
+  lane :remove_testflight_user do |options|
+    clean_testflight_testers(
+      testers: options[:testers],
+      app_identifier: APP_IDENTIFIER
+    )
+  end
+
+  desc 'Runs package tests. Pass scan:true to also run the app scheme through scan.'
+  lane :test do |options|
+    require 'fileutils'
+
+    package_path = repo_file('HandsOfTimeCore')
+    swiftpm_cache = File.join(package_path, '.build', 'swiftpm-cache')
+    swiftpm_config = File.join(package_path, '.build', 'swiftpm-config')
+    swiftpm_security = File.join(package_path, '.build', 'swiftpm-security')
+    clang_module_cache = File.join(package_path, '.build', 'clang-module-cache')
+    [swiftpm_cache, swiftpm_config, swiftpm_security, clang_module_cache].each do |path|
+      FileUtils.mkdir_p(path)
+    end
+
+    sh(
+      "CLANG_MODULE_CACHE_PATH=#{clang_module_cache} " \
+      "swift test --package-path #{package_path} " \
+      "--cache-path #{swiftpm_cache} " \
+      "--config-path #{swiftpm_config} " \
+      "--security-path #{swiftpm_security} " \
+      '--disable-sandbox ' \
+      '--manifest-cache local'
+    )
+    scan if boolean_option(options[:scan], default: false)
+  end
+
+  desc 'Runs the app scheme through scan.'
+  lane :scan_app do
+    scan
+  end
+
+  desc 'Builds an App Store archive.'
+  lane :build do
+    gym(project: xcode_project_path)
+  end
+
+  desc 'Submit a new external beta to TestFlight.'
+  lane :beta do |options|
+    skip_build = boolean_option(options[:skip_build], default: false)
+    create_beta(options) unless skip_build
+    submit_beta
+    upload_symbols
+    publish_beta unless boolean_option(options[:skip_publish], default: false)
+  end
+
+  lane :submit_beta do
+    pilot(
+      beta_app_feedback_email: ENV.fetch('BETA_FEEDBACK_EMAIL', APPLE_ID),
+      demo_account_required: false,
+      groups: ENV.fetch('TESTFLIGHT_GROUPS', 'Solo'),
+      distribute_external: true,
+      skip_waiting_for_build_processing: false,
+      changelog: external_changelog
+    )
+
+    notify(message: "#{APP_NAME} has been submitted to the external beta TestFlight group.")
+  end
+
+  lane :publish_beta do
+    grouping = 'beta'
+    add_git_tag(tag: tag(grouping))
+    push_to_git_remote
+  end
+
+  desc 'Submits a new version to the App Store.'
+  lane :production do |options|
+    setup(
+      exclude_match: boolean_option(options[:skip_match], default: false),
+      exclude_version_update: boolean_option(options[:skip_version_update], default: false),
+      allow_dirty: boolean_option(options[:allow_dirty], default: false)
+    )
+
+    version = get_version_number(xcodeproj: xcode_project_path, target: TARGET).to_s
+    message = read_release_notes
+    gym(project: xcode_project_path)
+    deliver(app_version: version)
+    upload_symbols
+    add_git_tag(tag: version, message: message)
+  end
+
+  desc 'Submits metadata for a version whose binary has already been uploaded.'
+  lane :submit_binary do
+    version = get_version_number(xcodeproj: xcode_project_path, target: TARGET).to_s
+    deliver(
+      app_version: version,
+      skip_binary_upload: true
+    )
+    notify(message: "#{APP_NAME} has been submitted to the App Store.")
+  end
+
+  desc 'Refreshes dSYM files by downloading from Apple and uploading to Sentry.'
+  lane :refresh_dsyms do |options|
+    version = options[:version] || get_version_number(xcodeproj: xcode_project_path, target: TARGET).to_s
+
+    download_dsyms(
+      app_identifier: APP_IDENTIFIER,
+      version: version
+    )
+    upload_symbols(path: Actions.lane_context[:DSYM_PATHS])
+    clean_build_artifacts
+  end
+
+  desc 'Uploads xcarchive dSYMs to Sentry, then uploads App Store Connect dSYMs when available.'
+  lane :upload_sentry_dsyms_from_archive do |options|
+    require 'fileutils'
+    require 'plist'
+
+    archive_path = options[:archive_path] || options[:xcarchive_path] || options[:path]
+    UI.user_error!("Pass archive_path:/path/to/#{TARGET}.xcarchive") if archive_path.to_s.empty?
+
+    archive_path = File.expand_path(archive_path)
+    UI.user_error!("Could not find archive at #{archive_path}") unless File.directory?(archive_path)
+    UI.user_error!("Expected a .xcarchive path, got #{archive_path}") unless File.extname(archive_path) == '.xcarchive'
+
+    archive_info_path = File.join(archive_path, 'Info.plist')
+    UI.user_error!("Could not find archive Info.plist at #{archive_info_path}") unless File.exist?(archive_info_path)
+
+    archive_info = Plist.parse_xml(archive_info_path) || {}
+    app_properties = archive_info['ApplicationProperties'] || {}
+    version = options[:version] || app_properties['CFBundleShortVersionString']
+    build_number = options[:build_number] || app_properties['CFBundleVersion']
+    app_identifier = options[:app_identifier] || app_properties['CFBundleIdentifier']
+
+    UI.user_error!("Could not determine version from #{archive_info_path}") if version.to_s.empty?
+    UI.user_error!("Could not determine build number from #{archive_info_path}") if build_number.to_s.empty?
+    UI.user_error!("Could not determine bundle identifier from #{archive_info_path}") if app_identifier.to_s.empty?
+
+    archive_dsyms_path = File.join(archive_path, 'dSYMs')
+    archive_dsyms = Dir[File.join(archive_dsyms_path, '*.dSYM')]
+    UI.user_error!("No dSYMs found in #{archive_dsyms_path}") if archive_dsyms.empty?
+
+    include_sources = boolean_option(options[:include_sources], default: true)
+
+    UI.message("Uploading #{archive_dsyms.count} dSYM bundle(s) from #{archive_dsyms_path}")
+    upload_symbols(
+      path: archive_dsyms_path,
+      include_sources: include_sources,
+      wait_for: options[:sentry_wait_for] || 300
+    )
+
+    output_directory = options[:output_directory] || File.join('build', 'sentry_dsyms', "#{version}-#{build_number}")
+    FileUtils.mkdir_p(output_directory)
+
+    wait_for_dsym_processing = boolean_option(options[:wait_for_dsym_processing], default: false)
+
+    UI.message("Checking App Store Connect dSYMs for #{app_identifier} #{version} (#{build_number})")
+    Actions.lane_context[:DSYM_PATHS] = []
+    download_dsyms(
+      app_identifier: app_identifier,
+      version: version,
+      build_number: build_number,
+      output_directory: output_directory,
+      wait_for_dsym_processing: wait_for_dsym_processing,
+      wait_timeout: options[:wait_timeout] || 600
+    )
+
+    dsym_paths = Actions.lane_context[:DSYM_PATHS] || []
+    if dsym_paths.empty?
+      UI.message("No App Store Connect dSYMs were available for #{app_identifier} #{version} (#{build_number})")
+    else
+      upload_symbols(
+        path: dsym_paths,
+        include_sources: include_sources,
+        wait_for: options[:sentry_wait_for] || 300
+      )
+    end
+  end
+
+  lane :upload_symbols do |options|
+    token = sentry_auth_token
+
+    if token.to_s.empty?
+      UI.important('Skipping Sentry dSYM upload; set HANDS_OF_TIME_SENTRY_AUTH_TOKEN or SENTRY_AUTH_TOKEN to enable it.')
+      next
+    end
+
+    upload_options = {
+      org_slug: ENV.fetch('SENTRY_ORG_SLUG', 'spacepyro-labs-llc'),
+      project_slug: ENV.fetch('SENTRY_PROJECT_SLUG', 'hands-of-time-ios'),
+      auth_token: token
+    }
+    upload_options[:path] = Array(options[:path]) unless options[:path].nil?
+    upload_options[:wait_for] = options[:wait_for] unless options[:wait_for].nil?
+    upload_options[:include_sources] = boolean_option(options[:include_sources], default: false)
+
+    sentry_debug_files_upload(upload_options)
+  end
+
+  desc 'Matches up provisioning profiles for development.'
+  lane :match_development do
+    setup_match_keychain
+
+    match(
+      type: 'development',
+      platform: 'ios',
+      keychain_name: match_keychain_name,
+      keychain_password: match_keychain_password,
+      app_identifier: MATCH_APP_IDENTIFIERS,
+      force_for_new_devices: true
+    )
+  end
+
+  desc 'Matches up provisioning profiles for App Store distribution.'
+  lane :match_production do |options|
+    setup_match_keychain
+
+    match(
+      type: 'appstore',
+      force: boolean_option(options[:force], default: false),
+      keychain_name: match_keychain_name,
+      keychain_password: match_keychain_password,
+      app_identifier: MATCH_APP_IDENTIFIERS
+    )
+  end
+
+  desc 'Matches up provisioning profiles.'
+  lane :match_targets do
+    match_production
+  end
+
+  desc 'Uploads metadata.'
+  lane :upload_metadata do
+    deliver(
+      skip_screenshots: true,
+      skip_binary_upload: true,
+      submit_for_review: false
+    )
+  end
+
+  desc 'Uploads new screenshots.'
+  lane :upload_screenshots do
+    deliver(
+      skip_screenshots: false,
+      skip_binary_upload: true,
+      skip_metadata: true,
+      submit_for_review: false
+    )
+  end
+
+  desc 'Submits the app for review. This assumes the binary has already been uploaded.'
+  lane :submit_for_review do
+    deliver(skip_binary_upload: true)
+  end
+
+  desc 'Sets a new version and build number, then pushes the version bump.'
+  desc "NOTE: This must be performed locally. Ensure you are on the right working branch."
+  desc 'ex: fastlane create_new_version version:1.1.0'
+  lane :create_new_version do |options|
+    version_number = options[:version]
+    UI.user_error!('Pass a version number, for example: fastlane ios create_new_version version:1.1.0') if version_number.to_s.empty?
+
+    unless is_ci? || boolean_option(options[:allow_dirty], default: false)
+      ensure_git_status_clean
+    end
+
+    branch = git_branch
+
+    update_xcodeproj(
+      xcodeproj: xcode_project_path,
+      options: {
+        MARKETING_VERSION: version_number
+      }
+    )
+
+    increment_build_number(
+      build_number: options[:build] || 1,
+      xcodeproj: xcode_project_path
+    )
+
+    commit_version_bump(
+      message: "[version] Bumping #{APP_NAME} to #{version_number}.",
+      xcodeproj: xcode_project_path
+    )
+
+    push_to_git_remote(
+      remote: 'origin',
+      local_branch: 'HEAD',
+      remote_branch: branch.to_s
+    )
+  end
+
+  lane :add_device do |options|
+    register_device(name: options[:name], udid: options[:udid])
+  end
+
+  lane :format do
+    swiftformat = ENV['SWIFTFORMAT_PATH'] || repo_file('Pods/SwiftFormat/CommandLineTool/swiftformat')
+
+    if File.exist?(swiftformat)
+      sh("#{swiftformat} #{repo_file('HandsOfTime')} #{repo_file('HandsOfTimeCore')}")
+    else
+      UI.important('SwiftFormat is not configured for this repo yet. Set SWIFTFORMAT_PATH to enable this lane.')
+    end
+  end
+
+  lane :update_build_number do
+    build_number = latest_testflight_build_number(
+      app_identifier: APP_IDENTIFIER,
+      version: get_version_number(xcodeproj: xcode_project_path, target: TARGET).to_s,
+      initial_build_number: get_build_number(xcodeproj: xcode_project_path)
+    )
+
+    increment_build_number(
+      build_number: build_number.to_i + 1,
+      xcodeproj: xcode_project_path
+    )
+  end
+
+  after_all do |lane|
+    clean unless lane == :test
+  end
+
+  error do |_lane, exception|
+    notify(message: exception.message, success: false) if is_ci?
+    clean
+  end
+
+  private_lane :clean do
+    clean_build_artifacts
+  end
+
+  private_lane :setup do |options|
+    unless is_ci? || boolean_option(options[:allow_dirty], default: false)
+      ensure_git_status_clean
+    end
+
+    exclude_match = boolean_option(options[:exclude_match], default: false)
+    exclude_version_update = boolean_option(options[:exclude_version_update], default: false)
+
+    match_targets unless exclude_match
+    update_build_number unless exclude_version_update
+  end
+
+  private_lane :create_beta do |options|
+    setup(
+      exclude_match: boolean_option(options[:skip_match], default: false),
+      exclude_version_update: boolean_option(options[:skip_version_update], default: false),
+      allow_dirty: boolean_option(options[:allow_dirty], default: false)
+    )
+    gym(project: xcode_project_path, scheme: SCHEME, configuration: 'Release')
+  end
+
+  def changelog
+    changelog_from_git_commits(
+      commits_count: 10,
+      pretty: '%h - %cr by %an%n%s%n%n'
+    )
+  end
+
+  def external_changelog
+    beta_notes = first_existing_file(['beta_notes.txt', '../beta_notes.txt'])
+    return File.read(beta_notes) if beta_notes
+
+    changelog
+  end
+
+  def setup_match_keychain
+    create_keychain(
+      name: match_keychain_name,
+      password: match_keychain_password,
+      default_keychain: false,
+      unlock: true,
+      timeout: 0,
+      lock_when_sleeps: false,
+      add_to_search_list: true,
+      require_create: false
+    )
+  end
+
+  def match_keychain_name
+    ENV['MATCH_KEYCHAIN_NAME'] || 'hands-of-time-match'
+  end
+
+  def match_keychain_password
+    ENV['MATCH_KEYCHAIN_PASSWORD'] || 'hands-of-time-match'
+  end
+
+  def tag(grouping)
+    version_number = get_version_number(xcodeproj: xcode_project_path, target: TARGET).to_s
+    build_number = get_build_number(xcodeproj: xcode_project_path).to_s
+    "v#{version_number}-#{build_number}-#{grouping}"
+  end
+
+  def get_commit_branch
+    if is_ci?
+      ENV['BITRISE_GIT_BRANCH']
+    else
+      git_branch
+    end
+  end
+
+  def read_release_notes
+    release_notes_path = first_existing_file([
+      'metadata/en-US/release_notes.txt',
+      'fastlane/metadata/en-US/release_notes.txt',
+      '../fastlane/metadata/en-US/release_notes.txt'
+    ])
+    return File.read(release_notes_path) if release_notes_path
+
+    changelog
+  end
+end
+
+# More information about multiple platforms in fastlane: https://docs.fastlane.tools/advanced/Fastfile/
+# All available actions: https://docs.fastlane.tools/actions/

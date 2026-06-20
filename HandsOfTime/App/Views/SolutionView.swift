@@ -13,7 +13,7 @@ struct SolutionView: View {
 
     private var instruction: String {
         if isComplete {
-            "Solved. Start another clock when ready."
+            return "Solved. Start another clock when ready."
         }
 
         return solution.steps[stepIndex].instruction

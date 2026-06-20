@@ -1,0 +1,10 @@
+project_path = ENV.fetch('XCODE_PROJECT', 'HandsOfTimeSwiftUI.xcodeproj')
+project(File.exist?(project_path) ? project_path : File.join('..', project_path))
+scheme(ENV.fetch('SCHEME', 'HandsOfTime'))
+xcargs('-allowProvisioningUpdates')
+skip_package_dependencies_resolution(true)
+
+export_options(
+  method: 'app-store',
+  teamID: ENV.fetch('FASTLANE_TEAM_ID', 'QYFSMCG7FR')
+)
