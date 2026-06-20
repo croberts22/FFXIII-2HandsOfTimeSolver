@@ -2,7 +2,7 @@ default_platform :ios
 
 APP_NAME = ENV.fetch('APP_NAME', 'Hands of Time')
 APP_IDENTIFIER = ENV.fetch('APP_IDENTIFIER', 'com.coreyroberts.ffxiii2solver')
-XCODE_PROJECT = ENV.fetch('XCODE_PROJECT', 'HandsOfTimeSwiftUI.xcodeproj')
+XCODE_PROJECT = ENV.fetch('XCODE_PROJECT', 'HandsOfTime.xcodeproj')
 SCHEME = ENV.fetch('SCHEME', 'HandsOfTime')
 TARGET = ENV.fetch('TARGET', 'HandsOfTime')
 APPLE_ID = ENV.fetch('FASTLANE_USER', 'corey@spacepyro.com')

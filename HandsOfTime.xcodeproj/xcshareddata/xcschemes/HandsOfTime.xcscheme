@@ -17,7 +17,7 @@
                BlueprintIdentifier = "4B61F9DBB0D0D66352792A74"
                BuildableName = "HandsOfTime.app"
                BlueprintName = "HandsOfTime"
-               ReferencedContainer = "container:HandsOfTimeSwiftUI.xcodeproj">
+               ReferencedContainer = "container:HandsOfTime.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,7 +33,7 @@
             BlueprintIdentifier = "4B61F9DBB0D0D66352792A74"
             BuildableName = "HandsOfTime.app"
             BlueprintName = "HandsOfTime"
-            ReferencedContainer = "container:HandsOfTimeSwiftUI.xcodeproj">
+            ReferencedContainer = "container:HandsOfTime.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -56,7 +56,7 @@
             BlueprintIdentifier = "4B61F9DBB0D0D66352792A74"
             BuildableName = "HandsOfTime.app"
             BlueprintName = "HandsOfTime"
-            ReferencedContainer = "container:HandsOfTimeSwiftUI.xcodeproj">
+            ReferencedContainer = "container:HandsOfTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -73,7 +73,7 @@
             BlueprintIdentifier = "4B61F9DBB0D0D66352792A74"
             BuildableName = "HandsOfTime.app"
             BlueprintName = "HandsOfTime"
-            ReferencedContainer = "container:HandsOfTimeSwiftUI.xcodeproj">
+            ReferencedContainer = "container:HandsOfTime.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

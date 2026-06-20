@@ -81,7 +81,7 @@
 				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2650;
 			};
-			buildConfigurationList = C6052E9AC7CC8A5940568425 /* Build configuration list for PBXProject "HandsOfTimeSwiftUI" */;
+			buildConfigurationList = C6052E9AC7CC8A5940568425 /* Build configuration list for PBXProject "HandsOfTime" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -306,7 +306,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C6052E9AC7CC8A5940568425 /* Build configuration list for PBXProject "HandsOfTimeSwiftUI" */ = {
+		C6052E9AC7CC8A5940568425 /* Build configuration list for PBXProject "HandsOfTime" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0226B7D1E79C1352EA512C19 /* Debug */,

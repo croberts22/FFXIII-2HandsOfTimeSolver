@@ -1,7 +1,7 @@
 # For more information about this configuration visit
 # https://github.com/fastlane/scan#scanfile
 
-project_path = ENV.fetch('XCODE_PROJECT', 'HandsOfTimeSwiftUI.xcodeproj')
+project_path = ENV.fetch('XCODE_PROJECT', 'HandsOfTime.xcodeproj')
 project(File.exist?(project_path) ? project_path : File.join('..', project_path))
 scheme(ENV.fetch('SCHEME', 'HandsOfTime'))
 code_coverage(true)
