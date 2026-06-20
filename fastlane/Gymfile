@@ -1,5 +1,14 @@
-project_path = ENV.fetch('XCODE_PROJECT', 'HandsOfTime.xcodeproj')
-project(File.exist?(project_path) ? project_path : File.join('..', project_path))
+repo_root = File.expand_path('..', __dir__)
+configured_project_path = ENV.fetch('XCODE_PROJECT', 'HandsOfTime.xcodeproj')
+project_candidates = [
+  File.expand_path(configured_project_path, Dir.pwd),
+  File.expand_path(configured_project_path, repo_root),
+  File.expand_path(File.basename(configured_project_path), repo_root)
+].uniq
+resolved_project_path = project_candidates.find { |path| File.exist?(path) } ||
+                        File.expand_path(configured_project_path, repo_root)
+
+project(resolved_project_path)
 scheme(ENV.fetch('SCHEME', 'HandsOfTime'))
 xcargs('-allowProvisioningUpdates')
 skip_package_dependencies_resolution(true)

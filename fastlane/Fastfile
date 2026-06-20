@@ -7,6 +7,7 @@ SCHEME = ENV.fetch('SCHEME', 'HandsOfTime')
 TARGET = ENV.fetch('TARGET', 'HandsOfTime')
 APPLE_ID = ENV.fetch('FASTLANE_USER', 'corey@spacepyro.com')
 TEAM_ID = ENV.fetch('FASTLANE_TEAM_ID', 'QYFSMCG7FR')
+REPO_ROOT = File.expand_path('..', __dir__)
 MATCH_APP_IDENTIFIERS = ENV.fetch('MATCH_APP_IDENTIFIERS', APP_IDENTIFIER)
                            .split(',')
                            .map(&:strip)
@@ -62,12 +63,13 @@ def sentry_auth_token
 end
 
 def repo_file(path)
-  return path if File.exist?(path)
+  candidates = [
+    File.expand_path(path, Dir.pwd),
+    File.expand_path(path, REPO_ROOT),
+    File.expand_path(File.basename(path), REPO_ROOT)
+  ].uniq
 
-  parent_path = File.join('..', path)
-  return parent_path if File.exist?(parent_path)
-
-  path
+  candidates.find { |candidate| File.exist?(candidate) } || File.expand_path(path, REPO_ROOT)
 end
 
 def first_existing_file(paths)
@@ -83,7 +85,7 @@ platform :ios do
     ENV['FASTLANE_EXPLICIT_OPEN_SIMULATOR'] ||= '1'
     ENV['FASTLANE_XCODE_LIST_TIMEOUT'] ||= '60'
     ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] ||= '120'
-    ENV['XCODE_PATH'] ||= XCODE_PROJECT
+    ENV['XCODE_PATH'] ||= xcode_project_path
     ENV['SENTRY_ORG_SLUG'] ||= 'spacepyro-labs-llc'
     ENV['SENTRY_PROJECT_SLUG'] ||= 'hands-of-time-ios'
 
