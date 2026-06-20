@@ -107,26 +107,9 @@ platform :ios do
 
   desc 'Runs package tests. Pass scan:true to also run the app scheme through scan.'
   lane :test do |options|
-    require 'fileutils'
-
     package_path = repo_file('HandsOfTimeCore')
-    swiftpm_cache = File.join(package_path, '.build', 'swiftpm-cache')
-    swiftpm_config = File.join(package_path, '.build', 'swiftpm-config')
-    swiftpm_security = File.join(package_path, '.build', 'swiftpm-security')
-    clang_module_cache = File.join(package_path, '.build', 'clang-module-cache')
-    [swiftpm_cache, swiftpm_config, swiftpm_security, clang_module_cache].each do |path|
-      FileUtils.mkdir_p(path)
-    end
 
-    sh(
-      "CLANG_MODULE_CACHE_PATH=#{clang_module_cache} " \
-      "swift test --package-path #{package_path} " \
-      "--cache-path #{swiftpm_cache} " \
-      "--config-path #{swiftpm_config} " \
-      "--security-path #{swiftpm_security} " \
-      '--disable-sandbox ' \
-      '--manifest-cache local'
-    )
+    sh("swift test --package-path #{package_path}")
     scan if boolean_option(options[:scan], default: false)
   end
 
