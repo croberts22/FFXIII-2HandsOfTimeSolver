@@ -20,15 +20,41 @@ def boolean_option(value, default:)
   %w[1 true yes].include?(value.to_s.downcase)
 end
 
+def env_value(*names)
+  names.map { |name| ENV[name].to_s }.find { |value| !value.empty? }
+end
+
+def pem_file?(path)
+  return false if path.to_s.empty? || !File.file?(path)
+
+  File.open(path, &:readline).to_s.start_with?('-----BEGIN')
+rescue EOFError, Errno::ENOENT
+  false
+end
+
 def configure_app_store_connect_api_key
-  key_id = ENV['APP_STORE_CONNECT_API_KEY_ID'] 
-  issuer_id = ENV['APP_STORE_CONNECT_ISSUER_ID'] 
-  key_filepath = ENV['APP_STORE_CONNECT_API_KEY_PATH'].to_s
-  key_content = ENV['APP_STORE_CONNECT_API_KEY_CONTENT'].to_s
+  key_id = env_value('APP_STORE_CONNECT_API_KEY_ID', 'APP_STORE_CONNECT_API_KEY_KEY_ID')
+  issuer_id = env_value('APP_STORE_CONNECT_ISSUER_ID', 'APP_STORE_CONNECT_API_KEY_ISSUER_ID')
+  key_filepath = env_value('APP_STORE_CONNECT_API_KEY_KEY_FILEPATH', 'APP_STORE_CONNECT_API_KEY_FILEPATH').to_s
+  key_content = env_value('APP_STORE_CONNECT_API_KEY_CONTENT', 'APP_STORE_CONNECT_API_KEY_KEY').to_s
+  legacy_key_file_envs = %w[APP_STORE_CONNECT_API_KEY_PATH SIGH_API_KEY_PATH]
+  legacy_key_content_envs = %w[APP_STORE_CONNECT_API_KEY SIGH_API_KEY]
+  pem_key_file_envs = legacy_key_file_envs.select { |name| pem_file?(ENV[name].to_s) }
+  pem_key_content_envs = legacy_key_content_envs.select { |name| ENV[name].to_s.start_with?('-----BEGIN') }
+
+  unless pem_key_file_envs.empty?
+    key_filepath = ENV[pem_key_file_envs.first].to_s if key_filepath.empty?
+    pem_key_file_envs.each { |name| ENV.delete(name) }
+  end
+
+  unless pem_key_content_envs.empty?
+    key_content = ENV[pem_key_content_envs.first].to_s if key_content.empty?
+    pem_key_content_envs.each { |name| ENV.delete(name) }
+  end
 
   key_file_exists = !key_filepath.empty? && File.exist?(key_filepath)
   if key_content.empty? && !key_file_exists
-    key_location = key_filepath.empty? ? 'APP_STORE_CONNECT_API_KEY_PATH' : key_filepath
+    key_location = key_filepath.empty? ? 'APP_STORE_CONNECT_API_KEY_KEY_FILEPATH' : key_filepath
     UI.message("No App Store Connect API key found at #{key_location}; App Store lanes may prompt for Apple ID auth.")
     return
   end
@@ -45,7 +71,7 @@ def configure_app_store_connect_api_key
   else
     options[:key_content] = key_content
     options[:is_key_content_base64] = boolean_option(
-      ENV['APP_STORE_CONNECT_API_KEY_CONTENT_BASE64'],
+      env_value('APP_STORE_CONNECT_API_KEY_CONTENT_BASE64', 'APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64'),
       default: false
     )
   end
