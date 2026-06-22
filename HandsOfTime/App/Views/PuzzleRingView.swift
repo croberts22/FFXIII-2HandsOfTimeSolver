@@ -6,44 +6,100 @@ struct PuzzleRingView: View {
     let stepIndex: Int
     let reduceMotion: Bool
 
+    @State private var selectionAnimationStart = Date()
+
+    private let selectionDuration: TimeInterval = 1.55
+    private let handNodeClearance: CGFloat = 8
+    private let handOuterStrokeWidth: CGFloat = 15
+
     private var activeNode: Int? {
-        guard stepIndex < solution.path.count else {
+        guard !solution.path.isEmpty, stepIndex < solution.path.count else {
             return nil
         }
-        return solution.path[stepIndex]
+
+        if stepIndex == 0 {
+            return solution.path[0]
+        }
+
+        return solution.path[stepIndex - 1]
     }
 
     private var nextNode: Int? {
-        guard stepIndex < solution.steps.count else {
+        guard stepIndex > 0, stepIndex - 1 < solution.steps.count else {
             return nil
         }
-        return solution.steps[stepIndex].nextIndex
+        return solution.steps[stepIndex - 1].nextIndex
     }
 
     private var completedNodes: Set<Int> {
-        Set(solution.path.prefix(min(stepIndex, solution.path.count)))
+        if stepIndex >= solution.path.count {
+            return Set(solution.path)
+        }
+
+        return Set(solution.path.prefix(max(0, stepIndex - 1)))
+    }
+
+    private var isInitialSelection: Bool {
+        stepIndex == 0
+    }
+
+    private var candidateNodes: Set<Int> {
+        guard !isInitialSelection, let activeNode, nextNode != nil else {
+            return []
+        }
+
+        let value = solution.values[activeNode]
+        return [
+            circularIndex(activeNode - value, count: solution.values.count),
+            circularIndex(activeNode + value, count: solution.values.count)
+        ]
     }
 
     var body: some View {
-        Canvas { context, size in
-            let side = min(size.width, size.height)
-            let center = CGPoint(x: size.width / 2, y: size.height / 2)
-            let outerRadius = side * 0.47
-            let ringRadius = side * 0.36
-            let innerRadius = side * 0.19
-            let nodeRadius = max(22, side * 0.058)
+        TimelineView(.animation) { timeline in
+            Canvas { context, size in
+                let side = min(size.width, size.height)
+                let center = CGPoint(x: size.width / 2, y: size.height / 2)
+                let outerRadius = side * 0.47
+                let ringRadius = side * 0.36
+                let innerRadius = side * 0.19
+                let nodeRadius = max(22, side * 0.058)
+                let glowPhase = reduceMotion ? 0 : CGFloat(timeline.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3.6) / 3.6)
+                let progress = reduceMotion ? 1 : selectionProgress(at: timeline.date)
+                let ringVisibility = ringVisibility(for: progress)
 
-            drawSpaceBackground(context: &context, size: size)
-            drawPlatform(context: &context, center: center, outerRadius: outerRadius, innerRadius: innerRadius)
-            drawTicks(context: &context, center: center, radius: outerRadius, count: 120)
-            drawSegmentArcs(context: &context, center: center, radius: ringRadius + nodeRadius * 0.82)
-            drawHands(context: &context, center: center, radius: ringRadius, nodeRadius: nodeRadius)
-            drawNodes(context: &context, center: center, radius: ringRadius, nodeRadius: nodeRadius)
+                drawSpaceBackground(context: &context, size: size)
+                drawPlatform(context: &context, center: center, outerRadius: outerRadius, innerRadius: innerRadius, glowPhase: glowPhase)
+                drawTicks(context: &context, center: center, radius: outerRadius, count: 120, glowPhase: glowPhase)
+                drawSegmentArcs(
+                    context: &context,
+                    center: center,
+                    radius: ringRadius + nodeRadius * 0.82,
+                    ringVisibility: ringVisibility
+                )
+                drawHands(context: &context, center: center, radius: ringRadius, nodeRadius: nodeRadius, progress: progress)
+                drawNodes(
+                    context: &context,
+                    center: center,
+                    radius: ringRadius,
+                    nodeRadius: nodeRadius,
+                    ringVisibility: ringVisibility,
+                    glowPhase: glowPhase,
+                    selectionPulse: selectionPulse(for: progress)
+                )
+            }
         }
         .background(.black)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilitySummary)
+        .onAppear(perform: playSelectionAnimation)
+        .onChange(of: stepIndex) {
+            playSelectionAnimation()
+        }
+        .onChange(of: reduceMotion) {
+            playSelectionAnimation()
+        }
     }
 
     private var accessibilitySummary: String {
@@ -79,7 +135,13 @@ struct PuzzleRingView: View {
         }
     }
 
-    private func drawPlatform(context: inout GraphicsContext, center: CGPoint, outerRadius: CGFloat, innerRadius: CGFloat) {
+    private func drawPlatform(
+        context: inout GraphicsContext,
+        center: CGPoint,
+        outerRadius: CGFloat,
+        innerRadius: CGFloat,
+        glowPhase: CGFloat
+    ) {
         context.fill(
             Path(ellipseIn: CGRect(center: center, radius: outerRadius)),
             with: .radialGradient(
@@ -109,24 +171,64 @@ struct PuzzleRingView: View {
             with: .color(.cyan.opacity(0.35)),
             lineWidth: 2
         )
+
+        drawOrbitGlow(
+            context: &context,
+            center: center,
+            radius: outerRadius * 0.98,
+            phase: glowPhase,
+            color: .cyan,
+            lineWidth: 5,
+            sweep: .pi * 0.18,
+            opacity: 0.72
+        )
+        drawOrbitGlow(
+            context: &context,
+            center: center,
+            radius: outerRadius * 0.88,
+            phase: glowPhase + 0.34,
+            color: .white,
+            lineWidth: 3,
+            sweep: .pi * 0.14,
+            opacity: 0.44
+        )
+        drawOrbitGlow(
+            context: &context,
+            center: center,
+            radius: innerRadius,
+            phase: 1 - glowPhase,
+            color: .blue,
+            lineWidth: 5,
+            sweep: .pi * 0.34,
+            opacity: 0.7
+        )
     }
 
-    private func drawTicks(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, count: Int) {
+    private func drawTicks(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, count: Int, glowPhase: CGFloat) {
         for tick in 0..<count {
             let angle = Angle.degrees(Double(tick) / Double(count) * 360 - 90).radians
             let length: CGFloat = tick.isMultiple(of: 5) ? 12 : 6
-            let color: Color = tick.isMultiple(of: 12) ? .yellow.opacity(0.72) : .cyan.opacity(0.45)
+            let tickPhase = CGFloat(tick) / CGFloat(count)
+            let chase = max(0, 1 - circularDistance(tickPhase, glowPhase) / 0.06)
+            let baseOpacity = tick.isMultiple(of: 12) ? 0.72 : 0.42
+            let color: Color = tick.isMultiple(of: 12) ? .yellow.opacity(baseOpacity + Double(chase) * 0.2) : .cyan.opacity(baseOpacity + Double(chase) * 0.38)
             var path = Path()
             path.move(to: point(center: center, radius: radius - length, angle: angle))
             path.addLine(to: point(center: center, radius: radius, angle: angle))
-            context.stroke(path, with: .color(color), lineWidth: tick.isMultiple(of: 5) ? 1.5 : 0.8)
+            context.stroke(path, with: .color(color), lineWidth: (tick.isMultiple(of: 5) ? 1.5 : 0.8) + chase * 1.3)
         }
     }
 
-    private func drawSegmentArcs(context: inout GraphicsContext, center: CGPoint, radius: CGFloat) {
+    private func drawSegmentArcs(
+        context: inout GraphicsContext,
+        center: CGPoint,
+        radius: CGFloat,
+        ringVisibility: CGFloat
+    ) {
         for index in solution.values.indices {
             let start = nodeAngle(index) - .pi / CGFloat(solution.values.count) * 0.72
             let end = nodeAngle(index) + .pi / CGFloat(solution.values.count) * 0.72
+            let baseColor = NodeColor.palette[solution.values[index], default: .cyan]
             var arc = Path()
             arc.addArc(
                 center: center,
@@ -137,60 +239,169 @@ struct PuzzleRingView: View {
             )
             context.stroke(
                 arc,
-                with: .color(NodeColor.palette[solution.values[index], default: .cyan].opacity(0.55)),
+                with: .color(baseColor.opacity(Double(0.24 + ringVisibility * 0.36))),
                 lineWidth: 3
             )
         }
     }
 
-    private func drawHands(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, nodeRadius: CGFloat) {
+    private func drawHands(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, nodeRadius: CGFloat, progress: CGFloat) {
         guard let activeNode else {
             context.fill(Path(ellipseIn: CGRect(center: center, radius: nodeRadius * 0.35)), with: .color(.yellow.opacity(0.8)))
             return
         }
 
-        drawHand(context: &context, center: center, radius: radius - nodeRadius * 0.35, angle: nodeAngle(activeNode), color: .yellow)
-
-        if let nextNode {
+        if isInitialSelection {
+            let handRadius = handRadius(for: radius, nodeRadius: nodeRadius)
             drawHand(
                 context: &context,
                 center: center,
-                radius: radius - nodeRadius * 0.8,
-                angle: nodeAngle(nextNode),
-                color: .orange.opacity(0.82)
+                radius: handRadius,
+                angle: -.pi / 2,
+                color: .cyan,
+                opacity: 0.64,
+                nodeRadius: nodeRadius
+            )
+            drawHand(
+                context: &context,
+                center: center,
+                radius: handRadius,
+                angle: -.pi / 2,
+                color: .yellow,
+                opacity: 0.92,
+                nodeRadius: nodeRadius
+            )
+            context.fill(Path(ellipseIn: CGRect(center: center, radius: nodeRadius * 0.34)), with: .color(.yellow.opacity(0.86)))
+            context.stroke(Path(ellipseIn: CGRect(center: center, radius: nodeRadius * 0.6)), with: .color(.cyan.opacity(0.58)), lineWidth: 2)
+            return
+        }
+
+        let value = solution.values[activeNode]
+        let activeAngle = nodeAngle(activeNode)
+        let startAngles = handStartAngles()
+        let arrival = easeOut(clamp(progress / 0.46))
+        let split = nextNode == nil ? 0 : easeInOut(clamp((progress - 0.58) / 0.42))
+        let leftArrivalAngle = interpolateAngle(from: startAngles.left, to: activeAngle, progress: arrival)
+        let rightArrivalAngle = interpolateAngle(from: startAngles.right, to: activeAngle, progress: arrival)
+        let leftAngle = activeAngle - (.pi * 2 * CGFloat(value) / CGFloat(solution.values.count)) * split
+        let rightAngle = activeAngle + (.pi * 2 * CGFloat(value) / CGFloat(solution.values.count)) * split
+        let handRadius = handRadius(for: radius, nodeRadius: nodeRadius)
+
+        if split == 0 {
+            drawHand(
+                context: &context,
+                center: center,
+                radius: handRadius,
+                angle: leftArrivalAngle,
+                color: .cyan,
+                opacity: 0.64,
+                nodeRadius: nodeRadius
+            )
+            drawHand(
+                context: &context,
+                center: center,
+                radius: handRadius,
+                angle: rightArrivalAngle,
+                color: .yellow,
+                opacity: 0.92,
+                nodeRadius: nodeRadius
+            )
+        } else {
+            drawHand(
+                context: &context,
+                center: center,
+                radius: handRadius,
+                angle: leftAngle,
+                color: .cyan,
+                opacity: handOpacity(for: circularIndex(activeNode - value, count: solution.values.count)),
+                nodeRadius: nodeRadius
+            )
+            drawHand(
+                context: &context,
+                center: center,
+                radius: handRadius,
+                angle: rightAngle,
+                color: .yellow,
+                opacity: handOpacity(for: circularIndex(activeNode + value, count: solution.values.count)),
+                nodeRadius: nodeRadius
             )
         }
 
-        context.fill(Path(ellipseIn: CGRect(center: center, radius: nodeRadius * 0.34)), with: .color(.yellow.opacity(0.85)))
-        context.stroke(Path(ellipseIn: CGRect(center: center, radius: nodeRadius * 0.6)), with: .color(.cyan.opacity(0.5)), lineWidth: 2)
+        context.fill(Path(ellipseIn: CGRect(center: center, radius: nodeRadius * 0.34)), with: .color(.yellow.opacity(0.86)))
+        context.stroke(Path(ellipseIn: CGRect(center: center, radius: nodeRadius * 0.6)), with: .color(.cyan.opacity(0.58)), lineWidth: 2)
+        drawOrbitGlow(
+            context: &context,
+            center: center,
+            radius: nodeRadius * 0.72,
+            phase: progress,
+            color: .blue,
+            lineWidth: 3,
+            sweep: .pi * 0.9,
+            opacity: 0.7
+        )
     }
 
-    private func drawHand(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, angle: CGFloat, color: Color) {
+    private func drawHand(
+        context: inout GraphicsContext,
+        center: CGPoint,
+        radius: CGFloat,
+        angle: CGFloat,
+        color: Color,
+        opacity: CGFloat,
+        nodeRadius: CGFloat
+    ) {
         var path = Path()
         path.move(to: center)
         path.addLine(to: point(center: center, radius: radius, angle: angle))
-        context.stroke(path, with: .color(color.opacity(0.9)), lineWidth: 5)
+        context.stroke(path, with: .color(color.opacity(Double(opacity * 0.2))), style: StrokeStyle(lineWidth: handOuterStrokeWidth, lineCap: .round))
+        context.stroke(path, with: .color(.white.opacity(Double(opacity * 0.9))), style: StrokeStyle(lineWidth: 7, lineCap: .round))
+        context.stroke(path, with: .color(color.opacity(Double(opacity))), style: StrokeStyle(lineWidth: 4, lineCap: .round))
 
         let tip = point(center: center, radius: radius, angle: angle)
-        context.fill(Path(ellipseIn: CGRect(center: tip, radius: 5)), with: .color(color))
+        let base = point(center: tip, radius: nodeRadius * 0.48, angle: angle + .pi)
+        let sideA = point(center: base, radius: nodeRadius * 0.22, angle: angle + .pi / 2)
+        let sideB = point(center: base, radius: nodeRadius * 0.22, angle: angle - .pi / 2)
+        var head = Path()
+        head.move(to: tip)
+        head.addLine(to: sideA)
+        head.addLine(to: sideB)
+        head.closeSubpath()
+        context.fill(head, with: .color(.white.opacity(Double(opacity * 0.92))))
+        context.stroke(head, with: .color(color.opacity(Double(opacity))), lineWidth: 2)
+        context.fill(Path(ellipseIn: CGRect(center: tip, radius: nodeRadius * 0.17)), with: .color(color.opacity(Double(opacity))))
     }
 
-    private func drawNodes(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, nodeRadius: CGFloat) {
+    private func handRadius(for radius: CGFloat, nodeRadius: CGFloat) -> CGFloat {
+        max(0, radius - nodeRadius - handNodeClearance - handOuterStrokeWidth / 2)
+    }
+
+    private func drawNodes(
+        context: inout GraphicsContext,
+        center: CGPoint,
+        radius: CGFloat,
+        nodeRadius: CGFloat,
+        ringVisibility: CGFloat,
+        glowPhase: CGFloat,
+        selectionPulse: CGFloat
+    ) {
         for index in solution.values.indices {
             let value = solution.values[index]
             let nodeCenter = point(center: center, radius: radius, angle: nodeAngle(index))
             let isActive = activeNode == index
             let isNext = nextNode == index
+            let isCandidate = candidateNodes.contains(index)
             let isCompleted = completedNodes.contains(index)
             let baseColor = NodeColor.palette[value, default: .cyan]
-            let opacity = isCompleted ? 0.32 : 1.0
+            let opacity = isCompleted && !isActive ? 0.32 : 1.0
+            let ringOpacity = Double(ringVisibility) * opacity
+            let pulseOpacity = Double(selectionPulse) * (isActive || isCandidate ? 0.44 : 0.18)
 
-            if isActive || isNext {
+            if isActive || isNext || isCandidate || selectionPulse > 0.04 {
                 context.fill(
-                    Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * 1.42)),
+                    Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * (1.28 + selectionPulse * 0.22))),
                     with: .radialGradient(
                         Gradient(colors: [
-                            baseColor.opacity(0.72),
+                            baseColor.opacity((isNext ? 0.72 : 0.46) + pulseOpacity),
                             baseColor.opacity(0.12),
                             .clear
                         ]),
@@ -205,7 +416,7 @@ struct PuzzleRingView: View {
                 Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius)),
                 with: .radialGradient(
                     Gradient(colors: [
-                        baseColor.opacity(0.65 * opacity),
+                        baseColor.opacity(0.38 * opacity + 0.27 * ringOpacity),
                         Color.black.opacity(0.72)
                     ]),
                     center: nodeCenter,
@@ -216,8 +427,19 @@ struct PuzzleRingView: View {
 
             context.stroke(
                 Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius)),
-                with: .color((isActive ? Color.white : baseColor).opacity(isActive ? 0.95 : 0.72 * opacity)),
+                with: .color((isActive ? Color.white : baseColor).opacity(isActive ? 0.95 : 0.28 * opacity + 0.48 * ringOpacity)),
                 lineWidth: isActive ? 4 : 2
+            )
+
+            drawOrbitGlow(
+                context: &context,
+                center: nodeCenter,
+                radius: nodeRadius * 1.08,
+                phase: glowPhase + CGFloat(index) * 0.071,
+                color: isNext ? .white : baseColor,
+                lineWidth: isActive || isCandidate ? 4 : 3,
+                sweep: .pi * 0.68,
+                opacity: ringVisibility * (isActive || isCandidate ? 0.86 : 0.56)
             )
 
             context.draw(
@@ -234,11 +456,111 @@ struct PuzzleRingView: View {
         (.pi * 2 * CGFloat(index) / CGFloat(solution.values.count)) - .pi / 2
     }
 
+    private func drawOrbitGlow(
+        context: inout GraphicsContext,
+        center: CGPoint,
+        radius: CGFloat,
+        phase: CGFloat,
+        color: Color,
+        lineWidth: CGFloat,
+        sweep: CGFloat,
+        opacity: CGFloat
+    ) {
+        let normalizedPhase = phase - floor(phase)
+        let start = normalizedPhase * .pi * 2 - .pi / 2
+        let trailCount = 3
+
+        for trail in 0..<trailCount {
+            let trailOffset = CGFloat(trail) * sweep * 0.72
+            let trailOpacity = opacity * (1 - CGFloat(trail) * 0.28)
+            var arc = Path()
+            arc.addArc(
+                center: center,
+                radius: radius,
+                startAngle: .radians(start - trailOffset),
+                endAngle: .radians(start + sweep - trailOffset),
+                clockwise: false
+            )
+            context.stroke(
+                arc,
+                with: .color(color.opacity(Double(max(0, trailOpacity)))),
+                style: StrokeStyle(lineWidth: max(1, lineWidth - CGFloat(trail)), lineCap: .round)
+            )
+        }
+    }
+
     private func point(center: CGPoint, radius: CGFloat, angle: CGFloat) -> CGPoint {
         CGPoint(
             x: center.x + cos(angle) * radius,
             y: center.y + sin(angle) * radius
         )
+    }
+
+    private func playSelectionAnimation() {
+        guard !reduceMotion, !isInitialSelection, activeNode != nil else {
+            selectionAnimationStart = Date(timeIntervalSinceNow: -selectionDuration)
+            return
+        }
+
+        selectionAnimationStart = Date()
+    }
+
+    private func handStartAngles() -> (left: CGFloat, right: CGFloat) {
+        guard stepIndex > 1 else {
+            return (-.pi / 2, -.pi / 2)
+        }
+
+        let sourceNode = solution.path[stepIndex - 2]
+        let sourceValue = solution.values[sourceNode]
+        let sourceAngle = nodeAngle(sourceNode)
+        let offset = .pi * 2 * CGFloat(sourceValue) / CGFloat(solution.values.count)
+        return (sourceAngle - offset, sourceAngle + offset)
+    }
+
+    private func handOpacity(for node: Int) -> CGFloat {
+        guard let nextNode else {
+            return 0.92
+        }
+        return nextNode == node ? 0.96 : 0.58
+    }
+
+    private func ringVisibility(for progress: CGFloat) -> CGFloat {
+        let beat = sin(clamp((progress - 0.22) / 0.5) * .pi)
+        return 1 - beat * 0.88
+    }
+
+    private func selectionPulse(for progress: CGFloat) -> CGFloat {
+        sin(clamp((progress - 0.24) / 0.62) * .pi)
+    }
+
+    private func selectionProgress(at date: Date) -> CGFloat {
+        guard activeNode != nil else {
+            return 1
+        }
+
+        return clamp(CGFloat(date.timeIntervalSince(selectionAnimationStart) / selectionDuration))
+    }
+
+    private func interpolateAngle(from start: CGFloat, to end: CGFloat, progress: CGFloat) -> CGFloat {
+        let delta = atan2(sin(end - start), cos(end - start))
+        return start + delta * progress
+    }
+
+    private func easeOut(_ value: CGFloat) -> CGFloat {
+        1 - pow(1 - value, 3)
+    }
+
+    private func easeInOut(_ value: CGFloat) -> CGFloat {
+        value * value * (3 - 2 * value)
+    }
+
+    private func clamp(_ value: CGFloat) -> CGFloat {
+        min(1, max(0, value))
+    }
+
+    private func circularDistance(_ first: CGFloat, _ second: CGFloat) -> CGFloat {
+        let distance = abs(first - second).truncatingRemainder(dividingBy: 1)
+        return min(distance, 1 - distance)
     }
 }
 

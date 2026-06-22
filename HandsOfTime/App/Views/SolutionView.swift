@@ -8,15 +8,22 @@ struct SolutionView: View {
     @State private var stepIndex = 0
 
     private var isComplete: Bool {
-        stepIndex >= solution.steps.count
+        stepIndex >= solution.path.count
     }
 
     private var instruction: String {
         if isComplete {
-            return "Solved. Start another clock when ready."
+            return "Solved! Set up another puzzle when ready."
         }
 
-        return solution.steps[stepIndex].instruction
+        if stepIndex == 0 {
+            let firstValue = solution.values[solution.path[0]]
+            return "Select the highlighted \(firstValue)."
+        }
+
+        let step = solution.steps[stepIndex - 1]
+        let direction = step.direction == .right ? "forwards" : "backwards"
+        return "From \(step.currentValue), move \(direction) to \(step.nextValue ?? step.currentValue)."
     }
 
     var body: some View {
@@ -30,10 +37,6 @@ struct SolutionView: View {
                     .font(.headline)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                Text("Path: \(solution.path.map(String.init).joined(separator: " -> "))")
-                    .font(.subheadline.monospacedDigit())
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding()
             .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
@@ -53,7 +56,7 @@ struct SolutionView: View {
 
                 Button {
                     withStepAnimation {
-                        stepIndex = min(solution.steps.count, stepIndex + 1)
+                        stepIndex = min(solution.path.count, stepIndex + 1)
                     }
                 } label: {
                     Label(isComplete ? "Solved" : "Next", systemImage: isComplete ? "checkmark" : "chevron.right")
