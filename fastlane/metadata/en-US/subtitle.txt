@@ -1,1 +1,1 @@
-Clock puzzle solver
+Puzzle Solver for FFXIII-2

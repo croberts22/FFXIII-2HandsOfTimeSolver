@@ -1,1 +1,1 @@
-Initial Fastlane metadata import for Hands of Time.
+This is a re-release of the Hands of Time solver that was made over a decade ago! Reimagined and modernized for iOS 26.
