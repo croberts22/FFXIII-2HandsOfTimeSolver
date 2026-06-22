@@ -164,9 +164,9 @@ platform :ios do
 
   lane :submit_beta do
     pilot(
-      beta_app_feedback_email: ENV.fetch('BETA_FEEDBACK_EMAIL', APPLE_ID),
+      beta_app_feedback_email: 'corey@spacepyro.com',
       demo_account_required: false,
-      groups: ENV.fetch('TESTFLIGHT_GROUPS', 'Solo'),
+      groups: 'Internal',
       distribute_external: true,
       skip_waiting_for_build_processing: false,
       changelog: external_changelog
