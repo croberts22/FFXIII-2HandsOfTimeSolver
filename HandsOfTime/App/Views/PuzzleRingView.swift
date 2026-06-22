@@ -64,7 +64,7 @@ struct PuzzleRingView: View {
                 let progress = reduceMotion ? 1 : selectionProgress(at: timeline.date)
                 let ringVisibility = ringVisibility(for: progress)
 
-                drawSpaceBackground(context: &context, size: size)
+                AppSpaceScene.drawBackground(context: &context, size: size, starCount: 42, starOpacity: 0.28)
                 drawPlatform(context: &context, center: center, outerRadius: outerRadius, innerRadius: innerRadius, glowPhase: glowPhase)
                 drawTicks(context: &context, center: center, radius: outerRadius, count: 120, glowPhase: glowPhase)
                 drawSegmentArcs(
@@ -85,7 +85,7 @@ struct PuzzleRingView: View {
                 )
             }
         }
-        .background(.black)
+        .background(.clear)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilitySummary)
@@ -103,32 +103,6 @@ struct PuzzleRingView: View {
             return "Puzzle ring. Active node \(activeNode), value \(solution.values[activeNode])."
         }
         return "Puzzle ring. Solution complete."
-    }
-
-    private func drawSpaceBackground(context: inout GraphicsContext, size: CGSize) {
-        let rect = CGRect(origin: .zero, size: size)
-        context.fill(
-            Path(rect),
-            with: .linearGradient(
-                Gradient(colors: [
-                    Color(red: 0.02, green: 0.03, blue: 0.08),
-                    Color(red: 0.0, green: 0.12, blue: 0.16),
-                    Color(red: 0.01, green: 0.01, blue: 0.03)
-                ]),
-                startPoint: CGPoint(x: rect.minX, y: rect.minY),
-                endPoint: CGPoint(x: rect.maxX, y: rect.maxY)
-            )
-        )
-
-        for index in 0..<42 {
-            let x = size.width * CGFloat((index * 37) % 101) / 101
-            let y = size.height * CGFloat((index * 53) % 97) / 97
-            let radius = CGFloat(index % 3 + 1) * 0.6
-            context.fill(
-                Path(ellipseIn: CGRect(x: x, y: y, width: radius, height: radius)),
-                with: .color(.white.opacity(0.28))
-            )
-        }
     }
 
     private func drawPlatform(
@@ -630,6 +604,275 @@ struct PuzzleRingView: View {
     private func circularDistance(_ first: CGFloat, _ second: CGFloat) -> CGFloat {
         let distance = abs(first - second).truncatingRemainder(dividingBy: 1)
         return min(distance, 1 - distance)
+    }
+}
+
+struct PuzzleInputRingView: View {
+    let values: [Int]
+    let reduceMotion: Bool
+
+    private var accessibilitySummary: String {
+        if values.isEmpty {
+            return "Empty clock."
+        }
+
+        return "Clock values \(values.map(String.init).joined(separator: ", "))."
+    }
+
+    var body: some View {
+        Color.clear
+            .aspectRatio(1, contentMode: .fit)
+            .overlay {
+                GeometryReader { geometry in
+                    let size = geometry.size
+                    let side = min(size.width, size.height)
+                    let center = CGPoint(x: size.width / 2, y: size.height / 2)
+                    let ringRadius = side * 0.36
+                    let nodeDiameter = max(34, min(52, side * 0.13))
+
+                    ZStack {
+                        PuzzleInputClockFace(reduceMotion: reduceMotion)
+
+                        ForEach(Array(values.enumerated()), id: \.offset) { item in
+                            PuzzleInputNode(value: item.element, diameter: nodeDiameter)
+                                .position(point(center: center, radius: ringRadius, angle: nodeAngle(item.offset, count: values.count)))
+                                .transition(.scale(scale: 0.35).combined(with: .opacity))
+                                .zIndex(Double(item.offset))
+                        }
+                    }
+                    .frame(width: size.width, height: size.height)
+                }
+            }
+            .background(.clear)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(accessibilitySummary)
+            .animation(reduceMotion ? nil : Animation.snappy(duration: 0.35), value: values)
+    }
+
+    private func nodeAngle(_ index: Int, count: Int) -> CGFloat {
+        guard count > 0 else {
+            return -.pi / 2
+        }
+
+        return (.pi * 2 * CGFloat(index) / CGFloat(count)) - .pi / 2
+    }
+
+    private func point(center: CGPoint, radius: CGFloat, angle: CGFloat) -> CGPoint {
+        CGPoint(
+            x: center.x + cos(angle) * radius,
+            y: center.y + sin(angle) * radius
+        )
+    }
+}
+
+private struct PuzzleInputClockFace: View {
+    let reduceMotion: Bool
+
+    var body: some View {
+        TimelineView(.animation) { timeline in
+            Canvas { context, size in
+                let side = min(size.width, size.height)
+                guard side > 0 else {
+                    return
+                }
+
+                let center = CGPoint(x: size.width / 2, y: size.height / 2)
+                let outerRadius = side * 0.47
+                let ringRadius = side * 0.36
+                let innerRadius = side * 0.19
+                let glowPhase = reduceMotion ? 0 : CGFloat(timeline.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3.6) / 3.6)
+
+                AppSpaceScene.drawBackground(context: &context, size: size, starCount: 42, starOpacity: 0.28)
+                drawPlatform(context: &context, center: center, outerRadius: outerRadius, innerRadius: innerRadius, glowPhase: glowPhase)
+                drawTicks(context: &context, center: center, radius: outerRadius, count: 120, glowPhase: glowPhase)
+
+                context.stroke(
+                    Path(ellipseIn: CGRect(center: center, radius: ringRadius)),
+                    with: .color(.cyan.opacity(0.22)),
+                    lineWidth: 2
+                )
+
+                drawOrbitGlow(
+                    context: &context,
+                    center: center,
+                    radius: ringRadius,
+                    phase: 1 - glowPhase,
+                    color: .cyan,
+                    lineWidth: 3,
+                    sweep: .pi * 0.22,
+                    opacity: 0.34
+                )
+            }
+        }
+    }
+
+    private func drawPlatform(
+        context: inout GraphicsContext,
+        center: CGPoint,
+        outerRadius: CGFloat,
+        innerRadius: CGFloat,
+        glowPhase: CGFloat
+    ) {
+        context.fill(
+            Path(ellipseIn: CGRect(center: center, radius: outerRadius)),
+            with: .radialGradient(
+                Gradient(colors: [
+                    .cyan.opacity(0.18),
+                    .blue.opacity(0.08),
+                    .black.opacity(0.6)
+                ]),
+                center: center,
+                startRadius: innerRadius,
+                endRadius: outerRadius
+            )
+        )
+
+        context.stroke(
+            Path(ellipseIn: CGRect(center: center, radius: outerRadius)),
+            with: .color(.cyan.opacity(0.55)),
+            lineWidth: 2
+        )
+        context.stroke(
+            Path(ellipseIn: CGRect(center: center, radius: innerRadius)),
+            with: .color(.blue.opacity(0.65)),
+            lineWidth: 3
+        )
+        context.stroke(
+            Path(ellipseIn: CGRect(center: center, radius: innerRadius * 0.72)),
+            with: .color(.cyan.opacity(0.35)),
+            lineWidth: 2
+        )
+
+        drawOrbitGlow(
+            context: &context,
+            center: center,
+            radius: outerRadius * 0.98,
+            phase: glowPhase,
+            color: .cyan,
+            lineWidth: 5,
+            sweep: .pi * 0.18,
+            opacity: 0.72
+        )
+        drawOrbitGlow(
+            context: &context,
+            center: center,
+            radius: outerRadius * 0.88,
+            phase: glowPhase + 0.34,
+            color: .white,
+            lineWidth: 3,
+            sweep: .pi * 0.14,
+            opacity: 0.44
+        )
+        drawOrbitGlow(
+            context: &context,
+            center: center,
+            radius: innerRadius,
+            phase: 1 - glowPhase,
+            color: .blue,
+            lineWidth: 5,
+            sweep: .pi * 0.34,
+            opacity: 0.7
+        )
+    }
+
+    private func drawTicks(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, count: Int, glowPhase: CGFloat) {
+        for tick in 0..<count {
+            let angle = Angle.degrees(Double(tick) / Double(count) * 360 - 90).radians
+            let length: CGFloat = tick.isMultiple(of: 5) ? 12 : 6
+            let tickPhase = CGFloat(tick) / CGFloat(count)
+            let chase = max(0, 1 - circularDistance(tickPhase, glowPhase) / 0.06)
+            let baseOpacity = tick.isMultiple(of: 12) ? 0.72 : 0.42
+            let color: Color = tick.isMultiple(of: 12) ? .yellow.opacity(baseOpacity + Double(chase) * 0.2) : .cyan.opacity(baseOpacity + Double(chase) * 0.38)
+            var path = Path()
+            path.move(to: point(center: center, radius: radius - length, angle: angle))
+            path.addLine(to: point(center: center, radius: radius, angle: angle))
+            context.stroke(path, with: .color(color), lineWidth: (tick.isMultiple(of: 5) ? 1.5 : 0.8) + chase * 1.3)
+        }
+    }
+
+    private func drawOrbitGlow(
+        context: inout GraphicsContext,
+        center: CGPoint,
+        radius: CGFloat,
+        phase: CGFloat,
+        color: Color,
+        lineWidth: CGFloat,
+        sweep: CGFloat,
+        opacity: CGFloat
+    ) {
+        let normalizedPhase = phase - floor(phase)
+        let start = normalizedPhase * .pi * 2 - .pi / 2
+        let trailCount = 3
+
+        for trail in 0..<trailCount {
+            let trailOffset = CGFloat(trail) * sweep * 0.72
+            let trailOpacity = opacity * (1 - CGFloat(trail) * 0.28)
+            var arc = Path()
+            arc.addArc(
+                center: center,
+                radius: radius,
+                startAngle: .radians(start - trailOffset),
+                endAngle: .radians(start + sweep - trailOffset),
+                clockwise: false
+            )
+            context.stroke(
+                arc,
+                with: .color(color.opacity(Double(max(0, trailOpacity)))),
+                style: StrokeStyle(lineWidth: max(1, lineWidth - CGFloat(trail)), lineCap: .round)
+            )
+        }
+    }
+
+    private func point(center: CGPoint, radius: CGFloat, angle: CGFloat) -> CGPoint {
+        CGPoint(
+            x: center.x + cos(angle) * radius,
+            y: center.y + sin(angle) * radius
+        )
+    }
+
+    private func circularDistance(_ first: CGFloat, _ second: CGFloat) -> CGFloat {
+        let distance = abs(first - second).truncatingRemainder(dividingBy: 1)
+        return min(distance, 1 - distance)
+    }
+}
+
+private struct PuzzleInputNode: View {
+    let value: Int
+    let diameter: CGFloat
+
+    private let innerRingColor = Color(red: 1.0, green: 0.76, blue: 0.30)
+
+    var body: some View {
+        let baseColor = NodeColor.palette[value, default: .cyan]
+
+        ZStack {
+            Circle()
+                .fill(
+                    RadialGradient(
+                        gradient: Gradient(colors: [
+                            baseColor.opacity(0.48),
+                            Color.black.opacity(0.72)
+                        ]),
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: diameter / 2
+                    )
+                )
+
+            Circle()
+                .stroke(baseColor.opacity(0.62), lineWidth: 2)
+
+            Circle()
+                .stroke(innerRingColor.opacity(0.34), lineWidth: 1.1)
+                .scaleEffect(0.72)
+
+            Text("\(value)")
+                .font(.system(size: max(19, diameter * 0.56), weight: .heavy, design: .rounded))
+                .foregroundStyle(baseColor)
+        }
+        .frame(width: diameter, height: diameter)
+        .shadow(color: baseColor.opacity(0.35), radius: 8)
     }
 }
 

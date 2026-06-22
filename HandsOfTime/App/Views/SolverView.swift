@@ -4,6 +4,7 @@ import SwiftUI
 
 struct SolverView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var viewModel = PuzzleInputViewModel()
     @State private var displayedSolution: DisplayedSolution?
 
@@ -15,15 +16,19 @@ struct SolverView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Clock Values")
                         .font(.headline)
+                        .foregroundStyle(.white)
 
-                    SequenceDisplay(values: viewModel.values)
-                        .frame(maxWidth: .infinity, minHeight: 74)
+                    PuzzleInputRingView(values: viewModel.values, reduceMotion: reduceMotion)
+                        .frame(maxWidth: 420)
+                        .frame(maxWidth: .infinity)
                 }
 
                 LazyVGrid(columns: keypadColumns, spacing: 12) {
                     ForEach(1...6, id: \.self) { value in
                         Button {
-                            viewModel.append(value)
+                            withInputAnimation {
+                                viewModel.append(value)
+                            }
                         } label: {
                             Text("\(value)")
                                 .font(.system(size: 30, weight: .bold, design: .rounded))
@@ -36,7 +41,9 @@ struct SolverView: View {
 
                 HStack(spacing: 12) {
                     Button {
-                        viewModel.deleteLast()
+                        withInputAnimation {
+                            viewModel.deleteLast()
+                        }
                     } label: {
                         Label("Delete", systemImage: "delete.left")
                             .frame(maxWidth: .infinity)
@@ -45,7 +52,9 @@ struct SolverView: View {
                     .disabled(!viewModel.canDelete)
 
                     Button {
-                        viewModel.reset()
+                        withInputAnimation {
+                            viewModel.reset()
+                        }
                     } label: {
                         Label("Reset", systemImage: "arrow.counterclockwise")
                             .frame(maxWidth: .infinity)
@@ -73,6 +82,8 @@ struct SolverView: View {
             }
             .padding()
         }
+        .background(.clear)
+        .scrollContentBackground(.hidden)
         .navigationTitle("Hands of Time")
         .sheet(item: $displayedSolution) { displayedSolution in
             NavigationStack {
@@ -96,43 +107,21 @@ struct SolverView: View {
         modelContext.insert(PuzzleHistoryEntry(solution: solution))
         displayedSolution = DisplayedSolution(solution: solution)
     }
+
+    private func withInputAnimation(_ update: () -> Void) {
+        if reduceMotion {
+            update()
+        } else {
+            withAnimation(.snappy(duration: 0.35)) {
+                update()
+            }
+        }
+    }
 }
 
 private struct DisplayedSolution: Identifiable {
     let id = UUID()
     let solution: HandsOfTimeSolution
-}
-
-private struct SequenceDisplay: View {
-    let values: [Int]
-
-    var body: some View {
-        Group {
-            if values.isEmpty {
-                Text("Enter values 1-6")
-                    .font(.title2.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(Array(values.enumerated()), id: \.offset) { _, value in
-                            Text("\(value)")
-                                .font(.title2.weight(.bold))
-                                .foregroundStyle(.white)
-                                .frame(width: 44, height: 44)
-                                .background(NodeColor.palette[value, default: .cyan].gradient, in: Circle())
-                                .overlay(Circle().stroke(.white.opacity(0.45), lineWidth: 1))
-                        }
-                    }
-                    .padding(.vertical, 4)
-                }
-            }
-        }
-        .padding(16)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
-        .accessibilityLabel(values.isEmpty ? "No values entered" : "Entered values \(values.map(String.init).joined(separator: ", "))")
-    }
 }
 
 private struct NumberButtonStyle: ButtonStyle {

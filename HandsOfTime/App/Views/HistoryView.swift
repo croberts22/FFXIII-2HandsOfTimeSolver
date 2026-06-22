@@ -24,9 +24,12 @@ struct HistoryView: View {
                         }
                     }
                     .onDelete(perform: deleteEntries)
+                    .listRowBackground(Color.clear)
                 }
+                .scrollContentBackground(.hidden)
             }
         }
+        .background(.clear)
         .navigationTitle("History")
         .navigationDestination(for: HandsOfTimeSolution.self) { solution in
             SolutionView(solution: solution)

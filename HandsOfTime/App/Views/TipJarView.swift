@@ -10,6 +10,7 @@ struct TipJarView: View {
                 Text("Hands of Time is fully usable without purchases. Tips are optional one-time support tiers.")
                     .foregroundStyle(.secondary)
             }
+            .listRowBackground(Color.clear)
 
             Section("Support") {
                 ForEach(TipTier.allCases) { tier in
@@ -25,6 +26,7 @@ struct TipJarView: View {
                     }
                 }
             }
+            .listRowBackground(Color.clear)
 
             Section {
                 Button {
@@ -36,15 +38,22 @@ struct TipJarView: View {
                 }
                 .disabled(store.isLoading)
             }
+            .listRowBackground(Color.clear)
 
             if let statusMessage = store.statusMessage {
                 Section {
                     Text(statusMessage)
                         .foregroundStyle(.secondary)
                 }
+                .listRowBackground(Color.clear)
             }
         }
         .navigationTitle("Tip Jar")
+        .scrollContentBackground(.hidden)
+        .background {
+            AppSpaceBackground()
+                .ignoresSafeArea()
+        }
         .refreshable {
             await store.loadProducts()
         }

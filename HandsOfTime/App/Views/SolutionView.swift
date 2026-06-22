@@ -70,6 +70,11 @@ struct SolutionView: View {
         }
         .navigationTitle("Solution")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .background {
+            AppSpaceBackground()
+                .ignoresSafeArea()
+        }
     }
 
     private func withStepAnimation(_ update: () -> Void) {
