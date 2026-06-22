@@ -1,3 +1,15 @@
-Hands of Time Solver helps solve clock puzzles in Final Fantasy XIII-2.
+Stuck on a Hands of Time puzzle in Final Fantasy XIII-2? This companion app finds the solution and walks you through it, one move at a time, so you can get through the game faster!
 
-Enter the numbers around the clock face, tap Solve Clock, and get an ordered path through the puzzle. The app keeps recent puzzles locally so repeated attempts are easy to revisit.
+HOW IT WORKS
+Enter the numbers around the clock face clockwise, starting from the top; just as they appear in the game. Tap Solve, and the app calculates a complete path through every node!
+
+GUIDED SOLUTIONS
+Follow along with an animated clock that highlights where to start, which direction to move, and where to go next. Step forward or back at your own pace while you play.
+
+FEATURES
+- Visual clock ring for entering puzzle values
+- Step-by-step solution walkthrough with animated hands
+- Puzzle history saved on your device for quick reference
+- Dark, game-inspired look designed for quick in-session use
+
+Originally released over a decade ago and rebuilt for modern iOS, Hands of Time Solver is a fan-made utility for FFXIII-2 players. It is not affiliated with or endorsed by Square Enix.

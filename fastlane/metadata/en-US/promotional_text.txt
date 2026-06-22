@@ -1,1 +1,1 @@
-Solve Hands of Time clock puzzles quickly so you can get through the game faster.
+The classic FFXIII-2 puzzle solver, rebuilt for modern iOS, now with animated, step-by-step walkthroughs.
