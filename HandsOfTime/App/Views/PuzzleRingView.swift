@@ -13,6 +13,7 @@ struct PuzzleRingView: View {
     private let handOuterStrokeWidth: CGFloat = 15
     private let handOpacity: CGFloat = 0.92
     private let selectableRingColor = Color(red: 0.46, green: 0.88, blue: 1.0)
+    private let recommendedNodeColor = Color(red: 1.0, green: 0.78, blue: 0.18)
     private let innerRingColor = Color(red: 1.0, green: 0.76, blue: 0.30)
 
     private var activeNode: Int? {
@@ -389,27 +390,32 @@ struct PuzzleRingView: View {
             let value = solution.values[index]
             let nodeCenter = point(center: center, radius: radius, angle: nodeAngle(index))
             let isActive = activeNode == index
+            let isRecommended = isInitialSelection ? isActive : nextNode == index
             let isCandidate = candidateNodes.contains(index)
             let baseColor = NodeColor.palette[value, default: .cyan]
             let candidateHighlight = candidateRingHighlight(for: index, split: split)
             let passThroughHighlight = passThroughRingHighlight(for: index, split: split)
-            let initialHighlight: CGFloat = isInitialSelection ? 1 : 0
+            let initialHighlight: CGFloat = isInitialSelection && isActive ? 1 : 0
             let selectionHighlight = max(initialHighlight, candidateHighlight, passThroughHighlight)
+            let recommendedHighlight = isRecommended ? max(selectionHighlight, isInitialSelection ? 1 : 0.54) : 0
             let activePulse = isActive ? selectionPulse * 0.42 : 0
-            let pulseOpacity = Double(max(selectionHighlight, activePulse))
+            let glowIntensity = max(selectionHighlight, activePulse, recommendedHighlight)
+            let pulseOpacity = Double(glowIntensity)
+            let selectionColor = isRecommended ? recommendedNodeColor : selectableRingColor
 
-            if selectionHighlight > 0.02 || activePulse > 0.04 {
+            if glowIntensity > 0.02 {
+                let glowRadiusScale = isRecommended ? 1.34 + recommendedHighlight * 0.30 : 1.24 + glowIntensity * 0.22
                 context.fill(
-                    Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * (1.24 + max(selectionHighlight, activePulse) * 0.22))),
+                    Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * glowRadiusScale)),
                     with: .radialGradient(
                         Gradient(colors: [
-                            selectableRingColor.opacity(0.26 + pulseOpacity * 0.42),
-                            selectableRingColor.opacity(0.10 + pulseOpacity * 0.12),
+                            selectionColor.opacity((isRecommended ? 0.34 : 0.26) + pulseOpacity * 0.42),
+                            selectionColor.opacity((isRecommended ? 0.14 : 0.10) + pulseOpacity * 0.12),
                             .clear
                         ]),
                         center: nodeCenter,
                         startRadius: 0,
-                        endRadius: nodeRadius * 1.42
+                        endRadius: nodeRadius * (isRecommended ? 1.72 : 1.42)
                     )
                 )
             }
@@ -429,8 +435,8 @@ struct PuzzleRingView: View {
 
             context.stroke(
                 Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius)),
-                with: .color(baseColor.opacity(isActive ? 0.82 : 0.56)),
-                lineWidth: isActive ? 3 : 2
+                with: .color((isRecommended ? recommendedNodeColor : baseColor).opacity(isRecommended ? 0.96 : isActive ? 0.82 : 0.56)),
+                lineWidth: isRecommended ? 4 : isActive ? 3 : 2
             )
 
             context.stroke(
@@ -450,22 +456,23 @@ struct PuzzleRingView: View {
                 opacity: 0.26
             )
 
-            if selectionHighlight > 0.02 {
+            if selectionHighlight > 0.02 || recommendedHighlight > 0.02 {
+                let ringRadiusScale = isRecommended ? 1.16 : 1.08
                 context.stroke(
-                    Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * 1.08)),
-                    with: .color(selectableRingColor.opacity(Double(0.42 + selectionHighlight * 0.48))),
-                    lineWidth: 2 + selectionHighlight * 2
+                    Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * ringRadiusScale)),
+                    with: .color(selectionColor.opacity(Double((isRecommended ? 0.62 : 0.42) + glowIntensity * (isRecommended ? 0.34 : 0.48)))),
+                    lineWidth: (isRecommended ? 3.2 : 2) + glowIntensity * (isRecommended ? 2.4 : 2)
                 )
 
                 drawOrbitGlow(
                     context: &context,
                     center: nodeCenter,
-                    radius: nodeRadius * 1.08,
+                    radius: nodeRadius * ringRadiusScale,
                     phase: glowPhase + CGFloat(index) * 0.071,
-                    color: selectableRingColor,
-                    lineWidth: isCandidate ? 4 : 3.4,
-                    sweep: .pi * 0.72,
-                    opacity: 0.36 + selectionHighlight * 0.48
+                    color: selectionColor,
+                    lineWidth: isRecommended ? 5.4 : isCandidate ? 4 : 3.4,
+                    sweep: isRecommended ? .pi * 0.92 : .pi * 0.72,
+                    opacity: (isRecommended ? 0.58 : 0.36) + glowIntensity * (isRecommended ? 0.38 : 0.48)
                 )
             }
 
