@@ -2,7 +2,7 @@ import Foundation
 
 public struct HandsOfTimePuzzle: Codable, Equatable, Hashable, Sendable {
     public static let maximumCount = 15
-    public static let allowedValues = 1...6
+    public static let allowedValues = 1 ... 6
 
     public let values: [Int]
 

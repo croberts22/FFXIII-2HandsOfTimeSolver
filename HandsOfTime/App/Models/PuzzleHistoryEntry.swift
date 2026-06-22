@@ -10,9 +10,9 @@ final class PuzzleHistoryEntry {
     var solvedAt: Date
 
     init(solution: HandsOfTimeSolution, solvedAt: Date = .now) {
-        self.id = UUID()
-        self.sequence = solution.values.map(String.init).joined()
-        self.solutionPath = solution.path.map(String.init).joined(separator: ",")
+        id = UUID()
+        sequence = solution.values.map(String.init).joined()
+        solutionPath = solution.path.map(String.init).joined(separator: ",")
         self.solvedAt = solvedAt
     }
 

@@ -24,7 +24,7 @@ struct SolverView: View {
                 }
 
                 LazyVGrid(columns: keypadColumns, spacing: 12) {
-                    ForEach(1...6, id: \.self) { value in
+                    ForEach(1 ... 6, id: \.self) { value in
                         Button {
                             withInputAnimation {
                                 viewModel.append(value)
@@ -135,5 +135,8 @@ private struct NumberButtonStyle: ButtonStyle {
                     .stroke(.white.opacity(configuration.isPressed ? 0.7 : 0.35), lineWidth: 1)
             )
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
+            .sensoryFeedback(.impact(weight: .light), trigger: configuration.isPressed) { _, isPressed in
+                isPressed
+            }
     }
 }

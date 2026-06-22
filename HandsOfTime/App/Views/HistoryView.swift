@@ -18,7 +18,9 @@ struct HistoryView: View {
                 List {
                     ForEach(entries) { entry in
                         if let solution = entry.solution {
-                            NavigationLink(value: solution) {
+                            NavigationLink {
+                                SolutionView(solution: solution)
+                            } label: {
                                 HistoryRow(entry: entry)
                             }
                         }
@@ -34,9 +36,7 @@ struct HistoryView: View {
                 .ignoresSafeArea()
         }
         .navigationTitle("History")
-        .navigationDestination(for: HandsOfTimeSolution.self) { solution in
-            SolutionView(solution: solution)
-        }
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     private func deleteEntries(at offsets: IndexSet) {

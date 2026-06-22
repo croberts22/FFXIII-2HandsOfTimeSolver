@@ -1,15 +1,20 @@
 import SwiftUI
 
+private enum LegalDocumentURL {
+    static let privacyPolicy = URL(string: "https://spacepyro.com/handsoftimesolver/privacy-policy/")!
+    static let termsOfUse = URL(string: "https://spacepyro.com/handsoftimesolver/terms-of-use/")!
+}
+
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
 
-    let tipJarStore: TipJarStore
+    var subscriptionStore: SubscriptionStore
 
     var body: some View {
         List {
-            Section {
+            Section("Support") {
                 NavigationLink {
-                    TipJarView(store: tipJarStore)
+                    TipJarView(store: subscriptionStore)
                 } label: {
                     Label("Tip Jar", systemImage: "heart")
                 }
@@ -26,21 +31,11 @@ struct SettingsView: View {
             .listRowBackground(Color.clear)
 
             Section {
-                NavigationLink {
-                    SettingsPlaceholderView(
-                        title: "Privacy Policy",
-                        systemImage: "lock.shield"
-                    )
-                } label: {
+                Link(destination: LegalDocumentURL.privacyPolicy) {
                     Label("Privacy Policy", systemImage: "lock.shield")
                 }
 
-                NavigationLink {
-                    SettingsPlaceholderView(
-                        title: "Terms of Use",
-                        systemImage: "doc.text"
-                    )
-                } label: {
+                Link(destination: LegalDocumentURL.termsOfUse) {
                     Label("Terms of Use", systemImage: "doc.text")
                 }
             }
@@ -48,6 +43,7 @@ struct SettingsView: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
         .scrollContentBackground(.hidden)
         .toolbarBackground(.hidden, for: .navigationBar)
         .background {
@@ -60,25 +56,6 @@ struct SettingsView: View {
                     dismiss()
                 }
             }
-        }
-    }
-}
-
-private struct SettingsPlaceholderView: View {
-    let title: String
-    let systemImage: String
-
-    var body: some View {
-        ContentUnavailableView(
-            title,
-            systemImage: systemImage,
-            description: Text("Coming soon.")
-        )
-        .navigationTitle(title)
-        .toolbarBackground(.hidden, for: .navigationBar)
-        .background {
-            AppSpaceBackground()
-                .ignoresSafeArea()
         }
     }
 }

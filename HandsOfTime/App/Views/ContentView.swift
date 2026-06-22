@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var tipJarStore = TipJarStore()
+    var subscriptionStore: SubscriptionStore
+
     @State private var isShowingSettings = false
 
     var body: some View {
@@ -19,13 +20,10 @@ struct ContentView: View {
         }
         .preferredColorScheme(.dark)
         .task {
-            await tipJarStore.loadProducts()
+            await subscriptionStore.loadOfferings()
         }
         .sheet(isPresented: $isShowingSettings) {
-            NavigationStack {
-                SettingsView(tipJarStore: tipJarStore)
-            }
-            .cosmicNavigationChrome()
+            SettingsSheetView(subscriptionStore: subscriptionStore)
         }
     }
 
@@ -42,6 +40,18 @@ struct ContentView: View {
     }
 }
 
+private struct SettingsSheetView: View {
+    let subscriptionStore: SubscriptionStore
+    @State private var path = NavigationPath()
+
+    var body: some View {
+        NavigationStack(path: $path) {
+            SettingsView(subscriptionStore: subscriptionStore)
+        }
+        .cosmicNavigationChrome()
+    }
+}
+
 private extension View {
     func cosmicNavigationChrome() -> some View {
         toolbarBackground(.hidden, for: .navigationBar)
@@ -49,6 +59,6 @@ private extension View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(subscriptionStore: SubscriptionStore())
         .modelContainer(for: PuzzleHistoryEntry.self, inMemory: true)
 }

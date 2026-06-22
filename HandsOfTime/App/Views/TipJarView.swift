@@ -1,44 +1,43 @@
-import StoreKit
+import RevenueCat
 import SwiftUI
 
 struct TipJarView: View {
-    var store: TipJarStore
+    var store: SubscriptionStore
 
     var body: some View {
         List {
             Section {
-                Text("Hands of Time is fully usable without purchases. Tips are optional one-time support tiers.")
-                    .foregroundStyle(.secondary)
+                Text("The Hands of Time solver is fully usable without purchases. However, if you feel like this app has helped you get through these rather tedious puzzles, a tip would be greatly appreciated! Tips are entirely optional and don't impact the use of this app in any way.")
+                    .foregroundStyle(.primary)
             }
             .listRowBackground(Color.clear)
 
-            Section("Support") {
-                ForEach(TipTier.allCases) { tier in
-                    TipTierRow(
-                        tier: tier,
-                        product: store.product(for: tier),
-                        isPurchased: store.isPurchased(tier.productID),
-                        isLoading: store.isLoading
-                    ) { product in
-                        Task {
-                            await store.purchase(product)
+            Section("Support me with...") {
+                if store.isLoading, store.availablePackages.isEmpty {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .listRowBackground(Color.clear)
+                } else if store.availablePackages.isEmpty {
+                    Text("Mog searched everywhere, kupo, but no tip offerings have turned up in this timeline!")
+                        .foregroundStyle(.secondary)
+                        .listRowBackground(Color.clear)
+                } else {
+                    ForEach(store.availablePackages, id: \.identifier) { package in
+                        TipProductRow(
+                            package: package,
+                            isPurchasing: store.purchasingPackageID == package.identifier
+                        ) {
+                            Task {
+                                await store.purchase(package)
+                            }
                         }
                     }
+                    .listRowBackground(Color.clear)
                 }
             }
-            .listRowBackground(Color.clear)
-
-            Section {
-                Button {
-                    Task {
-                        await store.restorePurchases()
-                    }
-                } label: {
-                    Label("Restore Purchases", systemImage: "arrow.clockwise")
-                }
-                .disabled(store.isLoading)
-            }
-            .listRowBackground(Color.clear)
 
             if let statusMessage = store.statusMessage {
                 Section {
@@ -55,50 +54,54 @@ struct TipJarView: View {
                 .ignoresSafeArea()
         }
         .refreshable {
-            await store.loadProducts()
+            await store.loadOfferings()
         }
     }
 }
 
-private struct TipTierRow: View {
-    let tier: TipTier
-    let product: Product?
-    let isPurchased: Bool
-    let isLoading: Bool
-    let purchase: (Product) -> Void
+private struct TipProductRow: View {
+    let package: Package
+    let isPurchasing: Bool
+    let purchase: () -> Void
+
+    private var product: StoreProduct {
+        package.storeProduct
+    }
 
     var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: isPurchased ? "heart.fill" : "heart")
-                .foregroundStyle(isPurchased ? .pink : .secondary)
-                .frame(width: 28)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(product?.displayName ?? tier.title)
-                    .font(.headline)
-
-                Text(product?.description ?? "Pending StoreKit setup")
-                    .font(.subheadline)
+        Button(action: purchase) {
+            HStack(spacing: 12) {
+                Image(systemName: "heart")
                     .foregroundStyle(.secondary)
-            }
+                    .frame(width: 28)
 
-            Spacer()
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(product.localizedTitle)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
 
-            if let product, !isPurchased {
-                Button(product.displayPrice) {
-                    purchase(product)
+                    if !product.localizedDescription.isEmpty {
+                        Text(product.localizedDescription)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
                 }
-                .buttonStyle(.borderedProminent)
-                .disabled(isLoading)
-            } else if isPurchased {
-                Text("Purchased")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.green)
-            } else {
-                ProgressView()
-                    .opacity(isLoading ? 1 : 0)
+
+                Spacer()
+
+                if isPurchasing {
+                    ProgressView()
+                } else {
+                    Text(product.localizedPriceString)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.primary)
+                }
             }
+            .contentShape(Rectangle())
         }
-        .accessibilityElement(children: .combine)
+        .buttonStyle(.plain)
+        .disabled(isPurchasing)
+        .accessibilityLabel("\(product.localizedTitle), \(product.localizedPriceString)")
+        .accessibilityHint("Opens the purchase screen.")
     }
 }

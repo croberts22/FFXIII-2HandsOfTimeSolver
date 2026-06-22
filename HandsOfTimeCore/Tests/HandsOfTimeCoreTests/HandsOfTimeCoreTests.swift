@@ -1,5 +1,5 @@
-import XCTest
 @testable import HandsOfTimeCore
+import XCTest
 
 final class HandsOfTimeCoreTests: XCTestCase {
     func testParserAcceptsCompactDigits() throws {

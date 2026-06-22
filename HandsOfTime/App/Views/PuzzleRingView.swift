@@ -174,7 +174,7 @@ struct PuzzleRingView: View {
     }
 
     private func drawTicks(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, count: Int, glowPhase: CGFloat) {
-        for tick in 0..<count {
+        for tick in 0 ..< count {
             let angle = Angle.degrees(Double(tick) / Double(count) * 360 - 90).radians
             let length: CGFloat = tick.isMultiple(of: 5) ? 12 : 6
             let tickPhase = CGFloat(tick) / CGFloat(count)
@@ -474,7 +474,7 @@ struct PuzzleRingView: View {
         let start = normalizedPhase * .pi * 2 - .pi / 2
         let trailCount = 3
 
-        for trail in 0..<trailCount {
+        for trail in 0 ..< trailCount {
             let trailOffset = CGFloat(trail) * sweep * 0.72
             let trailOpacity = opacity * (1 - CGFloat(trail) * 0.28)
             var arc = Path()
@@ -556,7 +556,7 @@ struct PuzzleRingView: View {
         let pulseWidth = max(0.06, min(0.18, 0.42 / CGFloat(value)))
         var strongestPulse: CGFloat = 0
 
-        for distance in 1..<value {
+        for distance in 1 ..< value {
             let leftNode = circularIndex(activeNode - distance, count: count)
             let rightNode = circularIndex(activeNode + distance, count: count)
             guard index == leftNode || index == rightNode else {
@@ -775,7 +775,7 @@ private struct PuzzleInputClockFace: View {
     }
 
     private func drawTicks(context: inout GraphicsContext, center: CGPoint, radius: CGFloat, count: Int, glowPhase: CGFloat) {
-        for tick in 0..<count {
+        for tick in 0 ..< count {
             let angle = Angle.degrees(Double(tick) / Double(count) * 360 - 90).radians
             let length: CGFloat = tick.isMultiple(of: 5) ? 12 : 6
             let tickPhase = CGFloat(tick) / CGFloat(count)
@@ -803,7 +803,7 @@ private struct PuzzleInputClockFace: View {
         let start = normalizedPhase * .pi * 2 - .pi / 2
         let trailCount = 3
 
-        for trail in 0..<trailCount {
+        for trail in 0 ..< trailCount {
             let trailOffset = CGFloat(trail) * sweep * 0.72
             let trailOpacity = opacity * (1 - CGFloat(trail) * 0.28)
             var arc = Path()

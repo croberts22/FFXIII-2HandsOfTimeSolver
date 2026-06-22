@@ -11,70 +11,73 @@ struct SolutionView: View {
         stepIndex >= solution.path.count
     }
 
-    private var instruction: String {
+    private var instructionText: Text {
         if isComplete {
-            return "Solved! Set up another puzzle when ready."
-        }
-
-        if stepIndex == 0 {
+            return Text("Solved! Set up another puzzle when ready.")
+        } else if stepIndex == 0 {
             let firstValue = solution.values[solution.path[0]]
-            return "Select the highlighted \(firstValue)."
+            return Text("Select the highlighted ") + coloredNumber(firstValue) + Text(".")
+        } else {
+            let step = solution.steps[stepIndex - 1]
+            let direction = step.direction == .right ? "forwards" : "backwards"
+            let nextValue = step.nextValue ?? step.currentValue
+            return Text("From ")
+                + coloredNumber(step.currentValue)
+                + Text(", move \(direction) to ")
+                + coloredNumber(nextValue)
+                + Text(".")
         }
+    }
 
-        let step = solution.steps[stepIndex - 1]
-        let direction = step.direction == .right ? "forwards" : "backwards"
-        return "From \(step.currentValue), move \(direction) to \(step.nextValue ?? step.currentValue)."
+    private func coloredNumber(_ value: Int) -> Text {
+        Text("\(value)")
+            .foregroundStyle(NodeColor.palette[value, default: .cyan])
     }
 
     var body: some View {
-        VStack(spacing: 18) {
-            PuzzleRingView(solution: solution, stepIndex: stepIndex, reduceMotion: reduceMotion)
-                .aspectRatio(1, contentMode: .fit)
+        ZStack {
+            AppSpaceBackground()
+                .ignoresSafeArea()
+
+            VStack(spacing: 18) {
+                PuzzleRingView(solution: solution, stepIndex: stepIndex, reduceMotion: reduceMotion)
+                    .aspectRatio(1, contentMode: .fit)
+                    .padding(.horizontal)
+
+                VStack(alignment: .leading, spacing: 8) {
+                    instructionText
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding()
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
                 .padding(.horizontal)
-
-            VStack(alignment: .leading, spacing: 8) {
-                Text(instruction)
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
             }
-            .padding()
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 8))
-            .padding(.horizontal)
-
-            HStack(spacing: 12) {
-                Button {
-                    withStepAnimation {
-                        stepIndex = max(0, stepIndex - 1)
-                    }
-                } label: {
-                    Label("Back", systemImage: "chevron.left")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .disabled(stepIndex == 0)
-
-                Button {
-                    withStepAnimation {
-                        stepIndex = min(solution.path.count, stepIndex + 1)
-                    }
-                } label: {
-                    Label(isComplete ? "Solved" : "Next", systemImage: isComplete ? "checkmark" : "chevron.right")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(isComplete)
-            }
-            .padding(.horizontal)
-            .padding(.bottom)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
         .navigationTitle("Solution")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
-        .background {
-            AppSpaceBackground()
-                .ignoresSafeArea()
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Button("Back") {
+                    withStepAnimation {
+                        stepIndex = max(0, stepIndex - 1)
+                    }
+                }
+                .disabled(stepIndex == 0)
+
+                Spacer()
+
+                Button("Next") {
+                    withStepAnimation {
+                        stepIndex = min(solution.path.count, stepIndex + 1)
+                    }
+                }
+                .disabled(isComplete)
+            }
         }
+        .toolbarBackground(.visible, for: .bottomBar)
     }
 
     private func withStepAnimation(_ update: () -> Void) {

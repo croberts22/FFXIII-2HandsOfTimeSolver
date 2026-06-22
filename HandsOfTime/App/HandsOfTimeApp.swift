@@ -1,11 +1,33 @@
-import SwiftData
+import RevenueCat
 import Sentry
-
+import SwiftData
 import SwiftUI
 
 @main
 struct HandsOfTimeApp: App {
+    @State private var subscriptionStore: SubscriptionStore
+
     init() {
+        #if DEBUG
+            Purchases.logLevel = .debug
+        #else
+            Purchases.logLevel = .warn
+        #endif
+
+        Purchases.configure(withAPIKey: RevenueCatConfiguration.apiKey)
+        _subscriptionStore = State(initialValue: SubscriptionStore())
+        configureSentry()
+        prepareApplicationSupportDirectory()
+    }
+
+    var body: some Scene {
+        WindowGroup {
+            ContentView(subscriptionStore: subscriptionStore)
+        }
+        .modelContainer(for: PuzzleHistoryEntry.self)
+    }
+
+    private func configureSentry() {
         SentrySDK.start { options in
             options.dsn = "https://0283981197da349be7287869d992541e@o4509200644505600.ingest.us.sentry.io/4511607287578624"
 
@@ -26,19 +48,10 @@ struct HandsOfTimeApp: App {
             // Uncomment the following lines to add more data to your events
             // options.attachScreenshot = true // This adds a screenshot to the error events
             // options.attachViewHierarchy = true // This adds the view hierarchy to the error events
-            
+
             // Enable experimental logging features
             options.experimental.enableLogs = false
         }
-
-        prepareApplicationSupportDirectory()
-    }
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-        .modelContainer(for: PuzzleHistoryEntry.self)
     }
 
     private func prepareApplicationSupportDirectory() {

@@ -34,8 +34,8 @@ enum AppSpaceScene {
             )
         )
 
-        let resolvedStarCount = starCount ?? max(64, min(180, Int((size.width * size.height) / 6_500)))
-        for index in 0..<resolvedStarCount {
+        let resolvedStarCount = starCount ?? max(64, min(180, Int((size.width * size.height) / 6500)))
+        for index in 0 ..< resolvedStarCount {
             let x = size.width * CGFloat((index * 37) % 101) / 101
             let y = size.height * CGFloat((index * 53) % 97) / 97
             let radius = CGFloat(index % 3 + 1) * 0.6
