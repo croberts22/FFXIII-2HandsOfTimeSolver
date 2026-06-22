@@ -55,32 +55,18 @@ struct SolverView: View {
                 .ignoresSafeArea()
         }
         .navigationTitle("Hands of Time")
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
-                Button {
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            SolverActionBar(
+                canUndo: !viewModel.values.isEmpty,
+                canSolve: viewModel.canSolve,
+                undo: {
                     withInputAnimation {
                         viewModel.undo()
                     }
-                } label: {
-                    Image(systemName: "arrow.counterclockwise")
-                }
-                .disabled(viewModel.values.isEmpty)
-                .accessibilityLabel("Undo")
-
-                Spacer()
-
-                Button {
-                    solvePuzzle()
-                } label: {
-                    Text("Solve")
-                        .font(.headline)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.cyan)
-                .disabled(!viewModel.canSolve)
-            }
+                },
+                solve: solvePuzzle
+            )
         }
-        .toolbarBackground(.visible, for: .bottomBar)
         .sheet(item: $displayedSolution) { displayedSolution in
             NavigationStack {
                 SolutionView(solution: displayedSolution.solution)
@@ -111,6 +97,39 @@ struct SolverView: View {
             withAnimation(.snappy(duration: 0.35)) {
                 update()
             }
+        }
+    }
+}
+
+private struct SolverActionBar: View {
+    let canUndo: Bool
+    let canSolve: Bool
+    let undo: () -> Void
+    let solve: () -> Void
+
+    var body: some View {
+        HStack {
+            Button(action: undo) {
+                Image(systemName: "arrow.counterclockwise")
+            }
+            .disabled(!canUndo)
+            .accessibilityLabel("Undo")
+
+            Spacer()
+
+            Button(action: solve) {
+                Text("Solve")
+                    .font(.headline)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.cyan)
+            .disabled(!canSolve)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 10)
+        .background(.ultraThinMaterial)
+        .overlay(alignment: .top) {
+            Divider()
         }
     }
 }

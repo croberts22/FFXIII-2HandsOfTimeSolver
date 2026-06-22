@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0192BC6C10E5C262858D937E /* HandsOfTimeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9D6060482F9C31804117DD0E /* HandsOfTimeCore */; };
+		68AD447D0043473486F35845 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 1BD3AD6D558C4A82B542E230 /* Sentry */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -15,7 +16,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		2C51D6D42FE510E0003CEF7F /* HandsOfTime */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = HandsOfTime; sourceTree = "<group>"; };
+		2C51D6D42FE510E0003CEF7F /* HandsOfTime */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			explicitFileTypes = {
+			};
+			explicitFolders = (
+			);
+			path = HandsOfTime;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -24,6 +33,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0192BC6C10E5C262858D937E /* HandsOfTimeCore in Frameworks */,
+				68AD447D0043473486F35845 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +66,7 @@
 				5A58C6DB2E7B61A7CEA3FE44 /* Sources */,
 				908600CA8BEDFBF284009B9E /* Frameworks */,
 				5575AC35C3C553C94862DB2C /* Resources */,
+				6DBC2A00222E4E6F8B6CFBC6 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -67,6 +78,7 @@
 			name = HandsOfTime;
 			packageProductDependencies = (
 				9D6060482F9C31804117DD0E /* HandsOfTimeCore */,
+				1BD3AD6D558C4A82B542E230 /* Sentry */,
 			);
 			productName = HandsOfTime;
 			productReference = 451C465836AA20AC427BB89C /* HandsOfTime.app */;
@@ -92,6 +104,7 @@
 			mainGroup = C8BF774D0607B8F44796541C;
 			packageReferences = (
 				AF13186CF68C4E63B02B3D0B /* XCLocalSwiftPackageReference "HandsOfTimeCore" */,
+				749A2A13C18F4A4B91F6FB95 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			productRefGroup = A01544B41F702689F2F5C3A9 /* Products */;
 			projectDirPath = "";
@@ -214,6 +227,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Debug;
 		};
@@ -302,6 +317,8 @@
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Release;
 		};
@@ -341,7 +358,56 @@
 			package = AF13186CF68C4E63B02B3D0B /* XCLocalSwiftPackageReference "HandsOfTimeCore" */;
 			productName = HandsOfTimeCore;
 		};
+		1BD3AD6D558C4A82B542E230 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 749A2A13C18F4A4B91F6FB95 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6DBC2A00222E4E6F8B6CFBC6 /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.
+if [[ \"$(uname -m)\" == arm64 ]]; then
+  export PATH=\"/opt/homebrew/bin:$PATH\"
+fi
+
+if which sentry-cli >/dev/null; then
+  export SENTRY_ORG=spacepyro-labs-llc
+  export SENTRY_PROJECT=hands-of-time-ios
+  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)
+  if [ ! $? -eq 0 ]; then
+    echo \"warning: sentry-cli - $ERROR\"
+  fi
+else
+  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"
+fi
+";
+			name = "Upload Debug Symbols to Sentry";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		749A2A13C18F4A4B91F6FB95 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = C398758265807E29B8EE535B /* Project object */;
 }

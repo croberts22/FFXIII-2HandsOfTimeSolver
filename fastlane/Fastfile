@@ -300,7 +300,11 @@ platform :ios do
     upload_options[:wait_for] = options[:wait_for] unless options[:wait_for].nil?
     upload_options[:include_sources] = boolean_option(options[:include_sources], default: false)
 
-    sentry_debug_files_upload(upload_options)
+    sentry_debug_files_upload(
+      org_slug: 'spacepyro-labs-llc',
+      project_slug: 'hands-of-time-ios',
+      include_sources: true
+    )
   end
 
   desc 'Matches up provisioning profiles for development.'
