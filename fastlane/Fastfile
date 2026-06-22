@@ -87,7 +87,7 @@ def notify(message:, success: true)
 end
 
 def sentry_auth_token
-  ENV['HANDS_OF_TIME_SENTRY_AUTH_TOKEN'] || ENV['SENTRY_AUTH_TOKEN']
+  ENV['HANDS_OF_TIME_SENTRY_AUTH_TOKEN']
 end
 
 def repo_file(path)
@@ -287,7 +287,7 @@ platform :ios do
     token = sentry_auth_token
 
     if token.to_s.empty?
-      UI.important('Skipping Sentry dSYM upload; set HANDS_OF_TIME_SENTRY_AUTH_TOKEN or SENTRY_AUTH_TOKEN to enable it.')
+      UI.important('Skipping Sentry dSYM upload; set HANDS_OF_TIME_SENTRY_AUTH_TOKEN to enable it.')
       next
     end
 
