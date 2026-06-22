@@ -64,7 +64,6 @@ struct PuzzleRingView: View {
                 let progress = reduceMotion ? 1 : selectionProgress(at: timeline.date)
                 let ringVisibility = ringVisibility(for: progress)
 
-                AppSpaceScene.drawBackground(context: &context, size: size, starCount: 42, starOpacity: 0.28)
                 drawPlatform(context: &context, center: center, outerRadius: outerRadius, innerRadius: innerRadius, glowPhase: glowPhase)
                 drawTicks(context: &context, center: center, radius: outerRadius, count: 120, glowPhase: glowPhase)
                 drawSegmentArcs(
@@ -683,7 +682,6 @@ private struct PuzzleInputClockFace: View {
                 let innerRadius = side * 0.19
                 let glowPhase = reduceMotion ? 0 : CGFloat(timeline.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3.6) / 3.6)
 
-                AppSpaceScene.drawBackground(context: &context, size: size, starCount: 42, starOpacity: 0.28)
                 drawPlatform(context: &context, center: center, outerRadius: outerRadius, innerRadius: innerRadius, glowPhase: glowPhase)
                 drawTicks(context: &context, center: center, radius: outerRadius, count: 120, glowPhase: glowPhase)
 

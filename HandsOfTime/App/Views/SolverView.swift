@@ -14,7 +14,7 @@ struct SolverView: View {
         ScrollView {
             VStack(spacing: 24) {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Clock Values")
+                    Text("Enter the numbers clockwise, starting from the top.")
                         .font(.headline)
                         .foregroundStyle(.white)
 
@@ -39,40 +39,6 @@ struct SolverView: View {
                     }
                 }
 
-                HStack(spacing: 12) {
-                    Button {
-                        withInputAnimation {
-                            viewModel.deleteLast()
-                        }
-                    } label: {
-                        Label("Delete", systemImage: "delete.left")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
-                    .disabled(!viewModel.canDelete)
-
-                    Button {
-                        withInputAnimation {
-                            viewModel.reset()
-                        }
-                    } label: {
-                        Label("Reset", systemImage: "arrow.counterclockwise")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.bordered)
-                    .disabled(viewModel.values.isEmpty)
-                }
-
-                Button {
-                    solvePuzzle()
-                } label: {
-                    Label("Solve Clock", systemImage: "play.fill")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(!viewModel.canSolve)
-
                 if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
                         .font(.callout)
@@ -82,9 +48,39 @@ struct SolverView: View {
             }
             .padding()
         }
-        .background(.clear)
         .scrollContentBackground(.hidden)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .background {
+            AppSpaceBackground()
+                .ignoresSafeArea()
+        }
         .navigationTitle("Hands of Time")
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Button {
+                    withInputAnimation {
+                        viewModel.undo()
+                    }
+                } label: {
+                    Image(systemName: "arrow.counterclockwise")
+                }
+                .disabled(viewModel.values.isEmpty)
+                .accessibilityLabel("Undo")
+
+                Spacer()
+
+                Button {
+                    solvePuzzle()
+                } label: {
+                    Text("Solve")
+                        .font(.headline)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.cyan)
+                .disabled(!viewModel.canSolve)
+            }
+        }
+        .toolbarBackground(.visible, for: .bottomBar)
         .sheet(item: $displayedSolution) { displayedSolution in
             NavigationStack {
                 SolutionView(solution: displayedSolution.solution)

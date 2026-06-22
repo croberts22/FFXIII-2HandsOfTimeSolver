@@ -9,31 +9,13 @@ struct ContentView: View {
             AppSpaceBackground()
                 .ignoresSafeArea()
 
-            TabView {
-                NavigationStack {
-                    SolverView()
-                        .toolbar {
-                            settingsToolbarItem()
-                        }
-                }
-                .cosmicNavigationChrome()
-                .tabItem {
-                    Label("Solve", systemImage: "clock")
-                }
-
-                NavigationStack {
-                    HistoryView()
-                        .toolbar {
-                            settingsToolbarItem()
-                        }
-                }
-                .cosmicNavigationChrome()
-                .tabItem {
-                    Label("History", systemImage: "clock.arrow.circlepath")
-                }
+            NavigationStack {
+                SolverView()
+                    .toolbar {
+                        settingsToolbarItem()
+                    }
             }
-            .background(.clear)
-            .toolbarBackground(.hidden, for: .tabBar)
+            .cosmicNavigationChrome()
         }
         .preferredColorScheme(.dark)
         .task {

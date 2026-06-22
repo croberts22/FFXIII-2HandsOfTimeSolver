@@ -8,12 +8,8 @@ final class PuzzleInputViewModel {
     private(set) var values: [Int] = []
     var errorMessage: String?
 
-    var canDelete: Bool {
-        !values.isEmpty
-    }
-
     var canSolve: Bool {
-        !values.isEmpty
+        values.count >= 2
     }
 
     var displayString: String {
@@ -35,7 +31,7 @@ final class PuzzleInputViewModel {
         errorMessage = nil
     }
 
-    func deleteLast() {
+    func undo() {
         guard !values.isEmpty else {
             return
         }
@@ -44,12 +40,12 @@ final class PuzzleInputViewModel {
         errorMessage = nil
     }
 
-    func reset() {
-        values.removeAll()
-        errorMessage = nil
-    }
-
     func solve() -> HandsOfTimeSolution? {
+        guard canSolve else {
+            errorMessage = "Enter at least two clock values."
+            return nil
+        }
+
         do {
             let puzzle = try HandsOfTimePuzzle(values: values)
             guard let solution = HandsOfTimeSolver.solve(puzzle) else {

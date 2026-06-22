@@ -29,7 +29,10 @@ struct HistoryView: View {
                 .scrollContentBackground(.hidden)
             }
         }
-        .background(.clear)
+        .background {
+            AppSpaceBackground()
+                .ignoresSafeArea()
+        }
         .navigationTitle("History")
         .navigationDestination(for: HandsOfTimeSolution.self) { solution in
             SolutionView(solution: solution)

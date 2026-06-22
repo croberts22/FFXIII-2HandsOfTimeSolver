@@ -16,6 +16,15 @@ struct SettingsView: View {
             }
             .listRowBackground(Color.clear)
 
+            Section("History") {
+                NavigationLink {
+                    HistoryView()
+                } label: {
+                    Label("History", systemImage: "clock.arrow.circlepath")
+                }
+            }
+            .listRowBackground(Color.clear)
+
             Section {
                 NavigationLink {
                     SettingsPlaceholderView(
