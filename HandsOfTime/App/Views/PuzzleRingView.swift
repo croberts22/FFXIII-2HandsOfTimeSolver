@@ -393,7 +393,7 @@ struct PuzzleRingView: View {
             let isRecommended = isInitialSelection ? isActive : nextNode == index
             let isCandidate = candidateNodes.contains(index)
             let baseColor = NodeColor.palette[value, default: .cyan]
-            let candidateHighlight = candidateRingHighlight(for: index, split: split)
+            let candidateHighlight = candidateRingHighlight(for: index, progress: progress)
             let passThroughHighlight = passThroughRingHighlight(for: index, split: split)
             let initialHighlight: CGFloat = isInitialSelection && isActive ? 1 : 0
             let selectionHighlight = max(initialHighlight, candidateHighlight, passThroughHighlight)
@@ -558,15 +558,15 @@ struct PuzzleRingView: View {
             return 0
         }
 
-        return easeInOut(clamp((progress - 0.58) / 0.42))
+        return easeInOut(clamp((progress - 0.58) / 0.26))
     }
 
-    private func candidateRingHighlight(for index: Int, split: CGFloat) -> CGFloat {
+    private func candidateRingHighlight(for index: Int, progress: CGFloat) -> CGFloat {
         guard !isInitialSelection, candidateNodes.contains(index), nextNode != nil else {
             return 0
         }
 
-        return easeInOut(clamp((split - 0.82) / 0.18))
+        return easeInOut(clamp((progress - 0.84) / 0.16))
     }
 
     private func passThroughRingHighlight(for index: Int, split: CGFloat) -> CGFloat {
