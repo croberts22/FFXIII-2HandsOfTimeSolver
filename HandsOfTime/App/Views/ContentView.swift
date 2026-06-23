@@ -24,6 +24,7 @@ struct ContentView: View {
         }
         .sheet(isPresented: $isShowingSettings) {
             SettingsSheetView(subscriptionStore: subscriptionStore)
+                .padModalSheetPresentation()
         }
     }
 

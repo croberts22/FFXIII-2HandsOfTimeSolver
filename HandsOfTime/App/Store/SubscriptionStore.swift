@@ -116,19 +116,19 @@ final class SubscriptionStore: NSObject, PurchasesDelegate {
     }
 
     private func thankYouMessage(for package: Package) -> String {
-        switch package.identifier {
+        switch package.storeProduct.productIdentifier {
         case "tipjar1":
-            "Mog chirps his thanks, kupo! Even the smallest gesture helps keep the clock turning."
+            "Mog chirps his thanks, kupo! Even the smallest gesture helps keep the clock turning correctly."
         case "tipjar2":
-            "Yeul sees countless moments; in this one, your kindness stands apart. Thank you for the glimpse."
+            "Yeul sees countless moments; in this one, your kindness stands apart. Thank you."
         case "tipjar3":
-            "Serah never stopped believing the timeline could be set right. Your resolve keeps that same hope alive, thank you."
+            "Serah never stopped believing the timeline could be set right. Your resolve keeps that same hope alive. Thank you."
         case "tipjar4":
-            "Noel knows what it means to carry a promise across time. Consider yours received. Thank you for the support."
+            "Noel knows what it means to carry a promise across time. Consider yours received. Thank you for the support!"
         case "tipjar5":
-            "Lightning doesn't offer praise lightly. Judgment rendered: worthy. Thank you, it means more than you know."
+            "Lightning doesn't offer praise lightly. Thank you, it means more than you know."
         default:
-            "Thank you. You've turned the hands in our favor."
+            "Thank you! You've turned the hands in our favor."
         }
     }
 }
