@@ -68,12 +68,26 @@ private struct TipProductRow: View {
         package.storeProduct
     }
 
+    private var productIcon: some View {
+        Group {
+            if let imageName = Self.tipJarImageName(for: package.storeProduct.productIdentifier) {
+                Image(imageName)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Image(systemName: "heart")
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(width: 28, height: 28)
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+    }
+
     var body: some View {
         Button(action: purchase) {
             HStack(spacing: 12) {
-                Image(systemName: "heart")
-                    .foregroundStyle(.secondary)
-                    .frame(width: 28)
+                productIcon
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(product.localizedTitle)
@@ -103,5 +117,14 @@ private struct TipProductRow: View {
         .disabled(isPurchasing)
         .accessibilityLabel("\(product.localizedTitle), \(product.localizedPriceString)")
         .accessibilityHint("Opens the purchase screen.")
+    }
+
+    private static func tipJarImageName(for identifier: String) -> String? {
+        switch identifier {
+        case "tipjar1", "tipjar2", "tipjar3", "tipjar4", "tipjar5":
+            identifier
+        default:
+            nil
+        }
     }
 }

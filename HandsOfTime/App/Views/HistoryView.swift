@@ -10,9 +10,9 @@ struct HistoryView: View {
         Group {
             if entries.isEmpty {
                 ContentUnavailableView(
-                    "No Solved Clocks",
-                    systemImage: "clock.badge.questionmark",
-                    description: Text("Solved puzzles will appear here.")
+                    "No puzzles solved yet, kupo!",
+                    image: "kupo-confused",
+                    description: Text("Once you've solved a puzzle, it will appear here.")
                 )
             } else {
                 List {

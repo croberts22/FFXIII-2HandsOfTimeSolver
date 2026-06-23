@@ -1,3 +1,4 @@
+import SafariServices
 import SwiftUI
 
 private enum LegalDocumentURL {
@@ -12,32 +13,37 @@ struct SettingsView: View {
 
     var body: some View {
         List {
-            Section("Support") {
-                NavigationLink {
-                    TipJarView(store: subscriptionStore)
-                } label: {
-                    Label("Tip Jar", systemImage: "heart")
-                }
-            }
-            .listRowBackground(Color.clear)
-
-            Section("History") {
-                NavigationLink {
-                    HistoryView()
-                } label: {
-                    Label("History", systemImage: "clock.arrow.circlepath")
-                }
-            }
-            .listRowBackground(Color.clear)
-
             Section {
-                Link(destination: LegalDocumentURL.privacyPolicy) {
-                    Label("Privacy Policy", systemImage: "lock.shield")
-                }
+                AppInfoHeaderView()
+                    .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+                    .listRowBackground(Color.clear)
+            }
 
-                Link(destination: LegalDocumentURL.termsOfUse) {
-                    Label("Terms of Use", systemImage: "doc.text")
-                }
+            NavigationLink {
+                TipJarView(store: subscriptionStore)
+            } label: {
+                Label("Tip Jar", systemImage: "heart")
+            }
+            .listRowBackground(Color.clear)
+
+            NavigationLink {
+                HistoryView()
+            } label: {
+                Label("History", systemImage: "clock.arrow.circlepath")
+            }
+            .listRowBackground(Color.clear)
+
+            NavigationLink {
+                SafariView(url: LegalDocumentURL.privacyPolicy)
+            } label: {
+                Label("Privacy Policy", systemImage: "lock.shield")
+            }
+            .listRowBackground(Color.clear)
+
+            NavigationLink {
+                SafariView(url: LegalDocumentURL.termsOfUse)
+            } label: {
+                Label("Terms of Use", systemImage: "doc.text")
             }
             .listRowBackground(Color.clear)
         }
@@ -58,4 +64,14 @@ struct SettingsView: View {
             }
         }
     }
+}
+
+private struct SafariView: UIViewControllerRepresentable {
+    let url: URL
+
+    func makeUIViewController(context: Context) -> SFSafariViewController {
+        SFSafariViewController(url: url)
+    }
+
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
 }

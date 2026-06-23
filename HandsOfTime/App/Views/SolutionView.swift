@@ -19,7 +19,7 @@ struct SolutionView: View {
             return Text("Select the highlighted ") + coloredNumber(firstValue) + Text(".")
         } else {
             let step = solution.steps[stepIndex - 1]
-            let direction = step.direction == .right ? "forwards" : "backwards"
+            let direction = step.direction == .right ? "clockwise" : "counter-clockwise"
             let nextValue = step.nextValue ?? step.currentValue
             return Text("From ")
                 + coloredNumber(step.currentValue)
@@ -40,7 +40,12 @@ struct SolutionView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 18) {
-                PuzzleRingView(solution: solution, stepIndex: stepIndex, reduceMotion: reduceMotion)
+                PuzzleRingView(
+                    solution: solution,
+                    stepIndex: stepIndex,
+                    reduceMotion: reduceMotion,
+                    onRecommendedNodeTap: advanceStep
+                )
                     .aspectRatio(1, contentMode: .fit)
                     .padding(.horizontal)
 
@@ -70,14 +75,22 @@ struct SolutionView: View {
                 Spacer()
 
                 Button("Next") {
-                    withStepAnimation {
-                        stepIndex = min(solution.path.count, stepIndex + 1)
-                    }
+                    advanceStep()
                 }
                 .disabled(isComplete)
             }
         }
         .toolbarBackground(.visible, for: .bottomBar)
+    }
+
+    private func advanceStep() {
+        guard !isComplete else {
+            return
+        }
+
+        withStepAnimation {
+            stepIndex = min(solution.path.count, stepIndex + 1)
+        }
     }
 
     private func withStepAnimation(_ update: () -> Void) {

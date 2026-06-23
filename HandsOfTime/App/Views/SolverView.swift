@@ -3,52 +3,75 @@ import SwiftData
 import SwiftUI
 
 struct SolverView: View {
+    private static let keypadMaxWidth: CGFloat = 400
+    private static let puzzleRingMaxWidthCompact: CGFloat = 420
+    private static let puzzleRingMaxWidthRegular: CGFloat = 560
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var viewModel = PuzzleInputViewModel()
     @State private var displayedSolution: DisplayedSolution?
+    @State private var toast: Toast?
 
     private let keypadColumns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 3)
+    private let noSolutionToastMessage = "No solution exists for this clock."
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Enter the numbers clockwise, starting from the top.")
-                        .font(.headline)
-                        .foregroundStyle(.white)
+        VStack(spacing: 20) {
+            Text("Enter the numbers clockwise, starting from the top.")
+                .font(.headline)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-                    PuzzleInputRingView(values: viewModel.values, reduceMotion: reduceMotion)
-                        .frame(maxWidth: 420)
-                        .frame(maxWidth: .infinity)
-                }
+            PuzzleInputRingView(values: viewModel.values, reduceMotion: reduceMotion)
+                .frame(maxWidth: puzzleRingMaxWidth)
+                .frame(maxWidth: .infinity)
+                .frame(maxHeight: .infinity)
 
-                LazyVGrid(columns: keypadColumns, spacing: 12) {
-                    ForEach(1 ... 6, id: \.self) { value in
-                        Button {
-                            withInputAnimation {
-                                viewModel.append(value)
-                            }
-                        } label: {
-                            Text("\(value)")
-                                .font(.system(size: 30, weight: .bold, design: .rounded))
-                                .frame(maxWidth: .infinity, minHeight: 68)
+            LazyVGrid(columns: keypadColumns, spacing: 12) {
+                ForEach(1 ... 6, id: \.self) { value in
+                    Button {
+                        withInputAnimation {
+                            viewModel.append(value)
                         }
-                        .buttonStyle(NumberButtonStyle(value: value))
-                        .disabled(viewModel.values.count >= HandsOfTimePuzzle.maximumCount)
+                    } label: {
+                        Text("\(value)")
+                            .font(.system(size: 30, weight: .bold, design: .rounded))
+                            .frame(maxWidth: .infinity, minHeight: 68)
                     }
-                }
-
-                if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .font(.callout)
-                        .foregroundStyle(.red)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    .buttonStyle(NumberButtonStyle(value: value))
+                    .disabled(viewModel.values.count >= HandsOfTimePuzzle.maximumCount)
                 }
             }
-            .padding()
+            .frame(maxWidth: Self.keypadMaxWidth)
+            .frame(maxWidth: .infinity)
         }
-        .scrollContentBackground(.hidden)
+        .padding(.horizontal, horizontalSizeClass == .regular ? 64 : 16)
+        .padding(.vertical, 16)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .overlay(alignment: .bottom) {
+            if let toast {
+                ToastBanner(message: toast.message)
+                    .padding(.bottom, 12)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .animation(reduceMotion ? nil : .snappy(duration: 0.3), value: toast?.id)
+        .task(id: toast?.id) {
+            guard toast != nil else {
+                return
+            }
+
+            try? await Task.sleep(for: .seconds(2))
+
+            if toast != nil {
+                toast = nil
+            }
+        }
+        .sensoryFeedback(.warning, trigger: toast?.id) { _, newValue in
+            newValue != nil
+        }
         .toolbarBackground(.hidden, for: .navigationBar)
         .background {
             AppSpaceBackground()
@@ -95,13 +118,21 @@ struct SolverView: View {
         }
     }
 
-    private func solvePuzzle() {
-        guard let solution = viewModel.solve() else {
-            return
-        }
+    private var puzzleRingMaxWidth: CGFloat {
+        horizontalSizeClass == .regular ? Self.puzzleRingMaxWidthRegular : Self.puzzleRingMaxWidthCompact
+    }
 
-        modelContext.insert(PuzzleHistoryEntry(solution: solution))
-        displayedSolution = DisplayedSolution(solution: solution)
+    private func solvePuzzle() {
+        switch viewModel.solve() {
+        case let .solution(solution):
+            modelContext.insert(PuzzleHistoryEntry(solution: solution))
+            displayedSolution = DisplayedSolution(solution: solution)
+        case .noSolution:
+            toast = Toast(message: noSolutionToastMessage)
+            AccessibilityNotification.Announcement(noSolutionToastMessage).post()
+        case nil:
+            break
+        }
     }
 
     private func withInputAnimation(_ update: () -> Void) {
@@ -112,6 +143,29 @@ struct SolverView: View {
                 update()
             }
         }
+    }
+}
+
+private struct Toast: Equatable {
+    let id = UUID()
+    let message: String
+}
+
+private struct ToastBanner: View {
+    let message: String
+
+    var body: some View {
+        Text(message)
+            .font(.subheadline.weight(.medium))
+            .multilineTextAlignment(.center)
+            .foregroundStyle(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(.black.opacity(0.72), in: Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(.white.opacity(0.2), lineWidth: 1)
+            )
     }
 }
 

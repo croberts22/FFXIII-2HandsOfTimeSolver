@@ -5,6 +5,7 @@ struct PuzzleRingView: View {
     let solution: HandsOfTimeSolution
     let stepIndex: Int
     let reduceMotion: Bool
+    var onRecommendedNodeTap: (() -> Void)?
 
     @State private var selectionAnimationStart = Date()
 
@@ -12,6 +13,7 @@ struct PuzzleRingView: View {
     private let handNodeClearance: CGFloat = 8
     private let handOuterStrokeWidth: CGFloat = 15
     private let handOpacity: CGFloat = 0.92
+    private let completedNodeDimmedOpacity: CGFloat = 0.2
     private let selectableRingColor = Color(red: 0.46, green: 0.88, blue: 1.0)
     private let recommendedNodeColor = Color(red: 1.0, green: 0.78, blue: 0.18)
     private let innerRingColor = Color(red: 1.0, green: 0.76, blue: 0.30)
@@ -39,6 +41,18 @@ struct PuzzleRingView: View {
         stepIndex == 0
     }
 
+    private var recommendedNode: Int? {
+        guard stepIndex < solution.path.count else {
+            return nil
+        }
+
+        if isInitialSelection {
+            return activeNode
+        }
+
+        return nextNode
+    }
+
     private var candidateNodes: Set<Int> {
         guard !isInitialSelection, let activeNode, nextNode != nil else {
             return []
@@ -49,6 +63,14 @@ struct PuzzleRingView: View {
             circularIndex(activeNode - value, count: solution.values.count),
             circularIndex(activeNode + value, count: solution.values.count)
         ]
+    }
+
+    private var completedNodes: Set<Int> {
+        guard stepIndex > 0 else {
+            return []
+        }
+
+        return Set(solution.path.prefix(stepIndex))
     }
 
     var body: some View {
@@ -70,7 +92,8 @@ struct PuzzleRingView: View {
                     context: &context,
                     center: center,
                     radius: ringRadius + nodeRadius * 0.82,
-                    ringVisibility: ringVisibility
+                    ringVisibility: ringVisibility,
+                    progress: progress
                 )
                 drawHands(context: &context, center: center, radius: ringRadius, nodeRadius: nodeRadius, progress: progress)
                 drawNodes(
@@ -84,10 +107,26 @@ struct PuzzleRingView: View {
                 )
             }
         }
+        .overlay {
+            GeometryReader { geometry in
+                if let recommendedNode, let onRecommendedNodeTap {
+                    recommendedNodeTapTarget(
+                        size: geometry.size,
+                        nodeIndex: recommendedNode,
+                        action: onRecommendedNodeTap
+                    )
+                }
+            }
+        }
         .background(.clear)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilitySummary)
+        .accessibilityAction(named: "Next step") {
+            if recommendedNode != nil {
+                onRecommendedNodeTap?()
+            }
+        }
         .onAppear(perform: playSelectionAnimation)
         .onChange(of: stepIndex) {
             playSelectionAnimation()
@@ -192,12 +231,14 @@ struct PuzzleRingView: View {
         context: inout GraphicsContext,
         center: CGPoint,
         radius: CGFloat,
-        ringVisibility: CGFloat
+        ringVisibility: CGFloat,
+        progress: CGFloat
     ) {
         for index in solution.values.indices {
             let start = nodeAngle(index) - .pi / CGFloat(solution.values.count) * 0.72
             let end = nodeAngle(index) + .pi / CGFloat(solution.values.count) * 0.72
             let baseColor = NodeColor.palette[solution.values[index], default: .cyan]
+            let arcOpacity = completedNodeOpacity(for: index, progress: progress)
             var arc = Path()
             arc.addArc(
                 center: center,
@@ -208,7 +249,7 @@ struct PuzzleRingView: View {
             )
             context.stroke(
                 arc,
-                with: .color(baseColor.opacity(Double(0.24 + ringVisibility * 0.36))),
+                with: .color(baseColor.opacity(Double(0.24 + ringVisibility * 0.36) * arcOpacity)),
                 lineWidth: 3
             )
         }
@@ -251,7 +292,7 @@ struct PuzzleRingView: View {
         let activeAngle = nodeAngle(activeNode)
         let startAngles = handStartAngles()
         let arrival = easeOut(clamp(progress / 0.46))
-        let split = nextNode == nil ? 0 : easeInOut(clamp((progress - 0.58) / 0.42))
+        let split = handFanOutProgress(for: progress)
         let leftArrivalAngle = interpolateAngle(from: startAngles.left, to: activeAngle, progress: arrival)
         let rightArrivalAngle = interpolateAngle(from: startAngles.right, to: activeAngle, progress: arrival)
         let leftAngle = activeAngle - (.pi * 2 * CGFloat(value) / CGFloat(solution.values.count)) * split
@@ -365,7 +406,12 @@ struct PuzzleRingView: View {
             let isActive = activeNode == index
             let isRecommended = isInitialSelection ? isActive : nextNode == index
             let isCandidate = candidateNodes.contains(index)
+            let nodeOpacity = completedNodeOpacity(for: index, progress: progress)
             let baseColor = NodeColor.palette[value, default: .cyan]
+            var nodeContext = context
+            if nodeOpacity < 0.999 {
+                nodeContext.opacity = nodeOpacity
+            }
             let candidateHighlight = candidateRingHighlight(for: index, progress: progress)
             let passThroughHighlight = passThroughRingHighlight(for: index, split: split)
             let initialHighlight: CGFloat = isInitialSelection && isActive ? 1 : 0
@@ -376,7 +422,7 @@ struct PuzzleRingView: View {
             let selectionColor = isRecommended ? recommendedNodeColor : selectableRingColor
 
             if glowIntensity > 0.02 {
-                context.fill(
+                nodeContext.fill(
                     Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * (1.24 + glowIntensity * 0.22))),
                     with: .radialGradient(
                         Gradient(colors: [
@@ -391,7 +437,7 @@ struct PuzzleRingView: View {
                 )
             }
 
-            context.fill(
+            nodeContext.fill(
                 Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius)),
                 with: .radialGradient(
                     Gradient(colors: [
@@ -404,20 +450,20 @@ struct PuzzleRingView: View {
                 )
             )
 
-            context.stroke(
+            nodeContext.stroke(
                 Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius)),
                 with: .color(baseColor.opacity(isActive ? 0.82 : 0.56)),
                 lineWidth: isActive ? 3 : 2
             )
 
-            context.stroke(
+            nodeContext.stroke(
                 Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * 0.72)),
                 with: .color(innerRingColor.opacity(0.34)),
                 lineWidth: 1.1
             )
 
             drawOrbitGlow(
-                context: &context,
+                context: &nodeContext,
                 center: nodeCenter,
                 radius: nodeRadius * 0.72,
                 phase: glowPhase + CGFloat(index) * 0.071,
@@ -428,14 +474,14 @@ struct PuzzleRingView: View {
             )
 
             if selectionHighlight > 0.02 {
-                context.stroke(
+                nodeContext.stroke(
                     Path(ellipseIn: CGRect(center: nodeCenter, radius: nodeRadius * 1.08)),
                     with: .color(selectionColor.opacity(Double(0.42 + selectionHighlight * 0.48))),
                     lineWidth: 2 + selectionHighlight * 2
                 )
 
                 drawOrbitGlow(
-                    context: &context,
+                    context: &nodeContext,
                     center: nodeCenter,
                     radius: nodeRadius * 1.08,
                     phase: glowPhase + CGFloat(index) * 0.071,
@@ -446,7 +492,7 @@ struct PuzzleRingView: View {
                 )
             }
 
-            context.draw(
+            nodeContext.draw(
                 Text("\(value)")
                     .font(.system(size: nodeRadius * 1.12, weight: .heavy, design: .rounded))
                     .foregroundStyle(baseColor),
@@ -458,6 +504,25 @@ struct PuzzleRingView: View {
 
     private func nodeAngle(_ index: Int) -> CGFloat {
         (.pi * 2 * CGFloat(index) / CGFloat(solution.values.count)) - .pi / 2
+    }
+
+    private func recommendedNodeTapTarget(size: CGSize, nodeIndex: Int, action: @escaping () -> Void) -> some View {
+        let side = min(size.width, size.height)
+        let center = CGPoint(x: size.width / 2, y: size.height / 2)
+        let ringRadius = side * 0.36
+        let nodeRadius = max(22, side * 0.058)
+        let nodeCenter = point(center: center, radius: ringRadius, angle: nodeAngle(nodeIndex))
+        let tapDiameter = nodeRadius * 2.2
+
+        return Button(action: action) {
+            Circle()
+                .fill(.clear)
+                .contentShape(Circle())
+                .frame(width: tapDiameter, height: tapDiameter)
+        }
+        .buttonStyle(.plain)
+        .position(nodeCenter)
+        .accessibilityHidden(true)
     }
 
     private func drawOrbitGlow(
@@ -519,6 +584,27 @@ struct PuzzleRingView: View {
         let sourceAngle = nodeAngle(sourceNode)
         let offset = .pi * 2 * CGFloat(sourceValue) / CGFloat(solution.values.count)
         return (sourceAngle - offset, sourceAngle + offset)
+    }
+
+    private func handFanOutProgress(for progress: CGFloat) -> CGFloat {
+        guard !isInitialSelection, nextNode != nil else {
+            return 0
+        }
+
+        return easeInOut(clamp((progress - 0.58) / 0.42))
+    }
+
+    private func completedNodeOpacity(for index: Int, progress: CGFloat) -> CGFloat {
+        guard completedNodes.contains(index) else {
+            return 1
+        }
+
+        if stepIndex > 0, activeNode == index, nextNode != nil {
+            let fanOut = handFanOutProgress(for: progress)
+            return 1 - (1 - completedNodeDimmedOpacity) * fanOut
+        }
+
+        return completedNodeDimmedOpacity
     }
 
     private func ringVisibility(for progress: CGFloat) -> CGFloat {

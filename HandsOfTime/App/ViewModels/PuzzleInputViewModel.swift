@@ -2,11 +2,15 @@ import Foundation
 import HandsOfTimeCore
 import Observation
 
+enum SolveResult {
+    case solution(HandsOfTimeSolution)
+    case noSolution
+}
+
 @MainActor
 @Observable
 final class PuzzleInputViewModel {
     private(set) var values: [Int] = []
-    var errorMessage: String?
 
     var canSolve: Bool {
         values.count >= 2
@@ -17,18 +21,13 @@ final class PuzzleInputViewModel {
     }
 
     func append(_ value: Int) {
-        guard HandsOfTimePuzzle.allowedValues.contains(value) else {
-            errorMessage = "Hands of Time values must be 1 through 6."
-            return
-        }
-
-        guard values.count < HandsOfTimePuzzle.maximumCount else {
-            errorMessage = "Hands of Time puzzles can contain at most \(HandsOfTimePuzzle.maximumCount) values."
+        guard HandsOfTimePuzzle.allowedValues.contains(value),
+              values.count < HandsOfTimePuzzle.maximumCount
+        else {
             return
         }
 
         values.append(value)
-        errorMessage = nil
     }
 
     func undo() {
@@ -37,26 +36,21 @@ final class PuzzleInputViewModel {
         }
 
         values.removeLast()
-        errorMessage = nil
     }
 
-    func solve() -> HandsOfTimeSolution? {
+    func solve() -> SolveResult? {
         guard canSolve else {
-            errorMessage = "Enter at least two clock values."
             return nil
         }
 
         do {
             let puzzle = try HandsOfTimePuzzle(values: values)
             guard let solution = HandsOfTimeSolver.solve(puzzle) else {
-                errorMessage = "No solution exists for this clock."
-                return nil
+                return .noSolution
             }
 
-            errorMessage = nil
-            return solution
+            return .solution(solution)
         } catch {
-            errorMessage = (error as? LocalizedError)?.errorDescription ?? "The puzzle could not be solved."
             return nil
         }
     }
