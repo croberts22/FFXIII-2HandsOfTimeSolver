@@ -10,6 +10,6 @@ FEATURES
 - Visual clock ring for entering puzzle values
 - Step-by-step solution walkthrough with animated hands
 - Puzzle history saved on your device for quick reference
-- Dark, game-inspired look designed for quick in-session use
+- Dark, high-contrast look designed for quick in-session use
 
-Originally released over a decade ago and rebuilt for modern iOS, Hands of Time Solver is a fan-made utility for FFXIII-2 players. It is not affiliated with or endorsed by Square Enix.
+Hands of Time Solver is an unofficial, fan-made utility for Final Fantasy XIII-2 players. It is not affiliated with, sponsored by, endorsed by, or approved by Square Enix, and no Square Enix content is used or sold in the app.

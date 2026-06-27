@@ -21,7 +21,7 @@ struct TipJarView: View {
                     }
                     .listRowBackground(Color.clear)
                 } else if store.availablePackages.isEmpty {
-                    Text("Mog searched everywhere, kupo, but no tip offerings have turned up in this timeline!")
+                    Text("No tip offerings are available right now.")
                         .foregroundStyle(.secondary)
                         .listRowBackground(Color.clear)
                 } else {
@@ -69,18 +69,10 @@ private struct TipProductRow: View {
     }
 
     private var productIcon: some View {
-        Group {
-            if let imageName = Self.tipJarImageName(for: package.storeProduct.productIdentifier) {
-                Image(imageName)
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                Image(systemName: "heart")
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .frame(width: 28, height: 28)
-        .clipShape(RoundedRectangle(cornerRadius: 6))
+        Image(systemName: "heart")
+            .font(.system(size: 18, weight: .semibold))
+            .foregroundStyle(.secondary)
+            .frame(width: 28, height: 28)
     }
 
     var body: some View {
@@ -117,14 +109,5 @@ private struct TipProductRow: View {
         .disabled(isPurchasing)
         .accessibilityLabel("\(product.localizedTitle), \(product.localizedPriceString)")
         .accessibilityHint("Opens the purchase screen.")
-    }
-
-    private static func tipJarImageName(for identifier: String) -> String? {
-        switch identifier {
-        case "tipjar1", "tipjar2", "tipjar3", "tipjar4", "tipjar5":
-            identifier
-        default:
-            nil
-        }
     }
 }
