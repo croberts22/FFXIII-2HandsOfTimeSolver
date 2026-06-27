@@ -1,1 +1,1 @@
-The classic FFXIII-2 puzzle solver, rebuilt for modern iOS, now with animated, step-by-step walkthroughs.
+The classic Hands of Time puzzle solver, rebuilt for modern iOS, now with animated, step-by-step walkthroughs.
